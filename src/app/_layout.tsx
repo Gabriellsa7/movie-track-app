@@ -12,9 +12,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { setUpReactQueryManagers } from '@/lib/react-query/react-native-managers';
 import { bootstrapSession, setUpSession } from '@/lib/session/session';
+import { Toaster } from '@/components/toaster';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { Providers } from '@/providers';
 import { ROUTES } from '@/routes/routes.constants';
@@ -97,15 +99,18 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <Providers>
-        <ThemeProvider value={navigationTheme(scheme)}>
-          <View style={[{ flex: 1 }, THEME_VARS[scheme]]}>
-            <RootStack />
-          </View>
-          <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-        </ThemeProvider>
-      </Providers>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <Providers>
+          <ThemeProvider value={navigationTheme(scheme)}>
+            <View style={[{ flex: 1 }, THEME_VARS[scheme]]}>
+              <RootStack />
+            </View>
+            <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+            <Toaster scheme={scheme} />
+          </ThemeProvider>
+        </Providers>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

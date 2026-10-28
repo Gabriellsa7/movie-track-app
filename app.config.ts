@@ -35,6 +35,14 @@ const config: ExpoConfig = {
   plugins: [
     'expo-router',
     [
+      'expo-image-picker',
+      {
+        photosPermission:
+          'O Movie Track usa suas fotos para o avatar e os pôsteres dos filmes.',
+        cameraPermission: false,
+      },
+    ],
+    [
       'expo-splash-screen',
       {
         backgroundColor: APP_BACKGROUND,
