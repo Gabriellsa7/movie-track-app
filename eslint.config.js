@@ -35,6 +35,20 @@ module.exports = defineConfig([
       // The const + type pair (EApiErrorCode) is intended, and axios.create is its documented API.
       '@typescript-eslint/no-redeclare': 'off',
       'import/no-named-as-default-member': 'off',
+      // Deprecated in RN 0.88, and patches/ removes its NativeWind className support.
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'react-native',
+              importNames: ['ImageBackground'],
+              message:
+                'Use a View with an absolutely positioned Image (expo-image) instead.',
+            },
+          ],
+        },
+      ],
       '@typescript-eslint/restrict-template-expressions': [
         'error',
         { allowNumber: true },

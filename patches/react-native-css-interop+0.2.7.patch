@@ -1,0 +1,38 @@
+diff --git a/node_modules/react-native-css-interop/dist/runtime/components.js b/node_modules/react-native-css-interop/dist/runtime/components.js
+index 7bb1ae4..7cad014 100644
+--- a/node_modules/react-native-css-interop/dist/runtime/components.js
++++ b/node_modules/react-native-css-interop/dist/runtime/components.js
+@@ -31,10 +31,6 @@ const api_1 = require("./api");
+     columnWrapperClassName: "columnWrapperStyle",
+     contentContainerClassName: "contentContainerStyle",
+ });
+-(0, api_1.remapProps)(react_native_1.ImageBackground, {
+-    className: "style",
+-    imageClassName: "imageStyle",
+-});
+ (0, api_1.remapProps)(react_native_1.KeyboardAvoidingView, {
+     className: "style",
+     contentContainerClassName: "contentContainerStyle",
+diff --git a/node_modules/react-native-css-interop/src/runtime/components.ts b/node_modules/react-native-css-interop/src/runtime/components.ts
+index aaf822d..879d21b 100644
+--- a/node_modules/react-native-css-interop/src/runtime/components.ts
++++ b/node_modules/react-native-css-interop/src/runtime/components.ts
+@@ -4,7 +4,6 @@ import {
+   ActivityIndicator,
+   FlatList,
+   Image,
+-  ImageBackground,
+   KeyboardAvoidingView,
+   Pressable,
+   ScrollView,
+@@ -50,10 +49,6 @@ remapProps(FlatList, {
+   columnWrapperClassName: "columnWrapperStyle",
+   contentContainerClassName: "contentContainerStyle",
+ });
+-remapProps(ImageBackground, {
+-  className: "style",
+-  imageClassName: "imageStyle",
+-});
+ remapProps(KeyboardAvoidingView, {
+   className: "style",
+   contentContainerClassName: "contentContainerStyle",

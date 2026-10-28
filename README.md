@@ -115,3 +115,8 @@ sit next to the code, named `describe('When we …')` / `it('should …')`.
 - Imports from `src` use the `@/` alias.
 - ESLint stays on v9: `eslint-plugin-react` (inside `eslint-config-expo`) does
   not support ESLint 10 yet.
+- `patches/react-native-css-interop+0.2.7.patch` (applied by `patch-package` on
+  install) stops NativeWind from reading `ImageBackground`, which RN 0.88
+  deprecated and warns about on startup. `ImageBackground` is blocked by ESLint:
+  use a `View` with an absolutely positioned `Image`. Drop the patch when
+  NativeWind ships a fix.
