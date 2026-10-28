@@ -1,0 +1,15 @@
+export const ROUTES = {
+  home: '/',
+  login: '/login',
+  signUp: '/sign-up',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password',
+  verifyEmail: '/verify-email',
+  explore: '/explore',
+  movies: '/movies',
+  newMovie: '/movies/new',
+  watchlist: '/watchlist',
+  newWatchlistItem: '/watchlist/new',
+  users: '/users',
+  account: '/account',
+} as const;
