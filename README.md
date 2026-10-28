@@ -40,11 +40,13 @@ the versions that match the SDK.
 | `yarn format` / `format:check` | Prettier                                |
 | `yarn typecheck`               | `tsc --noEmit`                          |
 | `yarn doctor`                  | `expo-doctor` (SDK and config problems) |
+| `yarn test` / `test:watch`     | Jest (jest-expo)                        |
+| `yarn test:coverage`           | Tests with the 80% coverage threshold   |
 
 Before pushing:
 
 ```bash
-yarn format:check && yarn lint && yarn typecheck && yarn doctor
+yarn format:check && yarn lint && yarn typecheck && yarn test:coverage && yarn doctor
 ```
 
 ## Styles
@@ -57,6 +59,20 @@ yarn format:check && yarn lint && yarn typecheck && yarn doctor
 - Fonts: `font-sans`, `font-medium`, `font-semibold`, `font-bold` (Inter) and
   `font-display` (Bebas Neue, titles and big numbers), loaded while the splash
   screen is up.
+
+## Tests
+
+Jest with `jest-expo` and React Native Testing Library 14 (its `render`,
+`renderHook`, `fireEvent` and `act` are async: always `await` them). Test files
+sit next to the code, named `describe('When we …')` / `it('should …')`.
+
+- API calls are answered by `axios-mock-adapter` (`src/test/mock-api.ts`);
+  unmatched requests fail.
+- `src/test/setup.ts` mocks SecureStore (in memory), AsyncStorage, NetInfo and
+  sonner-native, and resets the session, the query cache and the adapter
+  after each test. `EXPO_PUBLIC_API_URL` is set in `src/test/env.js`.
+- Protected routes are tested with `renderRouter` from
+  `expo-router/testing-library`.
 
 ## Conventions
 

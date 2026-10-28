@@ -7,7 +7,7 @@ import {
   Inter_700Bold,
   useFonts,
 } from '@expo-google-fonts/inter';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -19,7 +19,7 @@ import { bootstrapSession, setUpSession } from '@/lib/session/session';
 import { Toaster } from '@/components/toaster';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { Providers } from '@/providers';
-import { ROUTES } from '@/routes/routes.constants';
+import { RootStack } from '@/routes/root-stack';
 import { useSessionStore } from '@/stores/session.store';
 import { rgb, type TColorScheme } from '@/theme/palette';
 import { THEME_VARS } from '@/theme/theme-vars';
@@ -42,37 +42,6 @@ function navigationTheme(scheme: TColorScheme) {
       border: rgb(scheme, 'border'),
     },
   };
-}
-
-const MODAL = { presentation: 'modal' } as const;
-
-function RootStack() {
-  const isAuthenticated = useSessionStore(
-    (state) => state.status === 'authenticated',
-  );
-
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={isAuthenticated} redirectTo={ROUTES.login}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="movies/new" options={MODAL} />
-        <Stack.Screen name="movies/[movieId]/index" />
-        <Stack.Screen name="movies/[movieId]/edit" options={MODAL} />
-        <Stack.Screen name="watchlist/new" options={MODAL} />
-        <Stack.Screen name="watchlist/[itemId]/edit" options={MODAL} />
-        <Stack.Screen name="watchlist/[itemId]/watched" options={MODAL} />
-      </Stack.Protected>
-      <Stack.Protected guard={!isAuthenticated} redirectTo={ROUTES.home}>
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="explore" />
-      </Stack.Protected>
-      {/* Public: opened from e-mail links and shared profile and review links. */}
-      <Stack.Screen name="reset-password" />
-      <Stack.Screen name="verify-email" />
-      <Stack.Screen name="users/[userId]/index" />
-      <Stack.Screen name="users/[userId]/movies/[movieId]" />
-    </Stack>
-  );
 }
 
 export default function RootLayout() {

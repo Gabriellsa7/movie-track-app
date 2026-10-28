@@ -18,7 +18,10 @@
     "typecheck": "tsc --noEmit",
     "doctor": "npx expo-doctor",
     "prepare": "husky",
-    "gen:api": "openapi-typescript ../movie-track/src/contracts/service.yaml -o src/api/schema.d.ts --default-non-nullable false"
+    "gen:api": "openapi-typescript ../movie-track/src/contracts/service.yaml -o src/api/schema.d.ts --default-non-nullable false",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "lint-staged": {
     "*.{ts,tsx,js}": [
@@ -78,12 +81,18 @@
     "@babel/core": "^7.29.7",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
+    "@react-native/jest-preset": "^0.88.1",
+    "@testing-library/react-native": "^14.1.0",
+    "@types/jest": "30.0.0",
     "@types/react": "~19.3.0",
+    "axios-mock-adapter": "^2.1.0",
     "eslint": "^9",
     "eslint-config-expo": "~58.0.4",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.13.0",
     "husky": "^9.1.7",
+    "jest": "~30.5.2",
+    "jest-expo": "~58.0.12",
     "lint-staged": "^17.6.0",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.10",
