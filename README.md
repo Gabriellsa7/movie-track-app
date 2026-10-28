@@ -74,7 +74,13 @@ portfolio; there is no store release.
    environment: `npx eas-cli@latest env:create --environment preview --name EXPO_PUBLIC_API_URL --value https://<api-url> --visibility plaintext`.
 4. `yarn build:apk`, then share the APK link from the build page.
 
-The icons and the splash are placeholders until the logo exists.
+## Logo
+
+The logo is a cinema ticket with the rating star: `Logo` and `LogoMark` in
+`src/components/logo.tsx` (react-native-svg). The app icon, the Android
+adaptive and monochrome icons, the splash and the favicon in `assets/images/`
+are drawn from the same 64-unit grid, with the Android foreground inside the
+adaptive-icon safe zone.
 
 ## Tests
 

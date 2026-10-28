@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Logo, LogoMark } from './logo';
 import { ScreenPlaceholder } from './screen-placeholder';
 import { Toaster } from './toaster';
 
@@ -23,5 +24,15 @@ describe('When we render the shared components', () => {
 
   it('should render the toaster for the current scheme', async () => {
     await expect(render(<Toaster scheme="light" />)).resolves.toBeDefined();
+  });
+
+  it('should show the logo with the app name', async () => {
+    await render(<Logo />);
+
+    expect(screen.getByText('Movie Track')).toBeOnTheScreen();
+  });
+
+  it('should draw the mark at the size asked', async () => {
+    await expect(render(<LogoMark size={72} />)).resolves.toBeDefined();
   });
 });
