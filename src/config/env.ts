@@ -5,9 +5,11 @@ const envSchema = z.object({
 });
 
 // Expo only inlines process.env.EXPO_PUBLIC_* when it is read literally like this.
-const parsedEnv = envSchema.safeParse({
-  EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL as string | undefined,
-});
+// Typed as unknown: process.env is any in CI and string | undefined once Expo generates expo-env.d.ts.
+const rawEnv: Record<string, unknown> = {
+  EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL,
+};
+const parsedEnv = envSchema.safeParse(rawEnv);
 if (!parsedEnv.success) {
   throw new Error(
     `Invalid environment variables:\n${z.prettifyError(parsedEnv.error)}`,
