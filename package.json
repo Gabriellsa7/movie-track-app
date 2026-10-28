@@ -21,7 +21,8 @@
     "gen:api": "openapi-typescript ../movie-track/src/contracts/service.yaml -o src/api/schema.d.ts --default-non-nullable false",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "build:apk": "npx eas-cli@latest build -p android --profile preview"
   },
   "lint-staged": {
     "*.{ts,tsx,js}": [

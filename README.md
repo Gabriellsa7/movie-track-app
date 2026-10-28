@@ -42,6 +42,7 @@ the versions that match the SDK.
 | `yarn doctor`                  | `expo-doctor` (SDK and config problems) |
 | `yarn test` / `test:watch`     | Jest (jest-expo)                        |
 | `yarn test:coverage`           | Tests with the 80% coverage threshold   |
+| `yarn build:apk`               | EAS preview APK for Android             |
 
 Before pushing:
 
@@ -59,6 +60,21 @@ yarn format:check && yarn lint && yarn typecheck && yarn test:coverage && yarn d
 - Fonts: `font-sans`, `font-medium`, `font-semibold`, `font-bold` (Inter) and
   `font-display` (Bebas Neue, titles and big numbers), loaded while the splash
   screen is up.
+
+## Preview APK (EAS)
+
+The `preview` profile in `eas.json` builds an installable APK for the
+portfolio; there is no store release.
+
+1. Create an account on [expo.dev](https://expo.dev) and run
+   `npx eas-cli@latest login`.
+2. Link the project once: `npx eas-cli@latest init` (adds the project id to
+   the app config).
+3. Set `EXPO_PUBLIC_API_URL` to the deployed API in the **preview**
+   environment: `npx eas-cli@latest env:create --environment preview --name EXPO_PUBLIC_API_URL --value https://<api-url> --visibility plaintext`.
+4. `yarn build:apk`, then share the APK link from the build page.
+
+The icons and the splash are placeholders until the logo exists.
 
 ## Tests
 
