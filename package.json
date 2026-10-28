@@ -17,7 +17,8 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "doctor": "npx expo-doctor",
-    "prepare": "husky"
+    "prepare": "husky",
+    "gen:api": "openapi-typescript ../movie-track/src/contracts/service.yaml -o src/api/schema.d.ts --default-non-nullable false"
   },
   "lint-staged": {
     "*.{ts,tsx,js}": [
@@ -31,6 +32,7 @@
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo/ui": "~58.0.24",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "axios": "^1.21.0",
     "expo": "~58.0.20",
     "expo-constants": "~58.0.13",
     "expo-device": "~58.0.5",
@@ -54,6 +56,7 @@
     "react-native-screens": "~4.30.0",
     "react-native-web": "~0.21.4",
     "react-native-worklets": "0.13.0",
+    "zod": "^4.6.7",
     "zustand": "^5.0.16"
   },
   "devDependencies": {
@@ -67,6 +70,7 @@
     "globals": "^17.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
+    "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.17",
