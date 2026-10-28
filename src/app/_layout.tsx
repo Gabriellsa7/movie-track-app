@@ -10,12 +10,16 @@ import {
 import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { setUpReactQueryManagers } from '@/lib/react-query/react-native-managers';
 import { bootstrapSession, setUpSession } from '@/lib/session/session';
+import {
+  AnimatedSplash,
+  SPLASH_BACKGROUND,
+} from '@/components/animated-splash';
 import { Toaster } from '@/components/toaster';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { Providers } from '@/providers';
@@ -54,32 +58,33 @@ export default function RootLayout() {
     BebasNeue_400Regular,
   });
   const sessionLoading = useSessionStore((state) => state.status === 'loading');
-  // The splash stays until the fonts and the session are ready, so no screen flashes.
+  // The logo stays on screen until the fonts and the session are ready, so no screen flashes.
   const ready = (fontsLoaded || fontError !== null) && !sessionLoading;
-
-  useEffect(() => {
-    if (ready) {
-      void SplashScreen.hideAsync();
-    }
-  }, [ready]);
-
-  if (!ready) {
-    return null;
-  }
+  const [splashVisible, setSplashVisible] = useState(true);
+  const hideSplash = useCallback(() => {
+    setSplashVisible(false);
+  }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <Providers>
-          <ThemeProvider value={navigationTheme(scheme)}>
-            <View style={[{ flex: 1 }, THEME_VARS[scheme]]}>
-              <RootStack />
-            </View>
-            <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-            <Toaster scheme={scheme} />
-          </ThemeProvider>
-        </Providers>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <View style={{ flex: 1, backgroundColor: SPLASH_BACKGROUND }}>
+      {ready ? (
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <SafeAreaProvider>
+            <Providers>
+              <ThemeProvider value={navigationTheme(scheme)}>
+                <View style={[{ flex: 1 }, THEME_VARS[scheme]]}>
+                  <RootStack />
+                </View>
+                <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+                <Toaster scheme={scheme} />
+              </ThemeProvider>
+            </Providers>
+          </SafeAreaProvider>
+        </GestureHandlerRootView>
+      ) : null}
+      {splashVisible ? (
+        <AnimatedSplash ready={ready} onFinish={hideSplash} />
+      ) : null}
+    </View>
   );
 }

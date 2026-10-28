@@ -82,6 +82,13 @@ adaptive and monochrome icons, the splash and the favicon in `assets/images/`
 are drawn from the same 64-unit grid, with the Android foreground inside the
 adaptive-icon safe zone.
 
+Opening: the native splash shows the logo on `#0F1115`, then
+`AnimatedSplash` (`src/components/animated-splash.tsx`) takes over with the
+same logo at the same size, breathes while the fonts and the session load
+(at least 600 ms), and grows and fades into the first screen. With "reduce
+motion" on, it only fades. Expo Go shows its own loading screen while it
+downloads the bundle; the native splash is only used in a build (the APK).
+
 ## Tests
 
 Jest with `jest-expo` and React Native Testing Library 14 (its `render`,
