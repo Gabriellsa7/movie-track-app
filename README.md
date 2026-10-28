@@ -1,56 +1,61 @@
-# Welcome to your Expo app 👋
+# Movie Track — App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Native app (Android / iOS) of **Movie Track**, a personal movie log: log the
+movies you watched with a rating and a review, keep a watchlist of the next
+ones, see your stats and browse other people's profiles.
 
-## Get started
+It consumes the [Movie Track API](https://github.com/Gabriellsa7/movie-track)
+and has the same screens as the web app.
 
-1. Install dependencies
+## Stack
 
-   ```bash
-   npm install
-   ```
+Expo SDK 58 · React Native · Expo Router · TypeScript (strict) · ESLint
+(`eslint-config-expo`) · Prettier · Husky + commitlint.
 
-2. Start the app
+## Requirements
 
-   ```bash
-   npx expo start
-   ```
+- Node 24 (`.nvmrc`) and Yarn 1
+- Expo Go on the phone, matching SDK 58
+- The API running on your computer. The phone can't reach `localhost`: use
+  your computer's LAN IP (`http://192.168.x.x:3000`), or `http://10.0.2.2:3000`
+  on the Android emulator. CORS doesn't apply to native apps.
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Getting started
 
 ```bash
-npm run reset-project
+yarn
+yarn start          # scan the QR code with Expo Go
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Install native-aware packages with `npx expo install <package>`, which picks
+the versions that match the SDK.
 
-### Other setup steps
+## Scripts
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+| Script                         | What it does                            |
+| ------------------------------ | --------------------------------------- |
+| `yarn start`                   | Expo dev server                         |
+| `yarn android` / `ios` / `web` | Dev server opening that platform        |
+| `yarn lint` / `lint:fix`       | ESLint with type-aware rules            |
+| `yarn format` / `format:check` | Prettier                                |
+| `yarn typecheck`               | `tsc --noEmit`                          |
+| `yarn doctor`                  | `expo-doctor` (SDK and config problems) |
 
-## Learn more
+Before pushing:
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+yarn format:check && yarn lint && yarn typecheck && yarn doctor
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Conventions
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Routes live in `src/app/` (Expo Router) and only re-export screens; the rest
+  of the code lives in `src/`.
+- Files in kebab-case (`movie-card.tsx`, `home.screen.tsx`); components in
+  PascalCase (`MovieCard`).
+- Interfaces `I*`, type aliases `T*`, enums `E*`, constants `UPPER_SNAKE_CASE`.
+- Code, comments and commits in English; UI texts in pt-BR.
+- Conventional Commits, checked by commitlint on every commit.
+- Imports from `src` use the `@/` alias.
+- ESLint stays on v9: `eslint-plugin-react` (inside `eslint-config-expo`) does
+  not support ESLint 10 yet.
