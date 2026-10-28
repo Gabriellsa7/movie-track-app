@@ -9,7 +9,7 @@ and has the same screens as the web app.
 
 ## Stack
 
-Expo SDK 58 · React Native · Expo Router · TypeScript (strict) · ESLint
+Expo SDK 58 · React Native · Expo Router · NativeWind · TypeScript (strict) · ESLint
 (`eslint-config-expo`) · Prettier · Husky + commitlint.
 
 ## Requirements
@@ -46,6 +46,17 @@ Before pushing:
 ```bash
 yarn format:check && yarn lint && yarn typecheck && yarn doctor
 ```
+
+## Styles
+
+- [NativeWind](https://www.nativewind.dev) 4 (Tailwind 3 classes). Colors are
+  CSS variables set on the root view with `vars()` (`src/theme/`), with the
+  same token names as the web: `bg-surface`, `text-muted`, `bg-accent`…
+- The theme preference (dark, light, system) is saved in AsyncStorage and
+  applied with NativeWind's `colorScheme`; dark is the default.
+- Fonts: `font-sans`, `font-medium`, `font-semibold`, `font-bold` (Inter) and
+  `font-display` (Bebas Neue, titles and big numbers), loaded while the splash
+  screen is up.
 
 ## Conventions
 
