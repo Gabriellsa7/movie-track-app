@@ -1,5 +1,17 @@
-import { ScreenPlaceholder } from '@/components/screen-placeholder';
+import { LogoMark } from '@/components/logo';
+import { Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function LoginScreen() {
-  return <ScreenPlaceholder title="Entrar" />;
+  return (
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+      <View>
+        <LogoMark size={80} />
+        <Text>SEU DIÁRIO DE CINEMA</Text>
+        <Text>
+          Registre o que assistiu, dê sua nota e planeje os próximos filmes.
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
 }
