@@ -1,1 +1,1 @@
-export { ResetPasswordScreen as default } from '@/features/reset-password/reset-password';
+export { ResetPasswordScreen as default } from '@/features/auth/reset-password/reset-password';
