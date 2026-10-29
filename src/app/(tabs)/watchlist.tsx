@@ -1,1 +1,1 @@
-export { WatchlistScreen as default } from '@/features/watchlist/screens/watchlist.screen';
+export { WatchlistScreen as default } from '@/features/watchlist/watchlist';

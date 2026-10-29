@@ -1,1 +1,1 @@
-export { UserReviewScreen as default } from '@/features/users/screens/user-review.screen';
+export { UserReviewScreen as default } from '@/features/user-review/user-review';

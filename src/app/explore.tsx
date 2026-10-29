@@ -1,1 +1,1 @@
-export { UsersScreen as default } from '@/features/users/screens/users.screen';
+export { UsersScreen as default } from '@/features/users/users';

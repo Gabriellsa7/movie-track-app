@@ -1,1 +1,1 @@
-export { MovieDetailScreen as default } from '@/features/movies/screens/movie-detail.screen';
+export { MovieDetailScreen as default } from '@/features/movie-detail/movie-detail';
