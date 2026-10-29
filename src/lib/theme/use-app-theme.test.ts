@@ -26,8 +26,8 @@ describe('When we apply the theme preference', () => {
 
 describe('When we read the palette', () => {
   it('should give rgb colors and css variables for both schemes', () => {
-    expect(rgb('dark', 'accent')).toBe('rgb(245, 184, 61)');
-    expect(rgb('light', 'background')).toBe('rgb(247, 245, 241)');
+    expect(rgb('dark', 'accent-bg-color')).toBe('rgb(245, 184, 61)');
+    expect(rgb('light', 'primary-bg-color')).toBe('rgb(247, 245, 241)');
     expect(THEME_VARS.dark).toBeDefined();
     expect(THEME_VARS.light).toBeDefined();
   });

@@ -5,7 +5,7 @@ import { rgb } from '@/theme/palette';
 import { LogoMark } from './logo';
 
 // Same background and logo width as the native splash in app.config.ts, so the hand-off is invisible.
-export const SPLASH_BACKGROUND = rgb('dark', 'background');
+export const SPLASH_BACKGROUND = rgb('dark', 'primary-bg-color');
 const LOGO_SIZE = 120;
 // Keeps the brand moment readable when the session is restored instantly.
 const MIN_VISIBLE_MS = 600;

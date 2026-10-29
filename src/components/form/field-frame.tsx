@@ -12,15 +12,19 @@ interface IFieldFrameProps {
 export function FieldFrame({ label, error, hint, children }: IFieldFrameProps) {
   return (
     <View className="gap-1.5">
-      <Text className="font-semibold text-sm text-text">{label}</Text>
+      <Text className="font-semibold text-sm text-primary-text-color">
+        {label}
+      </Text>
       {children}
       {hint && !error && (
-        <Text className="font-sans text-xs text-text-muted">{hint}</Text>
+        <Text className="font-sans text-xs text-tertiary-text-color">
+          {hint}
+        </Text>
       )}
       {error && (
         <Text
           accessibilityRole="alert"
-          className="font-medium text-xs text-danger"
+          className="font-medium text-xs text-danger-text-color"
         >
           {error}
         </Text>
@@ -30,7 +34,7 @@ export function FieldFrame({ label, error, hint, children }: IFieldFrameProps) {
 }
 
 export function inputClassName(invalid: boolean) {
-  return `min-h-[52px] rounded-xl border bg-surface px-3.5 font-sans text-base text-text ${
-    invalid ? 'border-danger' : 'border-border'
+  return `min-h-[52px] rounded-xl border bg-secondary-bg-color px-3.5 font-sans text-base text-primary-text-color ${
+    invalid ? 'border-danger-border-color' : 'border-primary-border-color'
   }`;
 }

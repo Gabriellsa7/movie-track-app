@@ -42,7 +42,7 @@ export function TextField<TFields extends FieldValues>({
         onBlur={onBlur}
         accessibilityLabel={label}
         aria-invalid={error ? true : undefined}
-        placeholderTextColor={rgb(scheme, 'text-muted')}
+        placeholderTextColor={rgb(scheme, 'tertiary-text-color')}
         className={inputClassName(Boolean(error))}
         {...inputProps}
       />

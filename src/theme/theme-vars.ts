@@ -5,7 +5,7 @@ function toVars(scheme: TColorScheme) {
   return vars(
     Object.fromEntries(
       Object.entries(PALETTE[scheme]).map(([token, value]) => [
-        `--color-${token}`,
+        `--${token}`,
         value,
       ]),
     ),

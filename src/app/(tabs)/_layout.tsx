@@ -37,11 +37,11 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: rgb(scheme, 'accent'),
-        tabBarInactiveTintColor: rgb(scheme, 'text-muted'),
+        tabBarActiveTintColor: rgb(scheme, 'accent-bg-color'),
+        tabBarInactiveTintColor: rgb(scheme, 'tertiary-text-color'),
         tabBarStyle: {
-          backgroundColor: rgb(scheme, 'sidebar'),
-          borderTopColor: rgb(scheme, 'border'),
+          backgroundColor: rgb(scheme, 'sidebar-bg-color'),
+          borderTopColor: rgb(scheme, 'primary-border-color'),
         },
         tabBarLabelStyle: { fontFamily: 'Inter_600SemiBold', fontSize: 11 },
       }}

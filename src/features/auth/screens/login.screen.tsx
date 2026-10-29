@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function LoginScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-primary-bg-color" edges={['top']}>
       <View>
         <LogoMark size={80} />
         <Text>SEU DIÁRIO DE CINEMA</Text>

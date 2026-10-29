@@ -63,7 +63,7 @@ export function DateField<TFields extends FieldValues>({
         }}
         className={`justify-center ${inputClassName(Boolean(error))}`}
       >
-        <Text className="font-sans text-base text-text">
+        <Text className="font-sans text-base text-primary-text-color">
           {formatDate(value)}
         </Text>
       </Pressable>

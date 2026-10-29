@@ -11,11 +11,11 @@ export function ScreenPlaceholder({
   children?: ReactNode;
 }) {
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-primary-bg-color" edges={['top']}>
       <View className="flex-1 px-5 pt-4">
         <Text
           accessibilityRole="header"
-          className="font-display text-4xl text-text"
+          className="font-display text-4xl text-primary-text-color"
         >
           {title}
         </Text>

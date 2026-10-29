@@ -7,8 +7,8 @@ const TICKET =
 const STAR =
   'M0 -8.5L2.116 -2.912L8.084 -2.627L3.424 1.112L4.996 6.877L0 3.6L-4.996 6.877L-3.424 1.112L-8.084 -2.627L-2.116 -2.912Z';
 // Both themes share the accent and the ink on it, so the mark needs no scheme.
-const TILE = rgb('dark', 'accent');
-const INK = rgb('dark', 'on-accent');
+const TILE = rgb('dark', 'accent-bg-color');
+const INK = rgb('dark', 'on-accent-text-color');
 
 // The cinema ticket with the rating star, on a 64-unit grid. assets/images/ are rendered from the same drawing.
 export function LogoMark({ size = 36 }: { size?: number }) {
@@ -48,7 +48,7 @@ export function Logo() {
   return (
     <View className="flex-row items-center gap-2.5">
       <LogoMark />
-      <Text className="font-display text-[28px] leading-none tracking-[1px] text-text">
+      <Text className="font-display text-stat text-primary-text-color">
         Movie Track
       </Text>
     </View>

@@ -39,11 +39,11 @@ function navigationTheme(scheme: TColorScheme) {
     ...base,
     colors: {
       ...base.colors,
-      primary: rgb(scheme, 'accent'),
-      background: rgb(scheme, 'background'),
-      card: rgb(scheme, 'sidebar'),
-      text: rgb(scheme, 'text'),
-      border: rgb(scheme, 'border'),
+      primary: rgb(scheme, 'accent-bg-color'),
+      background: rgb(scheme, 'primary-bg-color'),
+      card: rgb(scheme, 'sidebar-bg-color'),
+      text: rgb(scheme, 'primary-text-color'),
+      border: rgb(scheme, 'primary-border-color'),
     },
   };
 }

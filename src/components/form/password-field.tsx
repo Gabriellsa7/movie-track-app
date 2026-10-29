@@ -25,7 +25,7 @@ export function PasswordField<TFields extends FieldValues>(
         className="mt-1.5 self-end"
         hitSlop={8}
       >
-        <Text className="font-semibold text-xs text-accent-text">
+        <Text className="font-semibold text-xs text-accent-text-color">
           {visible ? 'Ocultar senha' : 'Mostrar senha'}
         </Text>
       </Pressable>
