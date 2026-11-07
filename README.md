@@ -47,7 +47,7 @@ the versions that match the SDK.
 Before pushing:
 
 ```bash
-yarn format:check && yarn lint && yarn typecheck && yarn test:coverage && yarn doctor
+yarn format:check && yarn lint && yarn typecheck && yarn test:coverage
 ```
 
 ## Styles

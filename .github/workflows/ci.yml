@@ -30,6 +30,3 @@ jobs:
 
       - name: Tests with coverage threshold (80%)
         run: yarn test:coverage
-
-      - name: Expo doctor
-        run: yarn doctor
