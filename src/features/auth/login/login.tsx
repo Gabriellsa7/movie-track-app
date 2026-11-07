@@ -8,8 +8,10 @@ import { LoginHeader } from './components/login-header/login-header';
 export function LoginScreen() {
   return (
     <SafeAreaView className="flex-1 bg-primary-bg-color px-6" edges={['top']}>
-      <LoginHeader />
-      <LoginForm />
+      <View className="gap-2">
+        <LoginHeader />
+        <LoginForm />
+      </View>
 
       <View className="pb-10">
         <Text className="text-center text-sm text-primary-text-color">
