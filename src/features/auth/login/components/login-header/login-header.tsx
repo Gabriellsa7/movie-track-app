@@ -8,7 +8,7 @@ export function LoginHeader() {
       <View className="gap-3">
         <Text
           accessibilityRole="header"
-          className="font-display text-[52px] leading-[50px] tracking-[1px] text-primary-text-color"
+          className="font-display text-[52px] leading-[58px] tracking-[1px] text-primary-text-color"
         >
           {'SEU DIÁRIO\nDE CINEMA'}
         </Text>
