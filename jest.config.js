@@ -3,6 +3,11 @@ module.exports = {
   preset: 'jest-expo',
   setupFiles: ['./src/test/env.js'],
   setupFilesAfterEnv: ['./src/test/setup.ts'],
+  // The "react-native" export of lucide is .mjs, which jest does not transform.
+  moduleNameMapper: {
+    '^lucide-react-native$':
+      '<rootDir>/node_modules/lucide-react-native/dist/cjs/lucide-react-native.js',
+  },
   testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
   transformIgnorePatterns: [
     'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|nativewind|react-native-css-interop|lucide-react-native|sonner-native|react-native-gifted-charts|gifted-charts-core|react-native-svg|standard-navigation)',

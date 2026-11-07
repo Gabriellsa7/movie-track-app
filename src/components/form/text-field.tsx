@@ -4,7 +4,8 @@ import {
   type FieldPath,
   type FieldValues,
 } from 'react-hook-form';
-import { TextInput, type TextInputProps } from 'react-native';
+import type { ReactNode } from 'react';
+import { TextInput, View, type TextInputProps } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import { FieldFrame, inputClassName } from './field-frame';
@@ -17,6 +18,8 @@ export type TTextFieldProps<TFields extends FieldValues> = Omit<
   name: FieldPath<TFields>;
   label: string;
   hint?: string;
+  // Shown inside the input, on the right (e.g. the password visibility toggle).
+  trailing?: ReactNode;
 };
 
 export function TextField<TFields extends FieldValues>({
@@ -24,6 +27,7 @@ export function TextField<TFields extends FieldValues>({
   name,
   label,
   hint,
+  trailing,
   ...inputProps
 }: TTextFieldProps<TFields>) {
   const scheme = useAppTheme();
@@ -35,17 +39,20 @@ export function TextField<TFields extends FieldValues>({
 
   return (
     <FieldFrame label={label} error={error} hint={hint}>
-      <TextInput
-        ref={ref}
-        value={typeof value === 'string' ? value : ''}
-        onChangeText={onChange}
-        onBlur={onBlur}
-        accessibilityLabel={label}
-        aria-invalid={error ? true : undefined}
-        placeholderTextColor={color(scheme, 'tertiary-text-color')}
-        className={inputClassName(Boolean(error))}
-        {...inputProps}
-      />
+      <View className="justify-center">
+        <TextInput
+          ref={ref}
+          value={typeof value === 'string' ? value : ''}
+          onChangeText={onChange}
+          onBlur={onBlur}
+          accessibilityLabel={label}
+          aria-invalid={error ? true : undefined}
+          placeholderTextColor={color(scheme, 'tertiary-text-color')}
+          className={`${inputClassName(Boolean(error))} ${trailing ? 'pr-14' : ''}`}
+          {...inputProps}
+        />
+        {trailing && <View className="absolute right-2.5">{trailing}</View>}
+      </View>
     </FieldFrame>
   );
 }
