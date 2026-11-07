@@ -12,6 +12,8 @@ export const IMAGE_MIME_TYPES = [
 ] as const;
 const PASSWORD_MIN_LENGTH = 8;
 const PASSWORD_MAX_LENGTH = 72;
+const NAME_MIN_LENGTH = 2;
+const NAME_MAX_LENGTH = 80;
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 // Trim before checking the format, so pasted addresses with spaces still pass.
@@ -27,6 +29,30 @@ export const passwordSchema = z
   .max(PASSWORD_MAX_LENGTH, `Use no máximo ${PASSWORD_MAX_LENGTH} caracteres`)
   .regex(/[A-Za-z]/, 'Use pelo menos uma letra')
   .regex(/\d/, 'Use pelo menos um número');
+
+// The same rules as passwordSchema, shown as a live checklist while typing.
+export const PASSWORD_RULES = [
+  {
+    label: `Entre ${PASSWORD_MIN_LENGTH} e ${PASSWORD_MAX_LENGTH} caracteres`,
+    test: (password: string) =>
+      password.length >= PASSWORD_MIN_LENGTH &&
+      password.length <= PASSWORD_MAX_LENGTH,
+  },
+  {
+    label: 'Pelo menos uma letra',
+    test: (password: string) => /[A-Za-z]/.test(password),
+  },
+  {
+    label: 'Pelo menos um número',
+    test: (password: string) => /\d/.test(password),
+  },
+] as const;
+
+export const nameSchema = z
+  .string()
+  .trim()
+  .min(NAME_MIN_LENGTH, `Use pelo menos ${NAME_MIN_LENGTH} caracteres`)
+  .max(NAME_MAX_LENGTH, `Use no máximo ${NAME_MAX_LENGTH} caracteres`);
 
 export const ratingSchema = z
   .number('Dê uma nota')
