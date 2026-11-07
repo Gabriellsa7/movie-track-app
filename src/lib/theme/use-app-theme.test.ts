@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native';
 import { colorScheme } from 'nativewind';
 import { useThemeStore } from '@/stores/theme.store';
-import { rgb } from '@/theme/palette';
+import { color } from '@/theme/palette';
 import { THEME_VARS } from '@/theme/theme-vars';
 import { useAppTheme } from './use-app-theme';
 
@@ -25,9 +25,9 @@ describe('When we apply the theme preference', () => {
 });
 
 describe('When we read the palette', () => {
-  it('should give rgb colors and css variables for both schemes', () => {
-    expect(rgb('dark', 'accent-bg-color')).toBe('rgb(245, 184, 61)');
-    expect(rgb('light', 'primary-bg-color')).toBe('rgb(247, 245, 241)');
+  it('should give hex colors and css variables for both schemes', () => {
+    expect(color('dark', 'accent-bg-color')).toBe('#F5B83D');
+    expect(color('light', 'primary-bg-color')).toBe('#F7F5F1');
     expect(THEME_VARS.dark).toBeDefined();
     expect(THEME_VARS.light).toBeDefined();
   });

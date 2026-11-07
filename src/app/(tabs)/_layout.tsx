@@ -9,7 +9,7 @@ import {
 } from 'lucide-react-native';
 import type { ColorValue } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
-import { rgb } from '@/theme/palette';
+import { color } from '@/theme/palette';
 
 function tabIcon(Icon: LucideIcon) {
   return function TabIcon({
@@ -37,11 +37,11 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: rgb(scheme, 'accent-bg-color'),
-        tabBarInactiveTintColor: rgb(scheme, 'tertiary-text-color'),
+        tabBarActiveTintColor: color(scheme, 'accent-bg-color'),
+        tabBarInactiveTintColor: color(scheme, 'tertiary-text-color'),
         tabBarStyle: {
-          backgroundColor: rgb(scheme, 'sidebar-bg-color'),
-          borderTopColor: rgb(scheme, 'primary-border-color'),
+          backgroundColor: color(scheme, 'sidebar-bg-color'),
+          borderTopColor: color(scheme, 'primary-border-color'),
         },
         tabBarLabelStyle: { fontFamily: 'Inter_600SemiBold', fontSize: 11 },
       }}

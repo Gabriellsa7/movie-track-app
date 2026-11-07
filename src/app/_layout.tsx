@@ -25,7 +25,7 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { Providers } from '@/providers';
 import { RootStack } from '@/routes/root-stack';
 import { useSessionStore } from '@/stores/session.store';
-import { rgb, type TColorScheme } from '@/theme/palette';
+import { color, type TColorScheme } from '@/theme/palette';
 import { THEME_VARS } from '@/theme/theme-vars';
 
 void SplashScreen.preventAutoHideAsync();
@@ -39,11 +39,11 @@ function navigationTheme(scheme: TColorScheme) {
     ...base,
     colors: {
       ...base.colors,
-      primary: rgb(scheme, 'accent-bg-color'),
-      background: rgb(scheme, 'primary-bg-color'),
-      card: rgb(scheme, 'sidebar-bg-color'),
-      text: rgb(scheme, 'primary-text-color'),
-      border: rgb(scheme, 'primary-border-color'),
+      primary: color(scheme, 'accent-bg-color'),
+      background: color(scheme, 'primary-bg-color'),
+      card: color(scheme, 'sidebar-bg-color'),
+      text: color(scheme, 'primary-text-color'),
+      border: color(scheme, 'primary-border-color'),
     },
   };
 }

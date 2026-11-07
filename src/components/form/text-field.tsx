@@ -6,7 +6,7 @@ import {
 } from 'react-hook-form';
 import { TextInput, type TextInputProps } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
-import { rgb } from '@/theme/palette';
+import { color } from '@/theme/palette';
 import { FieldFrame, inputClassName } from './field-frame';
 
 export type TTextFieldProps<TFields extends FieldValues> = Omit<
@@ -42,7 +42,7 @@ export function TextField<TFields extends FieldValues>({
         onBlur={onBlur}
         accessibilityLabel={label}
         aria-invalid={error ? true : undefined}
-        placeholderTextColor={rgb(scheme, 'tertiary-text-color')}
+        placeholderTextColor={color(scheme, 'tertiary-text-color')}
         className={inputClassName(Boolean(error))}
         {...inputProps}
       />

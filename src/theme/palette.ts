@@ -1,70 +1,70 @@
-// Colors from the approved mockups (FQ-25), as "R G B" so Tailwind can add opacity.
+// Colors from the approved mockups (FQ-25).
 export const PALETTE = {
   dark: {
-    'primary-bg-color': '15 17 21',
-    'secondary-bg-color': '26 29 36',
-    'tertiary-bg-color': '35 39 49',
-    'sidebar-bg-color': '19 22 27',
-    'accent-bg-color': '245 184 61',
-    'accent-hover-bg-color': '255 210 122',
-    'accent-soft-bg-color': '42 36 24',
-    'danger-soft-bg-color': '46 28 28',
-    'success-soft-bg-color': '22 38 30',
+    'primary-bg-color': '#0F1115',
+    'secondary-bg-color': '#1A1D24',
+    'tertiary-bg-color': '#232731',
+    'sidebar-bg-color': '#13161B',
+    'accent-bg-color': '#F5B83D',
+    'accent-hover-bg-color': '#FFD27A',
+    'accent-soft-bg-color': '#2A2418',
+    'danger-soft-bg-color': '#2E1C1C',
+    'success-soft-bg-color': '#16261E',
     // Use with opacity: bg-overlay-bg-color/80
-    'overlay-bg-color': '7 8 10',
+    'overlay-bg-color': '#07080A',
 
-    'primary-text-color': '232 230 227',
-    'secondary-text-color': '201 199 195',
-    'tertiary-text-color': '138 143 152',
-    'accent-text-color': '245 184 61',
-    'on-accent-text-color': '15 17 21',
-    'danger-text-color': '242 139 130',
-    'success-text-color': '91 192 138',
+    'primary-text-color': '#E8E6E3',
+    'secondary-text-color': '#C9C7C3',
+    'tertiary-text-color': '#8A8F98',
+    'accent-text-color': '#F5B83D',
+    'on-accent-text-color': '#0F1115',
+    'danger-text-color': '#F28B82',
+    'success-text-color': '#5BC08A',
 
-    'primary-border-color': '44 49 60',
-    'secondary-border-color': '58 63 75',
-    'accent-border-color': '74 59 28',
-    'danger-border-color': '242 139 130',
-    'success-border-color': '36 80 58',
+    'primary-border-color': '#2C313C',
+    'secondary-border-color': '#3A3F4B',
+    'accent-border-color': '#4A3B1C',
+    'danger-border-color': '#F28B82',
+    'success-border-color': '#24503A',
 
-    'star-filled-color': '245 184 61',
-    'star-empty-color': '74 80 92',
+    'star-filled-color': '#F5B83D',
+    'star-empty-color': '#4A505C',
   },
   light: {
-    'primary-bg-color': '247 245 241',
-    'secondary-bg-color': '255 255 255',
-    'tertiary-bg-color': '239 236 230',
-    'sidebar-bg-color': '239 236 230',
-    'accent-bg-color': '245 184 61',
-    'accent-hover-bg-color': '224 165 44',
-    'accent-soft-bg-color': '251 239 211',
-    'danger-soft-bg-color': '251 233 231',
-    'success-soft-bg-color': '227 243 234',
+    'primary-bg-color': '#F7F5F1',
+    'secondary-bg-color': '#FFFFFF',
+    'tertiary-bg-color': '#EFECE6',
+    'sidebar-bg-color': '#EFECE6',
+    'accent-bg-color': '#F5B83D',
+    'accent-hover-bg-color': '#E0A52C',
+    'accent-soft-bg-color': '#FBEFD3',
+    'danger-soft-bg-color': '#FBE9E7',
+    'success-soft-bg-color': '#E3F3EA',
     // Use with opacity: bg-overlay-bg-color/45
-    'overlay-bg-color': '23 25 30',
+    'overlay-bg-color': '#17191E',
 
-    'primary-text-color': '23 25 30',
-    'secondary-text-color': '58 61 68',
-    'tertiary-text-color': '94 99 107',
-    'accent-text-color': '138 90 0',
-    'on-accent-text-color': '15 17 21',
-    'danger-text-color': '179 38 30',
-    'success-text-color': '30 122 76',
+    'primary-text-color': '#17191E',
+    'secondary-text-color': '#3A3D44',
+    'tertiary-text-color': '#5E636B',
+    'accent-text-color': '#8A5A00',
+    'on-accent-text-color': '#0F1115',
+    'danger-text-color': '#B3261E',
+    'success-text-color': '#1E7A4C',
 
-    'primary-border-color': '221 216 207',
-    'secondary-border-color': '207 201 190',
-    'accent-border-color': '235 203 134',
-    'danger-border-color': '179 38 30',
-    'success-border-color': '168 216 189',
+    'primary-border-color': '#DDD8CF',
+    'secondary-border-color': '#CFC9BE',
+    'accent-border-color': '#EBCB86',
+    'danger-border-color': '#B3261E',
+    'success-border-color': '#A8D8BD',
 
-    'star-filled-color': '245 184 61',
-    'star-empty-color': '207 201 190',
+    'star-filled-color': '#F5B83D',
+    'star-empty-color': '#CFC9BE',
   },
 } as const;
 
 export type TColorScheme = keyof typeof PALETTE;
 export type TColorToken = keyof (typeof PALETTE)['dark'];
 
-export function rgb(scheme: TColorScheme, token: TColorToken): string {
-  return `rgb(${PALETTE[scheme][token].replaceAll(' ', ', ')})`;
+export function color(scheme: TColorScheme, token: TColorToken): string {
+  return PALETTE[scheme][token];
 }

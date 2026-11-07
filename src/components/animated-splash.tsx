@@ -1,11 +1,11 @@
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { AccessibilityInfo, Animated, Easing, StyleSheet } from 'react-native';
-import { rgb } from '@/theme/palette';
+import { color } from '@/theme/palette';
 import { LogoMark } from './logo';
 
 // Same background and logo width as the native splash in app.config.ts, so the hand-off is invisible.
-export const SPLASH_BACKGROUND = rgb('dark', 'primary-bg-color');
+export const SPLASH_BACKGROUND = color('dark', 'primary-bg-color');
 const LOGO_SIZE = 120;
 // Keeps the brand moment readable when the session is restored instantly.
 const MIN_VISIBLE_MS = 600;
