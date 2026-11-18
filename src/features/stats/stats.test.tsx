@@ -3,6 +3,7 @@ import { fireEvent, screen } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 import { Text } from 'react-native';
 import type { IUserStats } from '@/api/types';
+import { MoviesPerMonth } from '@/features/home/components/movies-per-month/movies-per-month';
 import { StatsOverview } from '@/features/home/components/stats-overview/stats-overview';
 import { useSessionStore } from '@/stores/session.store';
 import { USER_ID } from '@/test/constants';
@@ -121,6 +122,22 @@ describe('When we tap the stats on the home', () => {
 
     await fireEvent.press(
       screen.getByRole('link', { name: 'Open your dashboard' }),
+    );
+
+    expect(await screen.findByText('Dashboard screen')).toBeOnTheScreen();
+  });
+
+  it('should open the dashboard from the movies per month chart', async () => {
+    await renderRouter(
+      {
+        index: () => <MoviesPerMonth stats={STATS} />,
+        stats: () => <Text>Dashboard screen</Text>,
+      },
+      { initialUrl: '/' },
+    );
+
+    await fireEvent.press(
+      screen.getByRole('link', { name: /^Movies per month/ }),
     );
 
     expect(await screen.findByText('Dashboard screen')).toBeOnTheScreen();
