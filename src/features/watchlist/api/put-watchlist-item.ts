@@ -1,12 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/api/client';
 import { useInvalidateWatchlist } from '@/api/get-watchlist';
+import { mapCachedItems, type TCachedPages } from '@/api/pagination';
 import { queryKeys } from '@/api/query-keys';
-import type {
-  IUpdateWatchlistItemBody,
-  IWatchlistItem,
-  IWatchlistPage,
-} from '@/api/types';
+import type { IUpdateWatchlistItemBody, IWatchlistItem } from '@/api/types';
 
 export async function updateWatchlistItem(
   itemId: string,
@@ -27,22 +24,17 @@ export function useUpdateWatchlistItemMutation(itemId: string) {
       updateWatchlistItem(itemId, body),
     onMutate: async (body) => {
       await client.cancelQueries({ queryKey: queryKeys.watchlist.all });
-      const previous = client.getQueriesData<IWatchlistPage>({
+      const previous = client.getQueriesData<TCachedPages<IWatchlistItem>>({
         queryKey: queryKeys.watchlist.all,
       });
       if (body.priority) {
         const { priority } = body;
-        client.setQueriesData<IWatchlistPage>(
+        client.setQueriesData<TCachedPages<IWatchlistItem>>(
           { queryKey: queryKeys.watchlist.all },
-          (page) =>
-            Array.isArray(page?.items)
-              ? {
-                  ...page,
-                  items: page.items.map((item) =>
-                    item.id === itemId ? { ...item, priority } : item,
-                  ),
-                }
-              : page,
+          (data) =>
+            mapCachedItems(data, (item) =>
+              item.id === itemId ? { ...item, priority } : item,
+            ),
         );
       }
       return { previous };

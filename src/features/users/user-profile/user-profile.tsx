@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ApiError } from '@/api/api-error';
+import { pagesItems } from '@/api/pagination';
 import { EApiErrorCode } from '@/api/error-codes';
 import { FilterChip } from '@/components/filter-chip';
 import { OptionSheet } from '@/components/option-sheet';
@@ -15,9 +16,10 @@ import {
   type TMovieSortKey,
 } from '@/lib/movie-sort';
 import { shareLink } from '@/lib/share';
+import { useLoadMore } from '@/lib/use-load-more';
 import { useRefreshControl } from '@/lib/use-refresh-control';
 import { ROUTES } from '@/routes/routes.constants';
-import { useUserMoviesQuery } from '../api/get-user-movies';
+import { useUserMoviePagesQuery } from '../api/get-user-movies';
 import { useUserProfileQuery } from '../api/get-user-profile';
 import { ProfileHeader } from './components/profile-header/profile-header';
 import { ProfileMovieRow } from './components/profile-movie-row/profile-movie-row';
@@ -26,17 +28,13 @@ import { ProfileSkeleton } from './components/profile-skeleton/profile-skeleton'
 import { ProfileStats } from './components/profile-stats/profile-stats';
 import { ProfileTopBar } from '../components/profile-top-bar/profile-top-bar';
 
-const MOVIES_PER_PAGE = 50;
-
 export function UserProfileScreen() {
   const { userId } = useLocalSearchParams<{ userId: string }>();
   const [sort, setSort] = useState<TMovieSortKey>('rating');
   const [isSortOpen, setIsSortOpen] = useState(false);
   const profile = useUserProfileQuery(userId);
-  const movies = useUserMoviesQuery(userId, {
-    ...movieSortQuery(sort),
-    limit: MOVIES_PER_PAGE,
-  });
+  const movies = useUserMoviePagesQuery(userId, movieSortQuery(sort));
+  const loadMore = useLoadMore(movies);
   const refreshControl = useRefreshControl(() =>
     Promise.all([profile.refetch(), movies.refetch()]),
   );
@@ -113,7 +111,7 @@ export function UserProfileScreen() {
   return (
     <SafeAreaView className="flex-1 bg-primary-bg-color" edges={['top']}>
       <FlatList
-        data={user ? movies.data?.items : undefined}
+        data={user ? pagesItems(movies.data) : undefined}
         keyExtractor={(movie) => movie.id}
         renderItem={({ item }) => <ProfileMovieRow movie={item} />}
         ItemSeparatorComponent={() => <View className="h-2.5" />}
@@ -131,6 +129,7 @@ export function UserProfileScreen() {
         ListEmptyComponent={renderEmptyMovies()}
         contentContainerClassName="px-5 pb-10 pt-1"
         refreshControl={refreshControl}
+        {...loadMore}
       />
       <OptionSheet<TMovieSortKey>
         title="Sort movies"

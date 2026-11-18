@@ -5,7 +5,8 @@ import {
 } from '@tanstack/react-query';
 import { listWatchlist } from '@/api/get-watchlist';
 import { queryKeys } from '@/api/query-keys';
-import type { IWatchlistItem, IWatchlistPage } from '@/api/types';
+import { cachedItems, type TCachedPages } from '@/api/pagination';
+import type { IWatchlistItem } from '@/api/types';
 
 const PAGE_LIMIT = 50;
 const MAX_PAGES = 10;
@@ -15,8 +16,10 @@ function findCachedItem(
   itemId: string,
 ): IWatchlistItem | undefined {
   return client
-    .getQueriesData<IWatchlistPage>({ queryKey: queryKeys.watchlist.all })
-    .flatMap(([, page]) => page?.items ?? [])
+    .getQueriesData<TCachedPages<IWatchlistItem>>({
+      queryKey: queryKeys.watchlist.all,
+    })
+    .flatMap(([, data]) => cachedItems(data))
     .find((item) => item.id === itemId);
 }
 

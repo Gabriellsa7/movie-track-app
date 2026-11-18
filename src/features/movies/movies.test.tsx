@@ -15,6 +15,14 @@ function lastMoviesParams(): unknown {
     .at(-1)?.params;
 }
 
+function lastMoviesFilters(): unknown {
+  const { page, limit, ...filters } = lastMoviesParams() as Record<
+    string,
+    unknown
+  >;
+  return filters;
+}
+
 async function renderMovies() {
   mockApi.onGet('/genres').reply(200, GENRES);
   const client = createTestQueryClient();
@@ -38,7 +46,12 @@ describe('When we open my movies', () => {
     expect(
       screen.getByLabelText('Duna: Parte 2, 2024, rating 9'),
     ).toBeOnTheScreen();
-    expect(lastMoviesParams()).toEqual({ sort: 'watchedAt', order: 'desc' });
+    expect(lastMoviesParams()).toEqual({
+      sort: 'watchedAt',
+      order: 'desc',
+      page: 1,
+      limit: 20,
+    });
   });
 
   it('should tell when there is no movie yet', async () => {
@@ -90,7 +103,7 @@ describe('When we search my movies', () => {
       await screen.findByText('No movies found for “xyz”'),
     ).toBeOnTheScreen();
     await waitFor(() => {
-      expect(lastMoviesParams()).toEqual({
+      expect(lastMoviesFilters()).toEqual({
         sort: 'watchedAt',
         order: 'desc',
         search: 'xyz',
@@ -118,7 +131,7 @@ describe('When we filter my movies', () => {
     );
 
     await waitFor(() => {
-      expect(lastMoviesParams()).toEqual({
+      expect(lastMoviesFilters()).toEqual({
         sort: 'rating',
         order: 'desc',
         favorite: true,
