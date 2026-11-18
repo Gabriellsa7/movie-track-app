@@ -10,7 +10,7 @@ export function MoviesHeader({ total }: IMoviesHeaderProps) {
     <View className="gap-1">
       <Text
         accessibilityRole="header"
-        className="font-display text-4xl text-primary-text-color"
+        className="font-display text-title-sm tracking-[1px] text-primary-text-color"
       >
         My movies
       </Text>

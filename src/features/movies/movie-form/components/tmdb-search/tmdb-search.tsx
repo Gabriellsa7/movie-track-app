@@ -18,10 +18,11 @@ const SEARCH_DEBOUNCE_MILLISECONDS = 400;
 const MAX_RESULTS = 5;
 
 interface ITmdbSearchProps {
+  placeholder: string;
   onSelect: (movie: ITmdbMovie) => void;
 }
 
-export function TmdbSearch({ onSelect }: ITmdbSearchProps) {
+export function TmdbSearch({ placeholder, onSelect }: ITmdbSearchProps) {
   const scheme = useAppTheme();
   const [text, setText] = useState('');
   const query = useDebouncedValue(text.trim(), SEARCH_DEBOUNCE_MILLISECONDS);
@@ -36,9 +37,6 @@ export function TmdbSearch({ onSelect }: ITmdbSearchProps) {
 
   return (
     <View className="gap-2">
-      <Text className="font-semibold text-sm text-primary-text-color">
-        Search TMDB
-      </Text>
       <View className="justify-center">
         <View className="absolute left-3.5 z-10">
           <Search size={18} color={color(scheme, 'tertiary-text-color')} />
@@ -47,7 +45,7 @@ export function TmdbSearch({ onSelect }: ITmdbSearchProps) {
           value={text}
           onChangeText={setText}
           accessibilityLabel="Search TMDB"
-          placeholder="Type a movie title to fill the form"
+          placeholder={placeholder}
           placeholderTextColor={color(scheme, 'tertiary-text-color')}
           autoCorrect={false}
           returnKeyType="search"

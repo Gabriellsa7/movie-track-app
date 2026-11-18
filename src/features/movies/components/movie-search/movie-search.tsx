@@ -20,7 +20,7 @@ export function MovieSearch({ value, onChangeText }: IMovieSearchProps) {
         value={value}
         onChangeText={onChangeText}
         accessibilityLabel="Search movies"
-        placeholder="Search by title"
+        placeholder="Search movies"
         placeholderTextColor={color(scheme, 'tertiary-text-color')}
         autoCapitalize="none"
         autoCorrect={false}

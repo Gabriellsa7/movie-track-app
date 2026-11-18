@@ -1,7 +1,7 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
-import { Alert, type AlertButton } from 'react-native';
+import { Alert, Share, type AlertButton } from 'react-native';
 import { toast } from 'sonner-native';
 import { MOVIE_ID } from '@/test/constants';
 import { A_MOVIE } from '@/test/fixtures';
@@ -34,22 +34,35 @@ async function renderDetail() {
   );
 }
 
+function pressAlertButton(
+  alert: jest.SpiedFunction<typeof Alert.alert>,
+  call: number,
+  text: string,
+) {
+  const buttons = alert.mock.calls[call]?.[2] as AlertButton[];
+  buttons.find((button) => button.text === text)?.onPress?.();
+}
+
 describe('When we open a movie', () => {
-  it('should show its information', async () => {
+  it('should show its information like the mockup', async () => {
     mockApi.onGet(`/movies/${MOVIE_ID}`).reply(200, FULL_MOVIE);
     await renderDetail();
 
     expect(
       await screen.findByRole('header', { name: 'Duna: Parte 2' }),
     ).toBeOnTheScreen();
-    expect(screen.getByText('2024 · 2h 46m')).toBeOnTheScreen();
-    expect(screen.getByText('Directed by Denis Villeneuve')).toBeOnTheScreen();
+    expect(
+      screen.getByText('2024 · 2h 46m · Denis Villeneuve'),
+    ).toBeOnTheScreen();
     expect(screen.getByLabelText('Rating 9 of 10')).toBeOnTheScreen();
+    expect(screen.getByText('9.0')).toBeOnTheScreen();
     expect(await screen.findByText('Science Fiction')).toBeOnTheScreen();
-    expect(screen.getByText('Oct 12, 2026')).toBeOnTheScreen();
-    expect(screen.getByText('2 times')).toBeOnTheScreen();
-    expect(screen.getByText(A_MOVIE.synopsis)).toBeOnTheScreen();
+    expect(
+      screen.getByText('Watched 2 times · last on Oct 12, 2026'),
+    ).toBeOnTheScreen();
+    expect(screen.getByText('My review')).toBeOnTheScreen();
     expect(screen.getByText('A masterpiece.')).toBeOnTheScreen();
+    expect(screen.getByText(A_MOVIE.synopsis)).toBeOnTheScreen();
   });
 
   it('should leave out what was not filled', async () => {
@@ -57,8 +70,7 @@ describe('When we open a movie', () => {
     await renderDetail();
 
     expect(await screen.findByText('2024')).toBeOnTheScreen();
-    expect(screen.queryByText(/Directed by/)).toBeNull();
-    expect(screen.queryByText('Your review')).toBeNull();
+    expect(screen.queryByText('My review')).toBeNull();
   });
 
   it('should tell when the movie no longer exists', async () => {
@@ -82,7 +94,7 @@ describe('When we open a movie', () => {
   });
 });
 
-describe('When we change a movie from its page', () => {
+describe('When we act on a movie from its page', () => {
   it('should mark it as favorite', async () => {
     let isFavorite = false;
     mockApi
@@ -104,22 +116,55 @@ describe('When we change a movie from its page', () => {
           .accessibilityState,
       ).toMatchObject({ checked: true });
     });
-    expect(JSON.parse(mockApi.history.patch[0]?.data as string)).toEqual({
-      isFavorite: true,
+  });
+
+  it('should add one more watch', async () => {
+    mockApi.onGet(`/movies/${MOVIE_ID}`).reply(200, A_MOVIE);
+    mockApi
+      .onPost(`/movies/${MOVIE_ID}/rewatch`)
+      .reply(200, { ...A_MOVIE, watchCount: 3 });
+    await renderDetail();
+
+    await fireEvent.press(
+      await screen.findByRole('button', { name: 'Watched again' }),
+    );
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('Added one more watch');
     });
   });
 
-  it('should delete it after confirming', async () => {
+  it('should share the public review link', async () => {
+    const share = jest.spyOn(Share, 'share').mockResolvedValue({
+      action: Share.sharedAction,
+      activityType: undefined,
+    });
+    mockApi.onGet(`/movies/${MOVIE_ID}`).reply(200, A_MOVIE);
+    await renderDetail();
+
+    await fireEvent.press(await screen.findByRole('button', { name: 'Share' }));
+
+    expect(share).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringContaining(
+          `/users/${A_MOVIE.userId}/movies/${MOVIE_ID}`,
+        ) as string,
+      }),
+    );
+    share.mockRestore();
+  });
+
+  it('should delete it from the more options menu after confirming', async () => {
     const alert = jest.spyOn(Alert, 'alert');
     mockApi.onGet(`/movies/${MOVIE_ID}`).reply(200, A_MOVIE);
     mockApi.onDelete(`/movies/${MOVIE_ID}`).reply(204);
     await renderDetail();
 
     await fireEvent.press(
-      await screen.findByRole('button', { name: 'Delete movie' }),
+      await screen.findByRole('button', { name: 'More options' }),
     );
-    const buttons = alert.mock.calls[0]?.[2] as AlertButton[];
-    buttons.find((button) => button.style === 'destructive')?.onPress?.();
+    pressAlertButton(alert, 0, 'Delete movie');
+    pressAlertButton(alert, 1, 'Delete');
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith('Movie deleted');

@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
+import { useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { Pressable, Switch, Text, View } from 'react-native';
+import { ScrollView, Switch, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
 import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
@@ -14,7 +14,6 @@ import { useCreateMovieMutation } from '@/features/movies/api/post-movie';
 import { uploadMoviePoster } from '@/features/movies/api/put-movie-poster';
 import { applyApiErrors } from '@/lib/forms/apply-api-errors';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
-import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
 import {
   MOVIE_FORM_FIELDS,
@@ -25,22 +24,29 @@ import {
   type IMovieFormOutput,
 } from '../../constants/constants';
 import { GenrePicker } from '../genre-picker/genre-picker';
+import {
+  closeMovieForm,
+  MovieFormHeader,
+} from '../movie-form-header/movie-form-header';
+import { MovieSummaryCard } from '../movie-summary-card/movie-summary-card';
 import { PosterPicker } from '../poster-picker/poster-picker';
-import { RatingPicker } from '../rating-picker/rating-picker';
+import { RatingField } from '../rating-field/rating-field';
 import { TmdbSearch } from '../tmdb-search/tmdb-search';
 
-function closeForm() {
-  if (router.canGoBack()) {
-    router.back();
-  } else {
-    router.replace(ROUTES.movies);
-  }
-}
+const DETAIL_FIELDS = [
+  'title',
+  'releaseYear',
+  'genreIds',
+  'synopsis',
+  'director',
+  'durationMinutes',
+] as const;
 
 export function NewMovieForm() {
   const scheme = useAppTheme();
   const createMovie = useCreateMovieMutation();
   const invalidateMyMovies = useInvalidateMyMovies();
+  const [isEditingDetails, setIsEditingDetails] = useState(false);
   const {
     control,
     handleSubmit,
@@ -52,10 +58,11 @@ export function NewMovieForm() {
     resolver: zodResolver(MOVIE_FORM_SCHEMA),
     defaultValues: movieFormDefaultValues(),
   });
-  const [title, poster, posterUrl] = useWatch({
+  const [title, releaseYear, genreIds, tmdbId, poster, posterUrl] = useWatch({
     control,
-    name: ['title', 'poster', 'posterUrl'],
+    name: ['title', 'releaseYear', 'genreIds', 'tmdbId', 'poster', 'posterUrl'],
   });
+  const showSummary = tmdbId !== undefined && !isEditingDetails;
 
   function fillFromTmdb(movie: ITmdbMovie) {
     const options = { shouldDirty: true };
@@ -69,7 +76,8 @@ export function NewMovieForm() {
     setValue('genreIds', movie.genreIds, options);
     setValue('tmdbId', movie.tmdbId, options);
     setValue('posterUrl', movie.posterUrl, options);
-    clearErrors(['title', 'releaseYear', 'synopsis', 'genreIds']);
+    clearErrors(DETAIL_FIELDS);
+    setIsEditingDetails(false);
   }
 
   function removePoster() {
@@ -88,14 +96,15 @@ export function NewMovieForm() {
           await invalidateMyMovies();
         } catch {
           toast.error(MOVIE_FORM_MESSAGES.posterNotSent);
-          closeForm();
+          closeMovieForm();
           return;
         }
       }
       toast.success(MOVIE_FORM_MESSAGES.created);
-      closeForm();
+      closeMovieForm();
     } catch (error) {
       if (applyApiErrors(error, setError, MOVIE_FORM_FIELDS)) {
+        setIsEditingDetails(true);
         return;
       }
       const apiError = ApiError.from(error);
@@ -110,84 +119,125 @@ export function NewMovieForm() {
     }
   };
 
+  const save = handleSubmit(onSubmit, (errors) => {
+    if (DETAIL_FIELDS.some((field) => field in errors)) {
+      setIsEditingDetails(true);
+    }
+  });
+
   return (
-    <View className="gap-5">
-      <TmdbSearch onSelect={fillFromTmdb} />
-      <PosterPicker
-        title={title}
-        photo={poster}
-        posterUrl={posterUrl}
-        onPick={(photo) => {
-          setValue('poster', photo);
-        }}
-        onRemove={removePoster}
+    <View className="flex-1">
+      <MovieFormHeader
+        title="Log a movie"
+        isSaving={isSubmitting}
+        onSave={() => void save()}
       />
-      <TextField control={control} name="title" label="Title" />
-      <TextField
-        control={control}
-        name="releaseYear"
-        label="Release year"
-        keyboardType="number-pad"
-        maxLength={4}
-      />
-      <GenrePicker control={control} name="genreIds" label="Genres" />
-      <TextAreaField control={control} name="synopsis" label="Synopsis" />
-      <RatingPicker control={control} name="rating" label="Your rating" />
-      <DateField
-        control={control}
-        name="watchedAt"
-        label="Watched on"
-        maximumDate={new Date()}
-      />
-      <TextField
-        control={control}
-        name="director"
-        label="Director"
-        hint="Optional"
-      />
-      <TextField
-        control={control}
-        name="durationMinutes"
-        label="Runtime (minutes)"
-        hint="Optional"
-        keyboardType="number-pad"
-        maxLength={4}
-      />
-      <TextAreaField
-        control={control}
-        name="review"
-        label="Your review"
-        hint="Optional"
-      />
-      <Controller
-        control={control}
-        name="isFavorite"
-        render={({ field: { value, onChange } }) => (
-          <View className="flex-row items-center justify-between">
-            <Text className="font-semibold text-sm text-primary-text-color">
-              Favorite
-            </Text>
-            <Switch
-              accessibilityLabel="Favorite"
-              value={value}
-              onValueChange={onChange}
-              trackColor={{ true: color(scheme, 'accent-bg-color') }}
+      <ScrollView
+        contentContainerClassName="gap-[18px] px-5 pb-10 pt-[18px]"
+        keyboardShouldPersistTaps="handled"
+      >
+        <TmdbSearch
+          placeholder={
+            tmdbId === undefined ? 'Search TMDB' : 'Search another movie'
+          }
+          onSelect={fillFromTmdb}
+        />
+
+        {showSummary ? (
+          <MovieSummaryCard
+            title={title}
+            releaseYear={releaseYear}
+            genreIds={genreIds}
+            posterUrl={poster?.uri ?? posterUrl}
+            onEdit={() => {
+              setIsEditingDetails(true);
+            }}
+          />
+        ) : (
+          <View className="gap-[18px]">
+            <PosterPicker
+              title={title}
+              photo={poster}
+              posterUrl={posterUrl}
+              onPick={(photo) => {
+                setValue('poster', photo);
+              }}
+              onRemove={removePoster}
+            />
+            <TextField control={control} name="title" label="Title" />
+            <TextField
+              control={control}
+              name="releaseYear"
+              label="Release year"
+              keyboardType="number-pad"
+              maxLength={4}
+            />
+            <GenrePicker control={control} name="genreIds" label="Genres" />
+            <TextAreaField control={control} name="synopsis" label="Synopsis" />
+            <TextField
+              control={control}
+              name="director"
+              label="Director"
+              hint="Optional"
+            />
+            <TextField
+              control={control}
+              name="durationMinutes"
+              label="Runtime (minutes)"
+              hint="Optional"
+              keyboardType="number-pad"
+              maxLength={4}
             />
           </View>
         )}
-      />
 
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ disabled: isSubmitting }}
-        disabled={isSubmitting}
-        onPress={() => void handleSubmit(onSubmit)()}
-        className="mt-2 h-[52px] items-center justify-center rounded-xl bg-accent-bg-color active:bg-accent-hover-bg-color disabled:opacity-60"
-      >
-        <Text className="font-semibold text-base text-on-accent-text-color">
-          {isSubmitting ? 'Saving…' : 'Log a movie'}
-        </Text>
-      </Pressable>
+        <RatingField control={control} name="rating" />
+
+        <View className="flex-row gap-2.5">
+          <View className="flex-1">
+            <DateField
+              control={control}
+              name="watchedAt"
+              label="Watched on"
+              maximumDate={new Date()}
+            />
+          </View>
+          <View className="w-[110px]">
+            <TextField
+              control={control}
+              name="watchCount"
+              label="Times"
+              keyboardType="number-pad"
+              maxLength={4}
+            />
+          </View>
+        </View>
+
+        <Controller
+          control={control}
+          name="isFavorite"
+          render={({ field: { value, onChange } }) => (
+            <View className="h-[52px] flex-row items-center justify-between rounded-xl border border-primary-border-color bg-secondary-bg-color px-3.5">
+              <Text className="font-medium text-[15px] text-primary-text-color">
+                Favorite
+              </Text>
+              <Switch
+                accessibilityLabel="Favorite"
+                value={value}
+                onValueChange={onChange}
+                trackColor={{ true: color(scheme, 'accent-bg-color') }}
+              />
+            </View>
+          )}
+        />
+
+        <TextAreaField
+          control={control}
+          name="review"
+          label="Your review"
+          placeholder="What did you think?"
+        />
+      </ScrollView>
     </View>
   );
 }
