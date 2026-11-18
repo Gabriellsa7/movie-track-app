@@ -43,7 +43,7 @@ describe('When we pick an image', () => {
 
     await expect(pickImage([1, 1])).resolves.toEqual({
       status: 'invalid',
-      message: 'Use a JPEG, PNG or WebP image',
+      message: 'validation.imageType',
     });
   });
 

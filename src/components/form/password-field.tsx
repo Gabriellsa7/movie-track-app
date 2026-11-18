@@ -5,12 +5,14 @@ import { Pressable } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import { TextField, type ITextFieldProps } from './text-field';
+import { useTranslation } from 'react-i18next';
 
 export function PasswordField<
   TFields extends FieldValues,
   TTransformed = TFields,
 >(props: ITextFieldProps<TFields, TTransformed>) {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const Icon = visible ? EyeOff : Eye;
 
@@ -23,7 +25,9 @@ export function PasswordField<
       trailing={
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={visible ? 'Hide password' : 'Show password'}
+          accessibilityLabel={
+            visible ? t('common.password.hide') : t('common.password.show')
+          }
           onPress={() => {
             setVisible((current) => !current);
           }}

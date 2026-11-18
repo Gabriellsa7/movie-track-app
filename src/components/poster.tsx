@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface IPosterProps {
   title: string;
@@ -14,6 +15,7 @@ export function Poster({
   className,
   showTitle = true,
 }: IPosterProps) {
+  const { t } = useTranslation();
   return (
     <View
       className={`overflow-hidden border border-primary-border-color bg-tertiary-bg-color ${className ?? ''}`}
@@ -21,7 +23,7 @@ export function Poster({
       {posterUrl ? (
         <Image
           source={{ uri: posterUrl }}
-          accessibilityLabel={`Poster of ${title}`}
+          accessibilityLabel={t('common.poster.of', { title })}
           contentFit="cover"
           transition={150}
           style={{ flex: 1 }}

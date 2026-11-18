@@ -8,14 +8,9 @@ export const RESET_PASSWORD_SCHEMA = z
   })
   .refine((values) => values.newPassword === values.confirmPassword, {
     path: ['confirmPassword'],
-    message: "The passwords don't match",
+    message: 'validation.passwordsMatch',
   });
 
 export interface IResetPasswordForm extends TInfer<
   typeof RESET_PASSWORD_SCHEMA
 > {}
-
-export const RESET_PASSWORD_MESSAGES = {
-  changed: 'Password changed. Log in with the new one.',
-  unexpected: "Couldn't save the new password. Try again.",
-} as const;

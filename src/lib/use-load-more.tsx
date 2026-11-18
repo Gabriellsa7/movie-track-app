@@ -1,6 +1,7 @@
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 const LOAD_MORE_THRESHOLD = 0.5;
 
@@ -13,6 +14,7 @@ interface IPagedQuery {
 
 export function useLoadMore(query: IPagedQuery) {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
 
   function loadMore() {
     if (
@@ -29,7 +31,7 @@ export function useLoadMore(query: IPagedQuery) {
       return (
         <View className="items-center py-4">
           <ActivityIndicator
-            accessibilityLabel="Loading more"
+            accessibilityLabel={t('common.loadingMore')}
             color={color(scheme, 'accent-text-color')}
           />
         </View>
@@ -43,7 +45,7 @@ export function useLoadMore(query: IPagedQuery) {
           className="items-center py-4"
         >
           <Text className="font-semibold text-sm text-accent-text-color">
-            Couldn&apos;t load more. Tap to try again.
+            {t('common.couldntLoadMore')}
           </Text>
         </Pressable>
       );

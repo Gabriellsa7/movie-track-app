@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { AccessibilityInfo, Animated, Easing, StyleSheet } from 'react-native';
 import { color } from '@/theme/palette';
 import { LogoMark } from './logo-mark';
+import { useTranslation } from 'react-i18next';
 
 export const SPLASH_BACKGROUND = color('dark', 'primary-bg-color');
 const LOGO_SIZE = 120;
@@ -17,6 +18,7 @@ export function AnimatedSplash({
   ready: boolean;
   onFinish: () => void;
 }) {
+  const { t } = useTranslation();
   const [pulse] = useState(() => new Animated.Value(1));
   const [exit] = useState(() => new Animated.Value(0));
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -75,7 +77,7 @@ export function AnimatedSplash({
   return (
     <Animated.View
       accessible
-      accessibilityLabel="Loading Movie Track"
+      accessibilityLabel={t('common.loadingApp')}
       onLayout={() => void SplashScreen.hideAsync()}
       style={[
         StyleSheet.absoluteFill,

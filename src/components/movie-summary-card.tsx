@@ -1,6 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 import { useGenreNames } from '@/api/get-genres';
 import { Poster } from '@/components/poster';
+import { useTranslation } from 'react-i18next';
 
 interface IMovieSummaryCardProps {
   title: string;
@@ -21,6 +22,7 @@ export function MovieSummaryCard({
   posterUrl,
   onEdit,
 }: IMovieSummaryCardProps) {
+  const { t } = useTranslation();
   const genreNames = useGenreNames(genreIds).join(', ');
   const credits = [director, durationMinutes && `${durationMinutes} min`]
     .filter(Boolean)
@@ -68,7 +70,7 @@ export function MovieSummaryCard({
           className="mt-auto h-8 justify-center self-start"
         >
           <Text className="font-semibold text-[13px] text-accent-text-color">
-            Edit movie details
+            {t('common.editMovieDetails')}
           </Text>
         </Pressable>
       </View>

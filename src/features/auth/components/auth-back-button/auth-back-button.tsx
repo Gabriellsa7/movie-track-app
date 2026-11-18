@@ -4,14 +4,16 @@ import { goBackOr } from '@/lib/navigation';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 export function AuthBackButton() {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="Back"
+      accessibilityLabel={t('common.back')}
       onPress={() => {
         goBackOr(ROUTES.login);
       }}

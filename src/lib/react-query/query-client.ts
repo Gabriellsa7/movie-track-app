@@ -2,6 +2,7 @@ import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner-native';
 import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
+import { i18n } from '@/i18n';
 
 const STALE_TIME_MILLISECONDS = 30_000;
 export const CACHE_MAX_AGE_MILLISECONDS = 24 * 60 * 60 * 1000;
@@ -16,7 +17,7 @@ const TEMPORARY_FAILURE_TOAST_ID = 'temporary-failure';
 
 function notifyTemporaryFailure(error: unknown) {
   if (TEMPORARY_FAILURE_CODES.includes(ApiError.from(error).code)) {
-    toast.error('Service unavailable right now. Try again in a moment.', {
+    toast.error(i18n.t('errors.serviceUnavailable'), {
       id: TEMPORARY_FAILURE_TOAST_ID,
     });
   }

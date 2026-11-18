@@ -13,6 +13,7 @@ import { Poster } from '@/components/poster';
 import { useDebouncedValue } from '@/lib/use-debounced-value';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 const SEARCH_DEBOUNCE_MILLISECONDS = 400;
 const MAX_RESULTS = 5;
@@ -24,6 +25,7 @@ interface ITmdbSearchProps {
 
 export function TmdbSearch({ placeholder, onSelect }: ITmdbSearchProps) {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
   const [text, setText] = useState('');
   const query = useDebouncedValue(text.trim(), SEARCH_DEBOUNCE_MILLISECONDS);
   const search = useTmdbSearchQuery({ query });
@@ -44,7 +46,7 @@ export function TmdbSearch({ placeholder, onSelect }: ITmdbSearchProps) {
         <TextInput
           value={text}
           onChangeText={setText}
-          accessibilityLabel="Search TMDB"
+          accessibilityLabel={t('common.tmdb.search')}
           placeholder={placeholder}
           placeholderTextColor={color(scheme, 'tertiary-text-color')}
           autoCorrect={false}
@@ -60,12 +62,12 @@ export function TmdbSearch({ placeholder, onSelect }: ITmdbSearchProps) {
 
       {search.isError && text.trim() ? (
         <Text className="font-sans text-xs text-tertiary-text-color">
-          Search is unavailable right now. Fill in the fields below.
+          {t('common.tmdb.unavailable')}
         </Text>
       ) : null}
       {results?.length === 0 && query && !isSearching && !search.isError ? (
         <Text className="font-sans text-xs text-tertiary-text-color">
-          No results. Fill in the fields below.
+          {t('common.tmdb.noResults')}
         </Text>
       ) : null}
 
@@ -73,9 +75,10 @@ export function TmdbSearch({ placeholder, onSelect }: ITmdbSearchProps) {
         <Pressable
           key={movie.tmdbId}
           accessibilityRole="button"
-          accessibilityLabel={`Fill with ${movie.title}${
-            movie.releaseYear ? `, ${String(movie.releaseYear)}` : ''
-          }`}
+          accessibilityLabel={t('common.tmdb.fillWith', {
+            title: movie.title,
+            year: movie.releaseYear ?? t('common.tmdb.unknownYear'),
+          })}
           onPress={() => {
             select(movie);
           }}
@@ -95,7 +98,7 @@ export function TmdbSearch({ placeholder, onSelect }: ITmdbSearchProps) {
               {movie.title}
             </Text>
             <Text className="font-sans text-xs text-tertiary-text-color">
-              {movie.releaseYear ?? 'Unknown year'}
+              {movie.releaseYear ?? t('common.tmdb.unknownYear')}
             </Text>
           </View>
         </Pressable>

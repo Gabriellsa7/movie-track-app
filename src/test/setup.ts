@@ -2,8 +2,13 @@ import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/asy
 import { registerSessionHandlers } from '@/api/client';
 import { queryClient } from '@/lib/react-query/query-client';
 import { useSessionStore } from '@/stores/session.store';
+import '@/i18n';
 import { mockApi } from './mock-api';
 import { secureStoreValues } from './secure-store.mock';
+
+jest.mock('expo-localization', () => ({
+  getLocales: () => [{ languageCode: 'en', languageTag: 'en-US' }],
+}));
 
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 jest.mock('@react-native-community/netinfo', () =>

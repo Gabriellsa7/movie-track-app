@@ -10,10 +10,12 @@ import {
   monthTitle,
   monthWeeks,
   shiftMonth,
-  WEEKDAY_LABELS,
+  weekdayLabels,
 } from '@/lib/calendar';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
+import { currentLanguage } from '@/i18n';
 
 interface ICalendarSheetProps {
   title: string;
@@ -36,6 +38,8 @@ export function CalendarSheet({
 }: ICalendarSheetProps) {
   const scheme = useAppTheme();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
+  const locale = currentLanguage();
   const today = new Date();
   const [shown, setShown] = useState(() => monthOf(selected ?? today));
   const previous = shiftMonth(shown, -1);
@@ -61,7 +65,7 @@ export function CalendarSheet({
       }}
     >
       <Pressable
-        accessibilityLabel="Close"
+        accessibilityLabel={t('common.close')}
         onPress={onClose}
         className="flex-1 bg-overlay-bg-color/60"
       />
@@ -80,7 +84,7 @@ export function CalendarSheet({
         <View className="h-11 flex-row items-center justify-between">
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Previous month"
+            accessibilityLabel={t('common.calendar.previousMonth')}
             accessibilityState={{ disabled: !canGoBack }}
             disabled={!canGoBack}
             onPress={() => {
@@ -94,11 +98,11 @@ export function CalendarSheet({
             />
           </Pressable>
           <Text className="font-semibold text-[15px] text-primary-text-color">
-            {monthTitle(shown)}
+            {monthTitle(shown, locale)}
           </Text>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Next month"
+            accessibilityLabel={t('common.calendar.nextMonth')}
             accessibilityState={{ disabled: !canGoForward }}
             disabled={!canGoForward}
             onPress={() => {
@@ -115,7 +119,7 @@ export function CalendarSheet({
 
         <View className="gap-1">
           <View className="flex-row">
-            {WEEKDAY_LABELS.map((label, index) => (
+            {weekdayLabels(locale).map((label, index) => (
               <Text
                 key={`${label}-${String(index)}`}
                 className="flex-1 text-center font-semibold text-xs text-tertiary-text-color"
@@ -142,7 +146,7 @@ export function CalendarSheet({
                   <View key={day.toISOString()} className="h-11 flex-1 p-0.5">
                     <Pressable
                       accessibilityRole="button"
-                      accessibilityLabel={day.toLocaleDateString('en-US', {
+                      accessibilityLabel={day.toLocaleDateString(locale, {
                         weekday: 'long',
                         month: 'long',
                         day: 'numeric',
@@ -189,7 +193,7 @@ export function CalendarSheet({
               className="h-[52px] flex-1 items-center justify-center rounded-xl border border-primary-border-color bg-primary-bg-color"
             >
               <Text className="font-semibold text-[15px] text-primary-text-color">
-                Today
+                {t('common.calendar.today')}
               </Text>
             </Pressable>
           )}
@@ -199,7 +203,7 @@ export function CalendarSheet({
             className="h-[52px] flex-1 items-center justify-center"
           >
             <Text className="font-semibold text-[15px] text-secondary-text-color">
-              Cancel
+              {t('common.cancel')}
             </Text>
           </Pressable>
         </View>

@@ -1,0 +1,55 @@
+import type { common as en } from '../en/common';
+
+export const common: typeof en = {
+  cancel: 'Cancelar',
+  save: 'Salvar',
+  saving: 'Salvando…',
+  close: 'Fechar',
+  back: 'Voltar',
+  tryAgain: 'Tentar de novo',
+  loadingMore: 'Carregando mais',
+  couldntLoadMore: 'Não deu para carregar mais. Toque para tentar de novo.',
+  loadingApp: 'Carregando o Movie Track',
+  logMovie: 'Registrar filme',
+  editMovieDetails: 'Editar dados do filme',
+  tmdb: {
+    search: 'Buscar no TMDB',
+    unavailable: 'A busca está indisponível agora. Preencha os campos abaixo.',
+    noResults: 'Nenhum resultado. Preencha os campos abaixo.',
+    unknownYear: 'Ano desconhecido',
+    fillWith: 'Preencher com {{title}}, {{year}}',
+  },
+  poster: {
+    label: 'Pôster',
+    of: 'Pôster de {{title}}',
+    none: 'Sem pôster',
+    fromTmdb: 'Pôster do TMDB',
+    current: 'Pôster atual',
+    fromPhone: 'Foto do seu celular',
+    optional: 'Opcional · JPEG, PNG ou WebP até 5 MB',
+    choose: 'Escolher foto',
+    change: 'Trocar foto',
+    remove: 'Remover pôster',
+  },
+  rating: {
+    yours: 'Sua nota',
+    value: '{{rating}} de 10',
+    label: 'Nota {{rating}} de 10',
+    none: 'Sem nota',
+    halfHint: 'Toque na metade esquerda da estrela para meio ponto',
+  },
+  calendar: {
+    previousMonth: 'Mês anterior',
+    nextMonth: 'Próximo mês',
+    today: 'Hoje',
+    pickDate: 'Escolha uma data',
+  },
+  password: {
+    show: 'Mostrar senha',
+    hide: 'Esconder senha',
+  },
+  genres: {
+    upTo: 'Até {{count}}',
+    loadFailed: 'Não deu para carregar os gêneros.',
+  },
+};

@@ -4,15 +4,17 @@ import { goBackOr } from '@/lib/navigation';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 export function SignUpHeader() {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
 
   return (
     <View className="gap-5">
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Back"
+        accessibilityLabel={t('common.back')}
         onPress={() => {
           goBackOr(ROUTES.login);
         }}
@@ -29,10 +31,10 @@ export function SignUpHeader() {
           accessibilityRole="header"
           className="font-display text-[48px] leading-[54px] tracking-[1px] text-primary-text-color"
         >
-          SIGN UP
+          {t('auth.signUpScreen.title')}
         </Text>
         <Text className="font-sans text-sm text-tertiary-text-color">
-          It takes less than a minute.
+          {t('auth.signUpScreen.subtitle')}
         </Text>
       </View>
     </View>

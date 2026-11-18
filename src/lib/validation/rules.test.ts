@@ -1,3 +1,4 @@
+import { translateMessage } from '@/i18n/message';
 import {
   emailSchema,
   genreIdsSchema,
@@ -12,7 +13,10 @@ import {
 const firstIssue = (result: {
   success: boolean;
   error?: { issues: { message: string }[] };
-}) => result.error?.issues[0]?.message;
+}) => {
+  const message = result.error?.issues[0]?.message;
+  return message === undefined ? undefined : translateMessage(message);
+};
 
 describe('When we validate form values like the API does', () => {
   it('should accept ratings from 1 to 10 in half steps', () => {

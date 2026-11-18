@@ -10,6 +10,7 @@ import { FieldFrame } from '@/components/form/field-frame';
 import { SectionError } from '@/components/section-error';
 import { Skeleton } from '@/components/skeleton';
 import { MAX_GENRES } from '@/lib/validation/rules';
+import { useTranslation } from 'react-i18next';
 
 interface IGenrePickerProps<
   TFields extends FieldValues,
@@ -31,6 +32,7 @@ export function GenrePicker<
     field: { value, onChange },
     fieldState,
   } = useController({ control, name });
+  const { t } = useTranslation();
   const selected: string[] = Array.isArray(value) ? (value as string[]) : [];
   const isFull = selected.length >= MAX_GENRES;
 
@@ -46,7 +48,7 @@ export function GenrePicker<
     <FieldFrame
       label={label}
       error={fieldState.error?.message}
-      hint={`Up to ${String(MAX_GENRES)}`}
+      hint={t('common.genres.upTo', { count: MAX_GENRES })}
     >
       {genres.isPending ? (
         <View className="flex-row flex-wrap gap-2">
@@ -56,7 +58,7 @@ export function GenrePicker<
         </View>
       ) : genres.isError ? (
         <SectionError
-          message="Couldn't load the genres."
+          message={t('common.genres.loadFailed')}
           onRetry={() => void genres.refetch()}
         />
       ) : (

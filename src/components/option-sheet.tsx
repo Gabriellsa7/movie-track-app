@@ -3,6 +3,7 @@ import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 export interface IOption<TValue> {
   label: string;
@@ -28,6 +29,7 @@ export function OptionSheet<TValue>({
 }: IOptionSheetProps<TValue>) {
   const scheme = useAppTheme();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   return (
     <Modal
@@ -37,7 +39,7 @@ export function OptionSheet<TValue>({
       onRequestClose={onClose}
     >
       <Pressable
-        accessibilityLabel="Close"
+        accessibilityLabel={t('common.close')}
         onPress={onClose}
         className="flex-1 bg-overlay-bg-color/60"
       />

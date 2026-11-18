@@ -1,4 +1,5 @@
 import '../../global.css';
+import '@/i18n';
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import {
   Inter_400Regular,

@@ -2,9 +2,11 @@ import { Mail } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 export function ResetLinkSent() {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
 
   return (
     <View
@@ -14,11 +16,10 @@ export function ResetLinkSent() {
       <Mail size={22} color={color(scheme, 'success-text-color')} />
       <View className="flex-1 gap-1.5">
         <Text className="font-semibold text-[15px] text-primary-text-color">
-          Check your inbox
+          {t('auth.forgot.sentTitle')}
         </Text>
         <Text className="font-sans text-sm leading-[21px] text-secondary-text-color">
-          If there is an account with this e-mail, the link arrives in a few
-          minutes. It is valid for 1 hour. Check the spam folder too.
+          {t('auth.forgot.sentBody')}
         </Text>
       </View>
     </View>

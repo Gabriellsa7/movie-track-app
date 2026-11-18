@@ -1,7 +1,9 @@
 import { LogoMark } from '@/components/logo-mark';
 import { Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 export function LoginHeader() {
+  const { t } = useTranslation();
   return (
     <View className="gap-5">
       <LogoMark size={56} />
@@ -10,10 +12,10 @@ export function LoginHeader() {
           accessibilityRole="header"
           className="font-display text-[52px] leading-[58px] tracking-[1px] text-primary-text-color"
         >
-          {'YOUR MOVIE\nDIARY'}
+          {t('auth.login.headline')}
         </Text>
         <Text className="font-sans text-body text-tertiary-text-color">
-          Log what you watched, rate it and plan what to watch next.
+          {t('auth.login.tagline')}
         </Text>
       </View>
     </View>

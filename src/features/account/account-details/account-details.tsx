@@ -23,12 +23,14 @@ import {
   toUpdateUserBody,
   type IAccountDetailsForm,
 } from './constants/constants';
+import { useTranslation } from 'react-i18next';
 
 function close() {
   goBackOr(ROUTES.account);
 }
 
 export function AccountDetailsScreen() {
+  const { t } = useTranslation();
   const user = useSessionStore((state) => state.user);
   const updateAccount = useUpdateAccountMutation();
   const {
@@ -53,9 +55,11 @@ export function AccountDetailsScreen() {
     try {
       await updateAccount.mutateAsync(toUpdateUserBody(values, user));
       toast.success(
-        emailChanged
-          ? ACCOUNT_DETAILS_MESSAGES.verifyNewEmail
-          : ACCOUNT_DETAILS_MESSAGES.updated,
+        t(
+          emailChanged
+            ? ACCOUNT_DETAILS_MESSAGES.verifyNewEmail
+            : ACCOUNT_DETAILS_MESSAGES.updated,
+        ),
       );
       close();
     } catch (error) {
@@ -90,7 +94,7 @@ export function AccountDetailsScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <FormHeader
-          title="Name and e-mail"
+          title={t('account.details.title')}
           isSaving={isSubmitting}
           onCancel={close}
           onSave={() => void handleSubmit(onSubmit)()}
@@ -102,29 +106,25 @@ export function AccountDetailsScreen() {
           <TextField
             control={control}
             name="name"
-            label="Name"
+            label={t('account.details.name')}
             autoComplete="name"
           />
           <TextField
             control={control}
             name="email"
-            label="E-mail"
+            label={t('account.details.email')}
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"
-            hint={
-              emailChanged
-                ? 'We will send a link to confirm the new e-mail.'
-                : undefined
-            }
+            hint={emailChanged ? t('account.details.newEmailHint') : undefined}
           />
           {emailChanged && (
             <PasswordField
               control={control}
               name="currentPassword"
-              label="Current password"
+              label={t('account.details.currentPassword')}
               autoComplete="current-password"
-              hint="Needed to change the e-mail"
+              hint={t('account.details.passwordHint')}
             />
           )}
         </ScrollView>

@@ -3,6 +3,7 @@ import { Modal, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 export interface IAction {
   label: string;
@@ -28,6 +29,7 @@ export function ActionSheet({
 }: IActionSheetProps) {
   const scheme = useAppTheme();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   return (
     <Modal
@@ -37,7 +39,7 @@ export function ActionSheet({
       onRequestClose={onClose}
     >
       <Pressable
-        accessibilityLabel="Close"
+        accessibilityLabel={t('common.close')}
         onPress={onClose}
         className="flex-1 bg-overlay-bg-color/60"
       />
@@ -92,7 +94,7 @@ export function ActionSheet({
           className="h-[52px] items-center justify-center"
         >
           <Text className="font-semibold text-[15px] text-secondary-text-color">
-            Cancel
+            {t('common.cancel')}
           </Text>
         </Pressable>
       </View>

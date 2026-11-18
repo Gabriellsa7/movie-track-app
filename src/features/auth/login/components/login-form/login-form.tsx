@@ -11,12 +11,13 @@ import { startSession } from '@/lib/session/session';
 import { ROUTES } from '@/routes/routes.constants';
 import {
   LOGIN_DEFAULT_VALUES,
-  LOGIN_ERROR_MESSAGES,
   LOGIN_SCHEMA,
   type ILoginForm,
 } from './constants/constants';
+import { useTranslation } from 'react-i18next';
 
 export function LoginForm() {
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -32,7 +33,7 @@ export function LoginForm() {
       const tokens = await login(values);
       await startSession(tokens);
     } catch (error) {
-      const message = authErrorMessage(error, LOGIN_ERROR_MESSAGES.unexpected);
+      const message = authErrorMessage(error, 'auth.login.unexpected');
       setError('root', { message });
       toast.error(message);
     }
@@ -43,7 +44,7 @@ export function LoginForm() {
       <TextField
         control={control}
         name="email"
-        label="E-mail"
+        label={t('auth.email')}
         keyboardType="email-address"
         autoCapitalize="none"
         autoComplete="email"
@@ -51,13 +52,13 @@ export function LoginForm() {
       <PasswordField
         control={control}
         name="password"
-        label="Password"
+        label={t('auth.password')}
         autoComplete="current-password"
       />
 
       <Link href={ROUTES.forgotPassword} asChild>
         <Text className="self-end font-semibold text-sm text-accent-text-color">
-          Forgot password
+          {t('auth.login.forgotPassword')}
         </Text>
       </Link>
 
@@ -78,7 +79,7 @@ export function LoginForm() {
         className="h-[52px] items-center justify-center rounded-xl bg-accent-bg-color active:bg-accent-hover-bg-color disabled:opacity-60"
       >
         <Text className="font-semibold text-base text-on-accent-text-color">
-          {isSubmitting ? 'Logging in…' : 'Log in'}
+          {isSubmitting ? t('auth.login.loggingIn') : t('auth.logIn')}
         </Text>
       </Pressable>
     </View>

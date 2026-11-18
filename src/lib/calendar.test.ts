@@ -22,7 +22,10 @@ describe('When we build a month for the calendar', () => {
       year: 2027,
       month: 0,
     });
-    expect(monthTitle({ year: 2026, month: 10 })).toBe('November 2026');
+    expect(monthTitle({ year: 2026, month: 10 }, 'en')).toBe('November 2026');
+    expect(monthTitle({ year: 2026, month: 10 }, 'pt-BR')).toBe(
+      'novembro de 2026',
+    );
   });
 });
 

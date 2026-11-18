@@ -3,19 +3,25 @@ import { Text, View } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { PASSWORD_RULES } from '@/lib/validation/rules';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
+import { translateMessage } from '@/i18n/message';
 
 export function PasswordRules({ password }: { password: string }) {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
 
   return (
-    <View accessibilityLabel="Password requirements" className="-mt-1 gap-1.5">
+    <View
+      accessibilityLabel={t('validation.passwordRules.title')}
+      className="-mt-1 gap-1.5"
+    >
       {PASSWORD_RULES.map(({ label, test }) => {
         const met = test(password);
         return (
           <View
             key={label}
             accessible
-            accessibilityLabel={label}
+            accessibilityLabel={translateMessage(label)}
             accessibilityState={{ checked: met }}
             className="flex-row items-center gap-2"
           >
@@ -37,7 +43,7 @@ export function PasswordRules({ password }: { password: string }) {
                 met ? 'text-success-text-color' : 'text-tertiary-text-color'
               }`}
             >
-              {label}
+              {translateMessage(label)}
             </Text>
           </View>
         );

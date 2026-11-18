@@ -20,13 +20,14 @@ import { useRequestPasswordResetMutation } from '../api/post-forgot-password';
 import { AuthBackButton } from '../components/auth-back-button/auth-back-button';
 import { ResetLinkSent } from './components/reset-link-sent/reset-link-sent';
 import {
-  FORGOT_PASSWORD_MESSAGES,
   FORGOT_PASSWORD_SCHEMA,
   RESEND_WAIT_SECONDS,
   type IForgotPasswordForm,
 } from './constants/constants';
+import { useTranslation } from 'react-i18next';
 
 export function ForgotPasswordScreen() {
+  const { t } = useTranslation();
   const { email = '' } = useLocalSearchParams<{ email?: string }>();
   const requestReset = useRequestPasswordResetMutation();
   const countdown = useCountdown();
@@ -47,18 +48,20 @@ export function ForgotPasswordScreen() {
       setSent(true);
       countdown.start(RESEND_WAIT_SECONDS);
     } catch (error) {
-      toast.error(authErrorMessage(error, FORGOT_PASSWORD_MESSAGES.unexpected));
+      toast.error(authErrorMessage(error, 'auth.forgot.unexpected'));
     }
   };
 
   function buttonLabel() {
     if (isSubmitting) {
-      return 'Sending…';
+      return t('auth.forgot.sending');
     }
     if (isWaiting) {
-      return `Resend in ${formatCountdown(countdown.secondsLeft)}`;
+      return t('auth.forgot.resendIn', {
+        time: formatCountdown(countdown.secondsLeft),
+      });
     }
-    return sent ? 'Resend link' : 'Send link';
+    return sent ? t('auth.forgot.resend') : t('auth.forgot.send');
   }
 
   return (
@@ -77,17 +80,16 @@ export function ForgotPasswordScreen() {
               accessibilityRole="header"
               className="font-display text-[48px] leading-[48px] tracking-[1px] text-primary-text-color"
             >
-              Forgot password
+              {t('auth.forgot.title')}
             </Text>
             <Text className="font-sans text-[15px] leading-[22px] text-tertiary-text-color">
-              Enter your account e-mail. We will send a link to create a new
-              password.
+              {t('auth.forgot.subtitle')}
             </Text>
           </View>
           <TextField
             control={control}
             name="email"
-            label="E-mail"
+            label={t('auth.email')}
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"
@@ -122,7 +124,7 @@ export function ForgotPasswordScreen() {
                 className="h-11 items-center justify-center self-center"
               >
                 <Text className="font-semibold text-sm text-accent-text-color">
-                  Back to login
+                  {t('auth.forgot.backToLogin')}
                 </Text>
               </Pressable>
             </Link>

@@ -3,17 +3,17 @@ import { passwordSchema } from '@/lib/validation/rules';
 
 export const ACCOUNT_PASSWORD_SCHEMA = z
   .object({
-    currentPassword: z.string().min(1, 'Enter your current password'),
+    currentPassword: z.string().min(1, 'validation.currentPasswordRequired'),
     newPassword: passwordSchema,
     confirmPassword: z.string(),
   })
   .refine((values) => values.newPassword === values.confirmPassword, {
     path: ['confirmPassword'],
-    message: "The passwords don't match",
+    message: 'validation.passwordsMatch',
   })
   .refine((values) => values.newPassword !== values.currentPassword, {
     path: ['newPassword'],
-    message: 'Use a password different from the current one',
+    message: 'validation.passwordDifferent',
   });
 
 export interface IAccountPasswordForm extends TInfer<
@@ -32,7 +32,7 @@ export const ACCOUNT_PASSWORD_FIELDS = [
 ] as const;
 
 export const ACCOUNT_PASSWORD_MESSAGES = {
-  changed: 'Password changed',
-  wrongPassword: 'Wrong password',
-  unexpected: "Couldn't change your password. Try again.",
+  changed: 'account.password.changed',
+  wrongPassword: 'errors.wrongPassword',
+  unexpected: 'account.password.unexpected',
 } as const;
