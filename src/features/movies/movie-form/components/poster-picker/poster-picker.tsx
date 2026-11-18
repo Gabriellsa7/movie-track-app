@@ -11,7 +11,6 @@ const POSTER_ASPECT: [number, number] = [2, 3];
 
 interface IPosterPickerProps {
   title: string;
-  // The photo wins over the TMDB poster: it was an explicit choice.
   photo: IUploadFile | undefined;
   posterUrl: string | undefined;
   onPick: (photo: IUploadFile) => void;

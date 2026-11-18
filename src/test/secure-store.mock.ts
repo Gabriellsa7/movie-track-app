@@ -1,4 +1,3 @@
-// In-memory stand-in for expo-secure-store, which needs a device.
 export const secureStoreValues = new Map<string, string>();
 
 export function getItemAsync(key: string): Promise<string | null> {

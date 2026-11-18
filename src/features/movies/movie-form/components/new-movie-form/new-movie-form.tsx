@@ -57,7 +57,6 @@ export function NewMovieForm() {
     name: ['title', 'poster', 'posterUrl'],
   });
 
-  // Fills what TMDB knows; rating, date and review stay with the user.
   function fillFromTmdb(movie: ITmdbMovie) {
     const options = { shouldDirty: true };
     setValue('title', movie.title, options);
@@ -80,7 +79,6 @@ export function NewMovieForm() {
 
   const onSubmit = async ({ poster: photo, ...values }: IMovieFormOutput) => {
     try {
-      // With a photo, the TMDB link is dropped so the photo becomes the poster.
       const movie = await createMovie.mutateAsync(
         photo ? { ...values, posterUrl: undefined } : values,
       );
@@ -89,7 +87,6 @@ export function NewMovieForm() {
           await uploadMoviePoster(movie.id, photo);
           await invalidateMyMovies();
         } catch {
-          // The movie exists: the poster can be sent again from its page.
           toast.error(MOVIE_FORM_MESSAGES.posterNotSent);
           closeForm();
           return;
@@ -102,7 +99,6 @@ export function NewMovieForm() {
         return;
       }
       const apiError = ApiError.from(error);
-      // 503s already get a global toast (see query-client.ts).
       if (apiError.is(EApiErrorCode.SERVICE_UNAVAILABLE)) {
         return;
       }

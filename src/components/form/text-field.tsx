@@ -18,7 +18,6 @@ export interface ITextFieldProps<
   name: FieldPath<TFields>;
   label: string;
   hint?: string;
-  // Shown inside the input, on the right (e.g. the password visibility toggle).
   trailing?: ReactNode;
 }
 

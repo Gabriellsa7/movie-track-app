@@ -14,7 +14,6 @@ const DIRECTOR_MAX_LENGTH = 200;
 const REVIEW_MAX_LENGTH = 5000;
 const MAX_DURATION_MINUTES = 1000;
 
-// Empty optional fields are left out of the request instead of sent as "".
 function optionalText(maxLength: number) {
   return z
     .string()
@@ -23,7 +22,6 @@ function optionalText(maxLength: number) {
     .transform((value) => value || undefined);
 }
 
-// Mirrors POST /movies; number inputs are typed as text and converted here.
 export const MOVIE_FORM_SCHEMA = z.object({
   title: z
     .string()
@@ -68,10 +66,8 @@ export const MOVIE_FORM_SCHEMA = z.object({
     ),
   review: optionalText(REVIEW_MAX_LENGTH),
   isFavorite: z.boolean(),
-  // Filled by the TMDB search; posterUrl is TMDB's own image, sent as a link.
   tmdbId: z.number().optional(),
   posterUrl: z.string().optional(),
-  // A photo from the phone, uploaded after the movie exists. Not part of the request body.
   poster: z.custom<IUploadFile>().optional(),
 });
 
@@ -92,7 +88,6 @@ export const MOVIE_FORM_FIELDS = [
   'posterUrl',
 ] as const;
 
-// A function, so "today" is the day the form opens and not the day the app started.
 export function movieFormDefaultValues(): Partial<IMovieFormInput> {
   return {
     title: '',

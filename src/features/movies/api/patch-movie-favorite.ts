@@ -15,7 +15,6 @@ export async function setMovieFavorite(
   return data;
 }
 
-// Optimistic: the heart flips at once and rolls back if the API refuses.
 export function useSetFavoriteMutation(movieId: string) {
   const client = useQueryClient();
   const invalidate = useInvalidateMyMovies();

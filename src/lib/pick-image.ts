@@ -9,7 +9,6 @@ export type TPickImageResult =
 
 const DEFAULT_MIME_TYPE = 'image/jpeg';
 
-// Picks one image for the avatar (square) or a poster (2:3) and checks it like the API does.
 export async function pickImage(
   aspect: [number, number],
 ): Promise<TPickImageResult> {

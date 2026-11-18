@@ -4,7 +4,6 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { PASSWORD_RULES } from '@/lib/validation/rules';
 import { color } from '@/theme/palette';
 
-// Live checklist under a new password field (sign-up, reset password).
 export function PasswordRules({ password }: { password: string }) {
   const scheme = useAppTheme();
 

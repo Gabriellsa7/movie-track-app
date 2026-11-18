@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// Stands in for each screen until it is built from the approved mockups.
 export function ScreenPlaceholder({
   title,
   children,

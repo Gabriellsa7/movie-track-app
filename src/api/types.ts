@@ -1,6 +1,5 @@
 import type { components, operations } from './schema';
 
-// openapi-typescript generates aliases; Pick turns each one into something an interface can extend.
 type TSchema<TName extends keyof components['schemas']> = Pick<
   components['schemas'][TName],
   keyof components['schemas'][TName]

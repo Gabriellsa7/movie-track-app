@@ -53,7 +53,6 @@ const PICKED = {
   name: 'poster.png',
   type: 'image/png',
 };
-// PUT /movies/{id} replaces the movie, so it takes the same required fields as POST.
 const NEW_MOVIE = {
   title: 'T',
   synopsis: 'S',
@@ -62,7 +61,6 @@ const NEW_MOVIE = {
   rating: 8,
 };
 
-// React Native's FormData lists its parts with getParts(); Node's (in Jest) with keys().
 function readBody(data: unknown): unknown {
   if (data && typeof (data as IFormDataParts).getParts === 'function') {
     return (data as IFormDataParts).getParts().map((part) => part.fieldName);

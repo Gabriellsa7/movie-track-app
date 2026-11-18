@@ -6,6 +6,5 @@ function base64Url(value: string) {
   return btoa(value).replace(/=+$/, '');
 }
 
-// JWTs whose payload is { "sub": USER_ID }; the app only decodes them.
 export const ACCESS_TOKEN = `${base64Url('{"alg":"HS256"}')}.${base64Url(JSON.stringify({ sub: USER_ID }))}.signature`;
 export const REFRESH_TOKEN = `${base64Url('{"alg":"HS256"}')}.${base64Url(JSON.stringify({ sub: USER_ID, jti: 'r1' }))}.signature`;

@@ -32,7 +32,6 @@ export function SignUpForm() {
   });
   const password = useWatch({ control, name: 'password' });
 
-  // After the account is created, logs in with the same credentials and opens Início.
   const onSubmit = async (values: ISignUpForm) => {
     try {
       await signUp(values);

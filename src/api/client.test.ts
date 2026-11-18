@@ -16,7 +16,6 @@ function handlersWith(overrides: Partial<ISessionHandlers> = {}) {
   return handlers;
 }
 
-// Answers 401 TOKEN_EXPIRED to the old token and 200 to the refreshed one.
 function useProtectedRoute() {
   mockApi
     .onGet('/protected')

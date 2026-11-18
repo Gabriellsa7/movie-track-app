@@ -2,7 +2,6 @@ import type { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
 
-// Domain errors that belong to one field, with the message shown under it.
 const FIELD_ERRORS: Partial<
   Record<EApiErrorCode, { field: string; message: string }>
 > = {
@@ -37,10 +36,6 @@ const FIELD_ERRORS: Partial<
   },
 };
 
-/**
- * Puts the API's errors on the form fields. Returns false when the error has no
- * field to show on, so the caller falls back to a toast.
- */
 export function applyApiErrors<TFields extends FieldValues>(
   error: unknown,
   setError: UseFormSetError<TFields>,

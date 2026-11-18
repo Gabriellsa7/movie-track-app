@@ -9,7 +9,6 @@ export async function signUp(body: INewUserBody): Promise<IUser> {
   return data;
 }
 
-// Sign-up returns the user but no tokens, so it logs in right after.
 export function useSignUpMutation() {
   return useMutation({
     mutationFn: async (body: INewUserBody) => {

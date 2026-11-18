@@ -32,16 +32,13 @@ module.exports = defineConfig([
     rules: {
       'no-console': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
-      // Object shapes are interfaces, also when they only extend a generated or inferred type.
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       '@typescript-eslint/no-empty-object-type': [
         'error',
         { allowInterfaces: 'with-single-extends' },
       ],
-      // The const + type pair (EApiErrorCode) is intended, and axios.create is its documented API.
       '@typescript-eslint/no-redeclare': 'off',
       'import/no-named-as-default-member': 'off',
-      // Deprecated in RN 0.88, and patches/ removes its NativeWind className support.
       'no-restricted-imports': [
         'error',
         {

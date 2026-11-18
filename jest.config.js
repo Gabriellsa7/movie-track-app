@@ -1,9 +1,7 @@
-/** @type {import('jest').Config} */
 module.exports = {
   preset: 'jest-expo',
   setupFiles: ['./src/test/env.js'],
   setupFilesAfterEnv: ['./src/test/setup.ts'],
-  // The "react-native" export of lucide is .mjs, which jest does not transform.
   moduleNameMapper: {
     '^lucide-react-native$':
       '<rootDir>/node_modules/lucide-react-native/dist/cjs/lucide-react-native.js',

@@ -1,7 +1,6 @@
 import { Text, View } from 'react-native';
 
 interface IMoviesEmptyProps {
-  // With a search, "nothing found" is a different message from "nothing registered yet".
   search: string;
 }
 

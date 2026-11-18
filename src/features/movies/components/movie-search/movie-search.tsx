@@ -8,7 +8,6 @@ interface IMovieSearchProps {
   onChangeText: (value: string) => void;
 }
 
-// Controlled: the screen owns the text and decides when it becomes a query.
 export function MovieSearch({ value, onChangeText }: IMovieSearchProps) {
   const scheme = useAppTheme();
 

@@ -11,7 +11,6 @@ const screenWithText = (text: string) =>
   };
 const groupLayout = () => <Stack screenOptions={{ headerShown: false }} />;
 
-// The route files the root stack declares, with stand-in screens.
 const SCREENS = {
   _layout: () => <RootStack />,
   '(tabs)/_layout': groupLayout,

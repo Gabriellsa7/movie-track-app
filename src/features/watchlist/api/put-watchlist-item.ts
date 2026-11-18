@@ -19,7 +19,6 @@ export async function updateWatchlistItem(
   return data;
 }
 
-// Optimistic on every cached page, so a priority change shows at once.
 export function useUpdateWatchlistItemMutation(itemId: string) {
   const client = useQueryClient();
   const invalidate = useInvalidateWatchlist();

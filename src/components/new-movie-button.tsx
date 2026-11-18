@@ -5,7 +5,6 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
 
-// The floating "+" of the mockups; place it as the last child of the screen's root view.
 export function NewMovieButton() {
   const scheme = useAppTheme();
 

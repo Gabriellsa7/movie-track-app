@@ -41,7 +41,6 @@ describe('When the app is starting', () => {
     const onFinish = jest.fn();
     await render(<AnimatedSplash ready onFinish={onFinish} />);
 
-    // First past the minimum time on screen, then through the fade.
     await act(async () => {
       await jest.advanceTimersByTimeAsync(600);
     });

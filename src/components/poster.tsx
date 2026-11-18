@@ -5,7 +5,6 @@ interface IPosterProps {
   title: string;
   posterUrl?: string;
   className?: string;
-  // Shown over the fallback tile when there is no poster; small posters leave it out.
   showTitle?: boolean;
 }
 

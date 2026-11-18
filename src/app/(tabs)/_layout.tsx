@@ -19,7 +19,6 @@ function tabIcon(Icon: LucideIcon) {
     color: ColorValue;
     size: number;
   }) {
-    // The tint colors set below are plain strings.
     return (
       <Icon
         color={typeof color === 'string' ? color : undefined}

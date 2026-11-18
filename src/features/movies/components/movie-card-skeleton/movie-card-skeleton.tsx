@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 
-// Same size as MovieCard, so the list doesn't jump when the movies arrive.
 export function MovieCardSkeleton() {
   return (
     <View

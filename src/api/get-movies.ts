@@ -24,7 +24,6 @@ export function useMoviesQuery(query: IListMoviesQuery) {
   });
 }
 
-// Any change to my movies also changes my stats and my public profile.
 export function useInvalidateMyMovies() {
   const client = useQueryClient();
   return () =>

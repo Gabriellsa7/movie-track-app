@@ -26,7 +26,6 @@ export function TmdbSearch({ onSelect }: ITmdbSearchProps) {
   const [text, setText] = useState('');
   const query = useDebouncedValue(text.trim(), SEARCH_DEBOUNCE_MILLISECONDS);
   const search = useTmdbSearchQuery({ query });
-  // The query is disabled under 2 characters, and then it never fetches.
   const isSearching = search.fetchStatus === 'fetching';
   const results = text.trim() ? search.data?.items.slice(0, MAX_RESULTS) : [];
 

@@ -2,7 +2,6 @@ import * as SecureStore from 'expo-secure-store';
 import type { IUser } from '@/api/types';
 
 const REFRESH_TOKEN_KEY = 'movie-track.refresh-token';
-// The account is kept too, so the app opens offline with the cached data.
 const USER_KEY = 'movie-track.user';
 
 export async function readRefreshToken(): Promise<string | null> {

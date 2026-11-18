@@ -52,7 +52,6 @@ function monthKey(year: number, monthIndex: number): string {
   return `${year}-${String(monthIndex + 1).padStart(2, '0')}`;
 }
 
-// The API only returns months with movies; the chart always shows the last 12.
 export function lastTwelveMonths(
   moviesPerMonth: IUserStats['moviesPerMonth'],
   today: Date,
@@ -75,7 +74,6 @@ export function lastTwelveMonths(
   });
 }
 
-// plannedFor is a calendar date sent as midnight UTC, so its UTC parts are the day the user picked.
 export function plannedLabel(plannedFor: string, today: Date): string {
   const planned = new Date(plannedFor);
   const plannedDay = Date.UTC(
