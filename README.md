@@ -107,6 +107,12 @@ sit next to the code, named `describe('When we …')` / `it('should …')`.
 
 - Routes live in `src/app/` (Expo Router) and only re-export screens; the rest
   of the code lives in `src/`.
+- API calls: one file per endpoint, named after its method and route
+  (`get-movies.ts`, `post-movie.ts`, `patch-movie-favorite.ts`), holding the
+  request function and its React Query hook. Calls used by more than one
+  feature (or by the session) live in `src/api/`; calls used by a single
+  feature live in `src/features/<feature>/api/`. Query keys are in
+  `src/api/query-keys.ts`.
 - Files in kebab-case (`movie-card.tsx`, `home.screen.tsx`); components in
   PascalCase (`MovieCard`).
 - Interfaces `I*`, type aliases `T*`, enums `E*`, constants `UPPER_SNAKE_CASE`.

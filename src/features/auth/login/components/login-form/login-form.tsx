@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { Pressable, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
-import { login } from '@/api/services/auth.service';
+import { login } from '@/api/post-login';
 import { PasswordField } from '@/components/form/password-field';
 import { TextField } from '@/components/form/text-field';
 import { authErrorMessage } from '@/lib/forms/auth-error-message';

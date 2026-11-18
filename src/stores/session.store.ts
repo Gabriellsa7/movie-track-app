@@ -30,3 +30,12 @@ export const useSessionStore = create<ISessionState>()((set) => ({
     set({ status: 'anonymous', accessToken: null, userId: null, user: null });
   },
 }));
+
+// For account calls: they need the logged-in user's id.
+export function requireUserId(): string {
+  const { userId } = useSessionStore.getState();
+  if (!userId) {
+    throw new Error('Not logged in');
+  }
+  return userId;
+}

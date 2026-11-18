@@ -3,7 +3,7 @@ import { Check } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
 import { Poster } from '@/components/poster';
 import { Skeleton } from '@/components/skeleton';
-import { useWatchlistQuery } from '@/hooks/queries/watchlist.queries';
+import { useWatchlistQuery } from '@/api/get-watchlist';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';

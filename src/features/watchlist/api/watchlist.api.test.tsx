@@ -1,17 +1,15 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
+import { useWatchlistQuery } from '@/api/get-watchlist';
+import { queryKeys } from '@/api/query-keys';
 import type { TWatchlistPage } from '@/api/types';
 import { ITEM_ID } from '@/test/constants';
 import { A_MOVIE, A_WATCHLIST_ITEM, A_WATCHLIST_PAGE } from '@/test/fixtures';
 import { apiErrorReply, mockApi } from '@/test/mock-api';
 import { createTestQueryClient, createWrapper } from '@/test/render';
-import { queryKeys } from './query-keys';
-import {
-  useAddWatchlistItemMutation,
-  useMarkWatchedMutation,
-  useRemoveWatchlistItemMutation,
-  useUpdateWatchlistItemMutation,
-  useWatchlistQuery,
-} from './watchlist.queries';
+import { useRemoveWatchlistItemMutation } from './delete-watchlist-item';
+import { useAddWatchlistItemMutation } from './post-watchlist-item';
+import { useMarkWatchedMutation } from './post-watchlist-item-watched';
+import { useUpdateWatchlistItemMutation } from './put-watchlist-item';
 
 const LIST_KEY = queryKeys.watchlist.list({ planned: true });
 

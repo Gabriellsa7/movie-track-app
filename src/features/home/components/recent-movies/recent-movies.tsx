@@ -4,7 +4,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import type { TMovie } from '@/api/types';
 import { Poster } from '@/components/poster';
 import { Skeleton } from '@/components/skeleton';
-import { useMoviesQuery } from '@/hooks/queries/movie.queries';
+import { useMoviesQuery } from '@/api/get-movies';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';

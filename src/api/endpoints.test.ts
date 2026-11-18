@@ -1,11 +1,40 @@
 import { ITEM_ID, MOVIE_ID, USER_ID } from '@/test/constants';
 import { mockApi } from '@/test/mock-api';
-import * as auth from './auth.service';
-import * as genre from './genre.service';
-import * as movie from './movie.service';
-import * as tmdb from './tmdb.service';
-import * as user from './user.service';
-import * as watchlist from './watchlist.service';
+import { deleteAccount } from '@/features/account/api/delete-account';
+import { removeAvatar } from '@/features/account/api/delete-avatar';
+import { changePassword } from '@/features/account/api/patch-password';
+import { resendEmailVerification } from '@/features/account/api/post-email-verification';
+import { updateAccount } from '@/features/account/api/put-account';
+import { uploadAvatar } from '@/features/account/api/put-avatar';
+import { requestPasswordReset } from '@/features/auth/api/post-forgot-password';
+import { resetPassword } from '@/features/auth/api/post-reset-password';
+import { signUp } from '@/features/auth/api/post-sign-up';
+import { verifyEmail } from '@/features/auth/api/post-verify-email';
+import { deleteMovie } from '@/features/movies/api/delete-movie';
+import { removeMoviePoster } from '@/features/movies/api/delete-movie-poster';
+import { getMovie } from '@/features/movies/api/get-movie';
+import { setMovieFavorite } from '@/features/movies/api/patch-movie-favorite';
+import { createMovie } from '@/features/movies/api/post-movie';
+import { rewatchMovie } from '@/features/movies/api/post-movie-rewatch';
+import { updateMovie } from '@/features/movies/api/put-movie';
+import { uploadMoviePoster } from '@/features/movies/api/put-movie-poster';
+import { getUserMovie } from '@/features/users/api/get-user-movie';
+import { listUserMovies } from '@/features/users/api/get-user-movies';
+import { getUserProfile } from '@/features/users/api/get-user-profile';
+import { listUsers } from '@/features/users/api/get-users';
+import { removeWatchlistItem } from '@/features/watchlist/api/delete-watchlist-item';
+import { addWatchlistItem } from '@/features/watchlist/api/post-watchlist-item';
+import { markWatchlistItemWatched } from '@/features/watchlist/api/post-watchlist-item-watched';
+import { updateWatchlistItem } from '@/features/watchlist/api/put-watchlist-item';
+import { getAccount } from './get-account';
+import { listGenres } from './get-genres';
+import { listMovies } from './get-movies';
+import { searchTmdbMovies } from './get-tmdb-search';
+import { getUserStats } from './get-user-stats';
+import { listWatchlist } from './get-watchlist';
+import { login } from './post-login';
+import { logout } from './post-logout';
+import { refreshTokens } from './post-refresh-token';
 
 interface IRecordedRequest {
   method: string;
@@ -60,7 +89,7 @@ beforeEach(() => {
 const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   [
     'login',
-    () => auth.login({ email: 'a@b.com', password: 'x' }),
+    () => login({ email: 'a@b.com', password: 'x' }),
     {
       method: 'POST',
       url: '/auth/login',
@@ -69,22 +98,22 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'refreshTokens',
-    () => auth.refreshTokens('rt'),
+    () => refreshTokens('rt'),
     { method: 'POST', url: '/auth/refresh', body: { refreshToken: 'rt' } },
   ],
   [
     'logout',
-    () => auth.logout('rt'),
+    () => logout('rt'),
     { method: 'POST', url: '/auth/logout', body: { refreshToken: 'rt' } },
   ],
   [
     'verifyEmail',
-    () => auth.verifyEmail('tk'),
+    () => verifyEmail('tk'),
     { method: 'POST', url: '/auth/verify-email', body: { token: 'tk' } },
   ],
   [
     'requestPasswordReset',
-    () => auth.requestPasswordReset('a@b.com'),
+    () => requestPasswordReset('a@b.com'),
     {
       method: 'POST',
       url: '/auth/forgot-password',
@@ -93,7 +122,7 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'resetPassword',
-    () => auth.resetPassword({ token: 'tk', newPassword: 'abc12345' }),
+    () => resetPassword({ token: 'tk', newPassword: 'abc12345' }),
     {
       method: 'POST',
       url: '/auth/reset-password',
@@ -102,7 +131,7 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'signUp',
-    () => user.signUp({ name: 'G', email: 'a@b.com', password: 'abc12345' }),
+    () => signUp({ name: 'G', email: 'a@b.com', password: 'abc12345' }),
     {
       method: 'POST',
       url: '/users',
@@ -111,28 +140,27 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'listUsers',
-    () => user.listUsers({ search: 'ma' }),
+    () => listUsers({ search: 'ma' }),
     { method: 'GET', url: '/users', params: { search: 'ma' }, body: null },
   ],
   [
     'getUserProfile',
-    () => user.getUserProfile(USER_ID),
+    () => getUserProfile(USER_ID),
     { method: 'GET', url: `/users/${USER_ID}`, body: null },
   ],
   [
     'getAccount',
-    () => user.getAccount(USER_ID),
+    () => getAccount(USER_ID),
     { method: 'GET', url: `/users/${USER_ID}/account`, body: null },
   ],
   [
     'updateAccount',
-    () => user.updateAccount(USER_ID, { name: 'G' }),
+    () => updateAccount(USER_ID, { name: 'G' }),
     { method: 'PUT', url: `/users/${USER_ID}`, body: { name: 'G' } },
   ],
   [
     'changePassword',
-    () =>
-      user.changePassword(USER_ID, { currentPassword: 'a', newPassword: 'b' }),
+    () => changePassword(USER_ID, { currentPassword: 'a', newPassword: 'b' }),
     {
       method: 'PATCH',
       url: `/users/${USER_ID}/password`,
@@ -141,32 +169,32 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'deleteAccount',
-    () => user.deleteAccount(USER_ID, 'pw'),
+    () => deleteAccount(USER_ID, 'pw'),
     { method: 'DELETE', url: `/users/${USER_ID}`, body: { password: 'pw' } },
   ],
   [
     'resendEmailVerification',
-    () => user.resendEmailVerification(USER_ID),
+    () => resendEmailVerification(USER_ID),
     { method: 'POST', url: `/users/${USER_ID}/email-verification`, body: null },
   ],
   [
     'uploadAvatar',
-    () => user.uploadAvatar(USER_ID, PICKED),
+    () => uploadAvatar(USER_ID, PICKED),
     { method: 'PUT', url: `/users/${USER_ID}/avatar`, body: ['avatar'] },
   ],
   [
     'removeAvatar',
-    () => user.removeAvatar(USER_ID),
+    () => removeAvatar(USER_ID),
     { method: 'DELETE', url: `/users/${USER_ID}/avatar`, body: null },
   ],
   [
     'getUserStats',
-    () => user.getUserStats(USER_ID),
+    () => getUserStats(USER_ID),
     { method: 'GET', url: `/users/${USER_ID}/stats`, body: null },
   ],
   [
     'listUserMovies',
-    () => user.listUserMovies(USER_ID, { favorite: true }),
+    () => listUserMovies(USER_ID, { favorite: true }),
     {
       method: 'GET',
       url: `/users/${USER_ID}/movies`,
@@ -176,27 +204,27 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'getUserMovie',
-    () => user.getUserMovie(USER_ID, MOVIE_ID),
+    () => getUserMovie(USER_ID, MOVIE_ID),
     { method: 'GET', url: `/users/${USER_ID}/movies/${MOVIE_ID}`, body: null },
   ],
   [
     'listMovies',
-    () => movie.listMovies({ sort: 'rating' }),
+    () => listMovies({ sort: 'rating' }),
     { method: 'GET', url: '/movies', params: { sort: 'rating' }, body: null },
   ],
   [
     'getMovie',
-    () => movie.getMovie(MOVIE_ID),
+    () => getMovie(MOVIE_ID),
     { method: 'GET', url: `/movies/${MOVIE_ID}`, body: null },
   ],
   [
     'createMovie',
-    () => movie.createMovie(NEW_MOVIE),
+    () => createMovie(NEW_MOVIE),
     { method: 'POST', url: '/movies', body: NEW_MOVIE },
   ],
   [
     'updateMovie',
-    () => movie.updateMovie(MOVIE_ID, { ...NEW_MOVIE, rating: 7.5 }),
+    () => updateMovie(MOVIE_ID, { ...NEW_MOVIE, rating: 7.5 }),
     {
       method: 'PUT',
       url: `/movies/${MOVIE_ID}`,
@@ -205,12 +233,12 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'deleteMovie',
-    () => movie.deleteMovie(MOVIE_ID),
+    () => deleteMovie(MOVIE_ID),
     { method: 'DELETE', url: `/movies/${MOVIE_ID}`, body: null },
   ],
   [
     'setMovieFavorite',
-    () => movie.setMovieFavorite(MOVIE_ID, true),
+    () => setMovieFavorite(MOVIE_ID, true),
     {
       method: 'PATCH',
       url: `/movies/${MOVIE_ID}/favorite`,
@@ -219,42 +247,42 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'rewatchMovie',
-    () => movie.rewatchMovie(MOVIE_ID),
+    () => rewatchMovie(MOVIE_ID),
     { method: 'POST', url: `/movies/${MOVIE_ID}/rewatch`, body: {} },
   ],
   [
     'uploadMoviePoster',
-    () => movie.uploadMoviePoster(MOVIE_ID, PICKED),
+    () => uploadMoviePoster(MOVIE_ID, PICKED),
     { method: 'PUT', url: `/movies/${MOVIE_ID}/poster`, body: ['poster'] },
   ],
   [
     'removeMoviePoster',
-    () => movie.removeMoviePoster(MOVIE_ID),
+    () => removeMoviePoster(MOVIE_ID),
     { method: 'DELETE', url: `/movies/${MOVIE_ID}/poster`, body: null },
   ],
   [
     'listWatchlist',
-    () => watchlist.listWatchlist({ planned: true }),
+    () => listWatchlist({ planned: true }),
     { method: 'GET', url: '/watchlist', params: { planned: true }, body: null },
   ],
   [
     'addWatchlistItem',
-    () => watchlist.addWatchlistItem({ title: 'T' }),
+    () => addWatchlistItem({ title: 'T' }),
     { method: 'POST', url: '/watchlist', body: { title: 'T' } },
   ],
   [
     'updateWatchlistItem',
-    () => watchlist.updateWatchlistItem(ITEM_ID, { priority: 'high' }),
+    () => updateWatchlistItem(ITEM_ID, { priority: 'high' }),
     { method: 'PUT', url: `/watchlist/${ITEM_ID}`, body: { priority: 'high' } },
   ],
   [
     'removeWatchlistItem',
-    () => watchlist.removeWatchlistItem(ITEM_ID),
+    () => removeWatchlistItem(ITEM_ID),
     { method: 'DELETE', url: `/watchlist/${ITEM_ID}`, body: null },
   ],
   [
     'markWatchlistItemWatched',
-    () => watchlist.markWatchlistItemWatched(ITEM_ID, { rating: 9 }),
+    () => markWatchlistItemWatched(ITEM_ID, { rating: 9 }),
     {
       method: 'POST',
       url: `/watchlist/${ITEM_ID}/watched`,
@@ -263,7 +291,7 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'searchTmdbMovies',
-    () => tmdb.searchTmdbMovies({ query: 'duna' }),
+    () => searchTmdbMovies({ query: 'duna' }),
     {
       method: 'GET',
       url: '/tmdb/search',
@@ -273,12 +301,12 @@ const CASES: [string, () => Promise<unknown>, IRecordedRequest][] = [
   ],
   [
     'listGenres',
-    () => genre.listGenres(),
+    () => listGenres(),
     { method: 'GET', url: '/genres', body: null },
   ],
 ];
 
-describe('When we call each API service', () => {
+describe('When we call each API endpoint', () => {
   it.each(CASES)(
     'should send %s to the right route',
     async (_name, call, expected) => {

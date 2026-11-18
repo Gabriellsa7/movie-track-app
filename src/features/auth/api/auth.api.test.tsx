@@ -1,23 +1,15 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
-import {
-  readRefreshToken,
-  writeRefreshToken,
-} from '@/lib/session/session.storage';
+import { useLoginMutation } from '@/api/post-login';
+import { useLogoutMutation } from '@/features/account/api/post-logout';
 import { ACCESS_TOKEN, REFRESH_TOKEN, USER_ID } from '@/test/constants';
 import { A_USER } from '@/test/fixtures';
 import { mockApi } from '@/test/mock-api';
 import { createWrapper } from '@/test/render';
 import { useSessionStore } from '@/stores/session.store';
-import {
-  useDeleteAccountMutation,
-  useLoginMutation,
-  useLogoutMutation,
-  useRequestPasswordResetMutation,
-  useResendVerificationMutation,
-  useResetPasswordMutation,
-  useSignUpMutation,
-  useVerifyEmailMutation,
-} from './auth.queries';
+import { useRequestPasswordResetMutation } from './post-forgot-password';
+import { useResetPasswordMutation } from './post-reset-password';
+import { useSignUpMutation } from './post-sign-up';
+import { useVerifyEmailMutation } from './post-verify-email';
 
 const TOKENS = { accessToken: ACCESS_TOKEN, refreshToken: REFRESH_TOKEN };
 
@@ -30,8 +22,6 @@ function renderAuthHooks() {
       verify: useVerifyEmailMutation(),
       forgot: useRequestPasswordResetMutation(),
       reset: useResetPasswordMutation(),
-      resend: useResendVerificationMutation(),
-      remove: useDeleteAccountMutation(),
     }),
     { wrapper: createWrapper() },
   );
@@ -67,11 +57,9 @@ describe('When we log in or sign up', () => {
 
 describe('When we use the e-mail and password flows', () => {
   it('should call the API for each one', async () => {
-    useSessionStore.setState({ userId: USER_ID });
     mockApi.onPost('/auth/verify-email').reply(204);
     mockApi.onPost('/auth/forgot-password').reply(204);
     mockApi.onPost('/auth/reset-password').reply(204);
-    mockApi.onPost(`/users/${USER_ID}/email-verification`).reply(204);
     const { result } = await renderAuthHooks();
 
     await act(async () => {
@@ -81,41 +69,10 @@ describe('When we use the e-mail and password flows', () => {
         token: 'token',
         newPassword: 'filmes2026',
       });
-      await result.current.resend.mutateAsync();
     });
 
     await waitFor(() => {
-      expect(result.current.resend.isSuccess).toBe(true);
-    });
-  });
-});
-
-describe('When we delete the account', () => {
-  it('should delete it and end the session', async () => {
-    useSessionStore.setState({ userId: USER_ID, status: 'authenticated' });
-    await writeRefreshToken(REFRESH_TOKEN);
-    mockApi.onDelete(`/users/${USER_ID}`).reply(204);
-    mockApi.onPost('/auth/logout').reply(204);
-    const { result } = await renderAuthHooks();
-
-    await act(async () => {
-      await result.current.remove.mutateAsync('filmes2026');
-    });
-
-    expect(useSessionStore.getState().status).toBe('anonymous');
-    expect(await readRefreshToken()).toBeNull();
-  });
-
-  it('should refuse account actions without a session', async () => {
-    const { result } = await renderAuthHooks();
-
-    await act(async () => {
-      await expect(result.current.resend.mutateAsync()).rejects.toThrow(
-        'Not logged in',
-      );
-      await expect(result.current.remove.mutateAsync('x')).rejects.toThrow(
-        'Not logged in',
-      );
+      expect(result.current.reset.isSuccess).toBe(true);
     });
   });
 });

@@ -1,6 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { listGenres } from '@/api/services/genre.service';
+import { apiClient } from './client';
 import { queryKeys } from './query-keys';
+import type { TGenre } from './types';
+
+export async function listGenres(): Promise<TGenre[]> {
+  const { data } = await apiClient.get<TGenre[]>('/genres');
+  return data;
+}
 
 export function useGenresQuery() {
   return useQuery({

@@ -3,8 +3,9 @@ import { jwtDecode } from 'jwt-decode';
 import { ApiError } from '@/api/api-error';
 import { registerSessionHandlers } from '@/api/client';
 import { EApiErrorCode } from '@/api/error-codes';
-import * as authService from '@/api/services/auth.service';
-import * as userService from '@/api/services/user.service';
+import { getAccount } from '@/api/get-account';
+import { logout as postLogout } from '@/api/post-logout';
+import { refreshTokens } from '@/api/post-refresh-token';
 import type { TAuthTokens } from '@/api/types';
 import { queryPersister } from '@/lib/react-query/persister';
 import { queryClient } from '@/lib/react-query/query-client';
@@ -53,7 +54,7 @@ export async function logout() {
   const refreshToken = await readRefreshToken();
   if (refreshToken) {
     // The device forgets the session even if the API can't revoke the token now.
-    await authService.logout(refreshToken).catch(() => undefined);
+    await postLogout(refreshToken).catch(() => undefined);
   }
   await endSession();
 }
@@ -99,7 +100,7 @@ async function refreshAccessToken(): Promise<string> {
       code: EApiErrorCode.INVALID_TOKEN,
     });
   }
-  const tokens = await authService.refreshTokens(refreshToken);
+  const tokens = await refreshTokens(refreshToken);
   await saveTokens(tokens);
   return tokens.accessToken;
 }
@@ -110,7 +111,7 @@ async function loadAccount() {
   if (!userId) {
     throw new Error('Session without a user id');
   }
-  const user = await userService.getAccount(userId);
+  const user = await getAccount(userId);
   useSessionStore.getState().setUser(user);
   await writeStoredUser(user);
 }
