@@ -1,102 +1,37 @@
-import * as Linking from 'expo-linking';
 import { useLocalSearchParams } from 'expo-router';
-import { Alert, ScrollView, Text, View } from 'react-native';
-import { toast } from 'sonner-native';
+import { Trash2 } from 'lucide-react-native';
+import { useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
-import { useGenresQuery } from '@/api/get-genres';
+import { useGenreNames } from '@/api/get-genres';
+import { ActionSheet } from '@/components/action-sheet';
 import { SectionError } from '@/components/section-error';
-import { shareLink } from '@/lib/share';
-import { useDeleteMovieMutation } from '../api/delete-movie';
 import { useMovieQuery } from '../api/get-movie';
-import { useSetFavoriteMutation } from '../api/patch-movie-favorite';
-import { useRewatchMovieMutation } from '../api/post-movie-rewatch';
 import { MovieActions } from './components/movie-actions/movie-actions';
-import {
-  goBackToMovies,
-  MovieDetailHero,
-} from './components/movie-detail-hero/movie-detail-hero';
+import { MovieDetailHero } from './components/movie-detail-hero/movie-detail-hero';
 import { MovieDetailSkeleton } from './components/movie-detail-skeleton/movie-detail-skeleton';
+import { MovieGenreChips } from './components/movie-genre-chips/movie-genre-chips';
 import { MovieInfoSection } from './components/movie-info-section/movie-info-section';
 import { MovieRatingCard } from './components/movie-rating-card/movie-rating-card';
+import { useMovieDetailActions } from './hooks/use-movie-detail-actions';
 import {
   formatWatchCount,
   formatWatchedDate,
 } from './utils/movie-detail.utils';
 
+type TSheet = 'options' | 'confirmDelete' | null;
+
 export function MovieDetailScreen() {
   const { movieId } = useLocalSearchParams<{ movieId: string }>();
   const movie = useMovieQuery(movieId);
-  const genres = useGenresQuery();
-  const setFavorite = useSetFavoriteMutation(movieId);
-  const rewatch = useRewatchMovieMutation(movieId);
-  const deleteMovie = useDeleteMovieMutation();
+  const genreNames = useGenreNames(movie.data?.genreIds);
+  const actions = useMovieDetailActions(movieId, movie.data);
+  const [sheet, setSheet] = useState<TSheet>(null);
+  const title = movie.data?.title ?? '';
 
-  const genreNames =
-    movie.data?.genreIds
-      .map(
-        (genreId) => genres.data?.find((genre) => genre.id === genreId)?.name,
-      )
-      .filter((name): name is string => Boolean(name)) ?? [];
-
-  function toggleFavorite() {
-    if (movie.data) {
-      setFavorite.mutate(!movie.data.isFavorite);
-    }
-  }
-
-  function watchedAgain() {
-    rewatch.mutate(undefined, {
-      onSuccess: () => {
-        toast.success('Added one more watch');
-      },
-      onError: () => {
-        toast.error("Couldn't save the new watch. Try again.");
-      },
-    });
-  }
-
-  function share() {
-    if (!movie.data) {
-      return;
-    }
-    const { title, userId, id } = movie.data;
-    void shareLink(
-      `My review of ${title} on Movie Track:`,
-      Linking.createURL(`/users/${userId}/movies/${id}`),
-    );
-  }
-
-  function remove() {
-    deleteMovie.mutate(movieId, {
-      onSuccess: () => {
-        toast.success('Movie deleted');
-        goBackToMovies();
-      },
-      onError: () => {
-        toast.error("Couldn't delete the movie. Try again.");
-      },
-    });
-  }
-
-  function showMoreOptions() {
-    Alert.alert(movie.data?.title ?? 'Movie', undefined, [
-      {
-        text: 'Delete movie',
-        style: 'destructive',
-        onPress: () => {
-          Alert.alert(
-            'Delete movie?',
-            `"${movie.data?.title ?? ''}" will be removed from your movies.`,
-            [
-              { text: 'Cancel', style: 'cancel' },
-              { text: 'Delete', style: 'destructive', onPress: remove },
-            ],
-          );
-        },
-      },
-      { text: 'Cancel', style: 'cancel' },
-    ]);
+  function closeSheet() {
+    setSheet(null);
   }
 
   function renderBody() {
@@ -119,20 +54,7 @@ export function MovieDetailScreen() {
     const { data } = movie;
     return (
       <View className="gap-4">
-        {genreNames.length > 0 && (
-          <View className="flex-row flex-wrap gap-1.5">
-            {genreNames.map((name) => (
-              <View
-                key={name}
-                className="h-[26px] justify-center rounded-full bg-tertiary-bg-color px-2.5"
-              >
-                <Text className="font-sans text-xs text-primary-text-color">
-                  {name}
-                </Text>
-              </View>
-            ))}
-          </View>
-        )}
+        <MovieGenreChips names={genreNames} />
 
         <View className="gap-2.5">
           <MovieRatingCard rating={data.rating} />
@@ -146,10 +68,10 @@ export function MovieDetailScreen() {
 
         <MovieActions
           isFavorite={data.isFavorite}
-          isRewatching={rewatch.isPending}
-          onToggleFavorite={toggleFavorite}
-          onRewatch={watchedAgain}
-          onShare={share}
+          isRewatching={actions.isRewatching}
+          onToggleFavorite={actions.toggleFavorite}
+          onRewatch={actions.watchedAgain}
+          onShare={actions.share}
         />
 
         {data.review && (
@@ -174,10 +96,46 @@ export function MovieDetailScreen() {
       <ScrollView contentContainerClassName="pb-10">
         <MovieDetailHero
           movie={movie.data}
-          onMoreOptions={movie.data ? showMoreOptions : undefined}
+          onMoreOptions={
+            movie.data
+              ? () => {
+                  setSheet('options');
+                }
+              : undefined
+          }
         />
         <View className="px-5 pt-[18px]">{renderBody()}</View>
       </ScrollView>
+
+      <ActionSheet
+        title={title}
+        visible={sheet === 'options'}
+        onClose={closeSheet}
+        actions={[
+          {
+            label: 'Delete movie',
+            icon: Trash2,
+            destructive: true,
+            onPress: () => {
+              setSheet('confirmDelete');
+            },
+          },
+        ]}
+      />
+      <ActionSheet
+        title="Delete movie?"
+        message={`"${title}" will be removed from your movies.`}
+        visible={sheet === 'confirmDelete'}
+        onClose={closeSheet}
+        actions={[
+          {
+            label: 'Delete',
+            icon: Trash2,
+            destructive: true,
+            onPress: actions.remove,
+          },
+        ]}
+      />
     </View>
   );
 }

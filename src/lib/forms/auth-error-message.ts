@@ -1,5 +1,6 @@
 import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
+import { NO_CONNECTION_MESSAGE } from './notify-save-error';
 
 const MESSAGES_BY_CODE: Partial<Record<EApiErrorCode, string>> = {
   [EApiErrorCode.INVALID_CREDENTIALS]: 'Wrong e-mail or password',
@@ -8,8 +9,7 @@ const MESSAGES_BY_CODE: Partial<Record<EApiErrorCode, string>> = {
     'Too many attempts. Wait a few minutes and try again.',
   [EApiErrorCode.TOO_MANY_REQUESTS]:
     'Too many attempts. Wait a few minutes and try again.',
-  [EApiErrorCode.NETWORK_ERROR]:
-    "Can't reach the server. Check your connection and try again.",
+  [EApiErrorCode.NETWORK_ERROR]: NO_CONNECTION_MESSAGE,
   [EApiErrorCode.SERVICE_UNAVAILABLE]:
     'Service unavailable right now. Try again in a moment.',
 };

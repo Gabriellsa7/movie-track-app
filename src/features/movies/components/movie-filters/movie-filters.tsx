@@ -1,15 +1,13 @@
-import { ChevronDown } from 'lucide-react-native';
 import { useState } from 'react';
-import { Pressable, ScrollView, Text } from 'react-native';
+import { ScrollView } from 'react-native';
 import { useGenresQuery } from '@/api/get-genres';
 import { OptionSheet, type IOption } from '@/components/option-sheet';
-import { useAppTheme } from '@/lib/theme/use-app-theme';
-import { color } from '@/theme/palette';
 import {
   MOVIE_SORT_OPTIONS,
   type IMovieFilters,
   type TMovieSortKey,
 } from '../../constants/constants';
+import { FilterChip } from '../filter-chip/filter-chip';
 
 interface IMovieFiltersProps {
   filters: IMovieFilters;
@@ -17,51 +15,6 @@ interface IMovieFiltersProps {
 }
 
 const ALL_GENRES = '';
-
-function Chip({
-  label,
-  active,
-  withMenu = false,
-  onPress,
-}: {
-  label: string;
-  active: boolean;
-  withMenu?: boolean;
-  onPress: () => void;
-}) {
-  const scheme = useAppTheme();
-
-  return (
-    <Pressable
-      accessibilityRole={withMenu ? 'button' : 'switch'}
-      accessibilityState={withMenu ? undefined : { checked: active }}
-      onPress={onPress}
-      className={`h-9 flex-row items-center gap-1 rounded-full border px-3 ${
-        active
-          ? 'border-accent-bg-color bg-accent-soft-bg-color'
-          : 'border-primary-border-color bg-secondary-bg-color'
-      }`}
-    >
-      <Text
-        className={`font-semibold text-[13px] ${
-          active ? 'text-accent-text-color' : 'text-primary-text-color'
-        }`}
-      >
-        {label}
-      </Text>
-      {withMenu && (
-        <ChevronDown
-          size={14}
-          strokeWidth={2.4}
-          color={color(
-            scheme,
-            active ? 'accent-text-color' : 'primary-text-color',
-          )}
-        />
-      )}
-    </Pressable>
-  );
-}
 
 export function MovieFilters({ filters, onChange }: IMovieFiltersProps) {
   const genres = useGenresQuery();
@@ -92,14 +45,14 @@ export function MovieFilters({ filters, onChange }: IMovieFiltersProps) {
         className="-mx-5"
         contentContainerClassName="gap-2 px-5"
       >
-        <Chip
+        <FilterChip
           label="Favorites"
           active={filters.favorite}
           onPress={() => {
             onChange({ ...filters, favorite: !filters.favorite });
           }}
         />
-        <Chip
+        <FilterChip
           label={genreName ?? 'Genre'}
           active={Boolean(genreName)}
           withMenu
@@ -107,7 +60,7 @@ export function MovieFilters({ filters, onChange }: IMovieFiltersProps) {
             setSheet('genre');
           }}
         />
-        <Chip
+        <FilterChip
           label={sortLabel}
           active={filters.sort !== 'latest'}
           withMenu

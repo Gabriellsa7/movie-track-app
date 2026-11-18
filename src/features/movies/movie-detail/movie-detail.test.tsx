@@ -1,7 +1,7 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
-import { Alert, Share, type AlertButton } from 'react-native';
+import { Share } from 'react-native';
 import { toast } from 'sonner-native';
 import { MOVIE_ID } from '@/test/constants';
 import { A_MOVIE } from '@/test/fixtures';
@@ -32,15 +32,6 @@ async function renderDetail() {
     },
     { initialUrl: `/movies/${MOVIE_ID}` },
   );
-}
-
-function pressAlertButton(
-  alert: jest.SpiedFunction<typeof Alert.alert>,
-  call: number,
-  text: string,
-) {
-  const buttons = alert.mock.calls[call]?.[2] as AlertButton[];
-  buttons.find((button) => button.text === text)?.onPress?.();
 }
 
 describe('When we open a movie', () => {
@@ -155,7 +146,6 @@ describe('When we act on a movie from its page', () => {
   });
 
   it('should delete it from the more options menu after confirming', async () => {
-    const alert = jest.spyOn(Alert, 'alert');
     mockApi.onGet(`/movies/${MOVIE_ID}`).reply(200, A_MOVIE);
     mockApi.onDelete(`/movies/${MOVIE_ID}`).reply(204);
     await renderDetail();
@@ -163,13 +153,19 @@ describe('When we act on a movie from its page', () => {
     await fireEvent.press(
       await screen.findByRole('button', { name: 'More options' }),
     );
-    pressAlertButton(alert, 0, 'Delete movie');
-    pressAlertButton(alert, 1, 'Delete');
+    await fireEvent.press(
+      await screen.findByRole('button', { name: 'Delete movie' }),
+    );
+    expect(
+      await screen.findByText(
+        '"Duna: Parte 2" will be removed from your movies.',
+      ),
+    ).toBeOnTheScreen();
+    await fireEvent.press(screen.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith('Movie deleted');
     });
     expect(mockApi.history.delete).toHaveLength(1);
-    alert.mockRestore();
   });
 });

@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Logo, LogoMark } from './logo';
+import { Logo } from './logo';
+import { LogoMark } from './logo-mark';
 import { ScreenPlaceholder } from './screen-placeholder';
 import { Toaster } from './toaster';
 

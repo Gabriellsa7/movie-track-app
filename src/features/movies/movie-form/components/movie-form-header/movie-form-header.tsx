@@ -1,5 +1,5 @@
-import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
+import { goBackOr } from '@/lib/navigation';
 import { ROUTES } from '@/routes/routes.constants';
 
 interface IMovieFormHeaderProps {
@@ -9,11 +9,7 @@ interface IMovieFormHeaderProps {
 }
 
 export function closeMovieForm() {
-  if (router.canGoBack()) {
-    router.back();
-  } else {
-    router.replace(ROUTES.movies);
-  }
+  goBackOr(ROUTES.movies);
 }
 
 export function MovieFormHeader({

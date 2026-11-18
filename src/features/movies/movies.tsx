@@ -1,17 +1,11 @@
 import { useState } from 'react';
-import {
-  FlatList,
-  RefreshControl,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { FlatList, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMoviesQuery } from '@/api/get-movies';
 import { NewMovieButton } from '@/components/new-movie-button';
 import { SectionError } from '@/components/section-error';
 import { useDebouncedValue } from '@/lib/use-debounced-value';
-import { useAppTheme } from '@/lib/theme/use-app-theme';
-import { color } from '@/theme/palette';
+import { useRefreshControl } from '@/lib/use-refresh-control';
 import { MovieCard } from './components/movie-card/movie-card';
 import { MovieCardSkeleton } from './components/movie-card-skeleton/movie-card-skeleton';
 import { MovieFilters } from './components/movie-filters/movie-filters';
@@ -32,7 +26,6 @@ const COLUMN_GAP = 10;
 const SKELETON_TILES = [0, 1, 2, 3, 4, 5];
 
 export function MoviesScreen() {
-  const scheme = useAppTheme();
   const { width: screenWidth } = useWindowDimensions();
   const tileWidth =
     (screenWidth - SCREEN_PADDING * 2 - COLUMN_GAP * (COLUMNS - 1)) / COLUMNS;
@@ -48,13 +41,7 @@ export function MoviesScreen() {
     isError,
     refetch,
   } = useMoviesQuery(toMoviesQuery(filters, search));
-  const [refreshing, setRefreshing] = useState(false);
-
-  async function refresh() {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  }
+  const refreshControl = useRefreshControl(() => refetch());
 
   function renderEmpty() {
     if (isPending) {
@@ -98,14 +85,7 @@ export function MoviesScreen() {
         keyboardDismissMode="on-drag"
         contentContainerClassName="pb-28 pt-4"
         contentContainerStyle={{ paddingHorizontal: SCREEN_PADDING }}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => void refresh()}
-            tintColor={color(scheme, 'accent-bg-color')}
-            colors={[color(scheme, 'accent-bg-color')]}
-          />
-        }
+        refreshControl={refreshControl}
       />
       <NewMovieButton />
     </SafeAreaView>

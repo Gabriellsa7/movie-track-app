@@ -5,7 +5,8 @@ import {
   type FieldValues,
 } from 'react-hook-form';
 import { Text, View } from 'react-native';
-import { formatRating, RatingStars } from '@/components/rating-stars';
+import { RatingStars } from '@/components/rating-stars';
+import { formatRating } from '@/lib/rating';
 
 interface IRatingFieldProps<
   TFields extends FieldValues,

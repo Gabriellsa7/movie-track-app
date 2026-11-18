@@ -13,6 +13,7 @@ export interface IAction {
 
 interface IActionSheetProps {
   title: string;
+  message?: string;
   visible: boolean;
   actions: IAction[];
   onClose: () => void;
@@ -20,6 +21,7 @@ interface IActionSheetProps {
 
 export function ActionSheet({
   title,
+  message,
   visible,
   actions,
   onClose,
@@ -51,6 +53,11 @@ export function ActionSheet({
         >
           {title}
         </Text>
+        {message ? (
+          <Text className="pb-1 font-sans text-sm text-tertiary-text-color">
+            {message}
+          </Text>
+        ) : null}
         {actions.map(({ label, icon: Icon, destructive = false, onPress }) => (
           <Pressable
             key={label}

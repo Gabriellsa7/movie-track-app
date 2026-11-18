@@ -2,6 +2,7 @@ import {
   formatRuntime,
   formatWatchCount,
   formatWatchedDate,
+  reviewShare,
 } from './movie-detail.utils';
 
 describe('When we format the movie details', () => {
@@ -18,5 +19,12 @@ describe('When we format the movie details', () => {
   it('should show how many times it was watched', () => {
     expect(formatWatchCount(1)).toBe('Watched once');
     expect(formatWatchCount(3)).toBe('Watched 3 times');
+  });
+
+  it('should build the message and the public review path to share', () => {
+    expect(reviewShare({ id: 'm1', title: 'Dune', userId: 'u1' })).toEqual({
+      message: 'My review of Dune on Movie Track:',
+      path: '/users/u1/movies/m1',
+    });
   });
 });

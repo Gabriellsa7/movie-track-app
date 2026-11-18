@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import { Star } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
 import type { IMovie } from '@/api/types';
-import { formatRating } from '@/components/rating-stars';
+import { formatRating } from '@/lib/rating';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 

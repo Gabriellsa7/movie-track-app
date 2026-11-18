@@ -1,5 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
-import { useGenresQuery } from '@/api/get-genres';
+import { useGenreNames } from '@/api/get-genres';
 import { Poster } from '@/components/poster';
 
 interface ISelectedMovieCardProps {
@@ -17,13 +17,7 @@ export function SelectedMovieCard({
   posterUrl,
   onChange,
 }: ISelectedMovieCardProps) {
-  const genres = useGenresQuery();
-  const meta = [
-    releaseYear,
-    ...genreIds.map(
-      (genreId) => genres.data?.find((genre) => genre.id === genreId)?.name,
-    ),
-  ]
+  const meta = [releaseYear, ...useGenreNames(genreIds)]
     .filter(Boolean)
     .join(' · ');
 

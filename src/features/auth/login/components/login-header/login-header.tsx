@@ -1,4 +1,4 @@
-import { LogoMark } from '@/components/logo';
+import { LogoMark } from '@/components/logo-mark';
 import { Text, View } from 'react-native';
 
 export function LoginHeader() {

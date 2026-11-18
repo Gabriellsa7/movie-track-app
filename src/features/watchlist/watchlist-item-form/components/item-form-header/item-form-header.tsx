@@ -1,5 +1,5 @@
-import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
+import { goBackOr } from '@/lib/navigation';
 import { ROUTES } from '@/routes/routes.constants';
 
 interface IItemFormHeaderProps {
@@ -10,11 +10,7 @@ interface IItemFormHeaderProps {
 }
 
 export function closeItemForm() {
-  if (router.canGoBack()) {
-    router.back();
-  } else {
-    router.replace(ROUTES.watchlist);
-  }
+  goBackOr(ROUTES.watchlist);
 }
 
 export function ItemFormHeader({

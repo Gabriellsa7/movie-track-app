@@ -15,3 +15,12 @@ export function useGenresQuery() {
     staleTime: Infinity,
   });
 }
+
+export function useGenreNames(
+  genreIds: readonly string[] | undefined,
+): string[] {
+  const { data } = useGenresQuery();
+  return (genreIds ?? [])
+    .map((genreId) => data?.find((genre) => genre.id === genreId)?.name)
+    .filter((name): name is string => Boolean(name));
+}

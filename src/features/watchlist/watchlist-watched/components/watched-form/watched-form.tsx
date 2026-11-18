@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import { Controller, useForm, type Resolver } from 'react-hook-form';
 import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
@@ -11,7 +10,9 @@ import { DateField } from '@/components/form/date-field';
 import { RatingField } from '@/components/form/rating-field';
 import { TextAreaField } from '@/components/form/text-area-field';
 import { applyApiErrors } from '@/lib/forms/apply-api-errors';
+import { notifySaveError } from '@/lib/forms/notify-save-error';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
+import { goBackOr } from '@/lib/navigation';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
 import { useMarkWatchedMutation } from '../../../api/post-watchlist-item-watched';
@@ -30,11 +31,7 @@ import { WatchedHeader } from '../watched-header/watched-header';
 const ALL_DETAILS: TMissingField[] = ['releaseYear', 'genreIds', 'synopsis'];
 
 export function closeWatched() {
-  if (router.canGoBack()) {
-    router.back();
-  } else {
-    router.replace(ROUTES.watchlist);
-  }
+  goBackOr(ROUTES.watchlist);
 }
 
 export function WatchedForm({ item }: { item: IWatchlistItem }) {
@@ -83,14 +80,7 @@ export function WatchedForm({ item }: { item: IWatchlistItem }) {
       if (applyApiErrors(error, setError, WATCHED_FIELDS)) {
         return;
       }
-      if (apiError.is(EApiErrorCode.SERVICE_UNAVAILABLE)) {
-        return;
-      }
-      toast.error(
-        apiError.is(EApiErrorCode.NETWORK_ERROR)
-          ? "Can't reach the server. Check your connection and try again."
-          : "Couldn't log the movie. Try again.",
-      );
+      notifySaveError(error, "Couldn't log the movie. Try again.");
     }
   };
 
