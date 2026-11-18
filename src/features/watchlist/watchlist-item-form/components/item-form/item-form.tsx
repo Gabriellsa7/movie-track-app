@@ -12,6 +12,7 @@ import { TextAreaField } from '@/components/form/text-area-field';
 import { TextField } from '@/components/form/text-field';
 import { TmdbSearch } from '@/components/tmdb-search';
 import { applyApiErrors } from '@/lib/forms/apply-api-errors';
+import { notifySaveError } from '@/lib/forms/notify-save-error';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import { useAddWatchlistItemMutation } from '../../../api/post-watchlist-item';
@@ -98,16 +99,12 @@ export function ItemForm({ item }: { item?: IWatchlistItem }) {
         setShowDetails(true);
         return;
       }
-      const apiError = ApiError.from(error);
-      if (apiError.is(EApiErrorCode.SERVICE_UNAVAILABLE)) {
+      const duplicate = DUPLICATE_MESSAGES[ApiError.from(error).code];
+      if (duplicate) {
+        toast.error(duplicate);
         return;
       }
-      toast.error(
-        DUPLICATE_MESSAGES[apiError.code] ??
-          (apiError.is(EApiErrorCode.NETWORK_ERROR)
-            ? "Can't reach the server. Check your connection and try again."
-            : "Couldn't save it. Try again."),
-      );
+      notifySaveError(error, "Couldn't save it. Try again.");
     }
   };
 

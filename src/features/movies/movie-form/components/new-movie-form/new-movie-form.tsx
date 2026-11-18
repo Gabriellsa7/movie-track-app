@@ -3,8 +3,6 @@ import { useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { ScrollView, Switch, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
-import { ApiError } from '@/api/api-error';
-import { EApiErrorCode } from '@/api/error-codes';
 import { useInvalidateMyMovies } from '@/api/get-movies';
 import type { ITmdbMovie } from '@/api/types';
 import { DateField } from '@/components/form/date-field';
@@ -16,6 +14,7 @@ import { TmdbSearch } from '@/components/tmdb-search';
 import { useCreateMovieMutation } from '@/features/movies/api/post-movie';
 import { uploadMoviePoster } from '@/features/movies/api/put-movie-poster';
 import { applyApiErrors } from '@/lib/forms/apply-api-errors';
+import { notifySaveError } from '@/lib/forms/notify-save-error';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import {
@@ -107,15 +106,7 @@ export function NewMovieForm() {
         setIsEditingDetails(true);
         return;
       }
-      const apiError = ApiError.from(error);
-      if (apiError.is(EApiErrorCode.SERVICE_UNAVAILABLE)) {
-        return;
-      }
-      toast.error(
-        apiError.is(EApiErrorCode.NETWORK_ERROR)
-          ? MOVIE_FORM_MESSAGES.noConnection
-          : MOVIE_FORM_MESSAGES.unexpected,
-      );
+      notifySaveError(error, MOVIE_FORM_MESSAGES.unexpected);
     }
   };
 

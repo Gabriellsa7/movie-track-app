@@ -1,6 +1,6 @@
-import { router } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
+import { goBackOr } from '@/lib/navigation';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
@@ -14,11 +14,7 @@ export function StatsHeader() {
         accessibilityRole="button"
         accessibilityLabel="Back"
         onPress={() => {
-          if (router.canGoBack()) {
-            router.back();
-          } else {
-            router.replace(ROUTES.home);
-          }
+          goBackOr(ROUTES.home);
         }}
         className="-ml-3 h-11 w-11 items-center justify-center"
       >

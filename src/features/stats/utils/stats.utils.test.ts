@@ -3,6 +3,7 @@ import {
   monthsInsights,
   mostGivenRating,
   percentOf,
+  plural,
   rewatchCount,
 } from './stats.utils';
 
@@ -55,5 +56,12 @@ describe('When we compute shares and rewatches', () => {
     expect(
       rewatchCount({ totalMovies: 10, totalWatches: 14 } as IUserStats),
     ).toBe(4);
+  });
+});
+
+describe('When we count things in words', () => {
+  it('should pick the singular or the plural', () => {
+    expect(plural(1, 'movie', 'movies')).toBe('1 movie');
+    expect(plural(3, 'rewatch', 'rewatches')).toBe('3 rewatches');
   });
 });

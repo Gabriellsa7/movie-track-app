@@ -118,7 +118,6 @@ export function movieFormDefaultValues(): Partial<IMovieFormInput> {
 
 export const MOVIE_FORM_MESSAGES = {
   created: 'Movie logged',
-  noConnection: "Can't reach the server. Check your connection and try again.",
   unexpected: "Couldn't log the movie. Try again.",
   posterNotSent: 'Movie logged, but the poster was not uploaded.',
 } as const;

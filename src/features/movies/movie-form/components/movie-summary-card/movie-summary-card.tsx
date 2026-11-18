@@ -1,5 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
-import { useGenresQuery } from '@/api/get-genres';
+import { useGenreNames } from '@/api/get-genres';
 import { Poster } from '@/components/poster';
 
 interface IMovieSummaryCardProps {
@@ -17,11 +17,7 @@ export function MovieSummaryCard({
   posterUrl,
   onEdit,
 }: IMovieSummaryCardProps) {
-  const genres = useGenresQuery();
-  const genreNames = genreIds
-    .map((genreId) => genres.data?.find((genre) => genre.id === genreId)?.name)
-    .filter(Boolean)
-    .join(', ');
+  const genreNames = useGenreNames(genreIds).join(', ');
 
   return (
     <View className="flex-row gap-3 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-3">

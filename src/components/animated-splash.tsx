@@ -2,7 +2,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { AccessibilityInfo, Animated, Easing, StyleSheet } from 'react-native';
 import { color } from '@/theme/palette';
-import { LogoMark } from './logo';
+import { LogoMark } from './logo-mark';
 
 export const SPLASH_BACKGROUND = color('dark', 'primary-bg-color');
 const LOGO_SIZE = 120;

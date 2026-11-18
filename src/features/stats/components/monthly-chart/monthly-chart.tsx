@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native';
 import type { IMonthCount } from '@/lib/stats';
 import type { IMonthsInsights } from '../../utils/stats.utils';
+import { Insight } from '../monthly-insight/monthly-insight';
 
 const CHART_HEIGHT = 120;
 const EMPTY_BAR_HEIGHT = 3;
@@ -9,19 +10,6 @@ const LABEL_SPACE = 18;
 interface IMonthlyChartProps {
   months: IMonthCount[];
   insights: IMonthsInsights;
-}
-
-function Insight({ label, value }: { label: string; value: string }) {
-  return (
-    <View className="flex-1 gap-0.5">
-      <Text className="font-sans text-xs text-tertiary-text-color">
-        {label}
-      </Text>
-      <Text className="font-semibold text-sm text-primary-text-color">
-        {value}
-      </Text>
-    </View>
-  );
 }
 
 export function MonthlyChart({ months, insights }: IMonthlyChartProps) {

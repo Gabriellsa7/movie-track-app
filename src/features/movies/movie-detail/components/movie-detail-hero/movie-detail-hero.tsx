@@ -1,51 +1,22 @@
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
 import { ChevronLeft, Ellipsis } from 'lucide-react-native';
-import type { ReactNode } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { IMovie } from '@/api/types';
 import { Poster } from '@/components/poster';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
+import { goBackOr } from '@/lib/navigation';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
 import { formatRuntime } from '../../utils/movie-detail.utils';
+import { HeroButton } from '../hero-button/hero-button';
 
 const HERO_HEIGHT = 270;
 const BLUR_RADIUS = 40;
 
-export function goBackToMovies() {
-  if (router.canGoBack()) {
-    router.back();
-  } else {
-    router.replace(ROUTES.movies);
-  }
-}
-
 interface IMovieDetailHeroProps {
   movie: IMovie | undefined;
   onMoreOptions?: () => void;
-}
-
-function HeroButton({
-  label,
-  onPress,
-  children,
-}: {
-  label: string;
-  onPress: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      onPress={onPress}
-      className="h-11 w-11 items-center justify-center rounded-xl bg-overlay-bg-color/70"
-    >
-      {children}
-    </Pressable>
-  );
 }
 
 export function MovieDetailHero({
@@ -84,7 +55,12 @@ export function MovieDetailHero({
         className="absolute left-3 right-3 flex-row justify-between"
         style={{ top: insets.top + 8 }}
       >
-        <HeroButton label="Back" onPress={goBackToMovies}>
+        <HeroButton
+          label="Back"
+          onPress={() => {
+            goBackOr(ROUTES.movies);
+          }}
+        >
           <ChevronLeft size={22} strokeWidth={2.4} color={iconColor} />
         </HeroButton>
         {onMoreOptions && (
