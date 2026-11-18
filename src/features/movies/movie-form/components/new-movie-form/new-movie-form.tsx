@@ -8,8 +8,11 @@ import { EApiErrorCode } from '@/api/error-codes';
 import { useInvalidateMyMovies } from '@/api/get-movies';
 import type { ITmdbMovie } from '@/api/types';
 import { DateField } from '@/components/form/date-field';
+import { GenrePicker } from '@/components/form/genre-picker';
+import { RatingField } from '@/components/form/rating-field';
 import { TextAreaField } from '@/components/form/text-area-field';
 import { TextField } from '@/components/form/text-field';
+import { TmdbSearch } from '@/components/tmdb-search';
 import { useCreateMovieMutation } from '@/features/movies/api/post-movie';
 import { uploadMoviePoster } from '@/features/movies/api/put-movie-poster';
 import { applyApiErrors } from '@/lib/forms/apply-api-errors';
@@ -23,15 +26,12 @@ import {
   type IMovieFormInput,
   type IMovieFormOutput,
 } from '../../constants/constants';
-import { GenrePicker } from '../genre-picker/genre-picker';
 import {
   closeMovieForm,
   MovieFormHeader,
 } from '../movie-form-header/movie-form-header';
 import { MovieSummaryCard } from '../movie-summary-card/movie-summary-card';
 import { PosterPicker } from '../poster-picker/poster-picker';
-import { RatingField } from '../rating-field/rating-field';
-import { TmdbSearch } from '../tmdb-search/tmdb-search';
 
 const DETAIL_FIELDS = [
   'title',

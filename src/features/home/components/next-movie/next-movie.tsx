@@ -7,7 +7,7 @@ import { useWatchlistQuery } from '@/api/get-watchlist';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
-import { plannedLabel, priorityLabel } from '../../utils/home.utils';
+import { plannedLabel, priorityLabel } from '@/lib/watchlist';
 import { SectionError } from '@/components/section-error';
 import { SectionHeader } from '../section-header/section-header';
 
