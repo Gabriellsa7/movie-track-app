@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMoviesQuery } from '@/api/get-movies';
-import type { IListMoviesQuery } from '@/api/types';
 import { NewMovieButton } from '@/components/new-movie-button';
 import { SectionError } from '@/components/section-error';
 import { useDebouncedValue } from '@/lib/use-debounced-value';
@@ -10,29 +14,40 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import { MovieCard } from './components/movie-card/movie-card';
 import { MovieCardSkeleton } from './components/movie-card-skeleton/movie-card-skeleton';
+import { MovieFilters } from './components/movie-filters/movie-filters';
 import { MovieSearch } from './components/movie-search/movie-search';
 import { MoviesEmpty } from './components/movies-empty/movies-empty';
 import { MoviesHeader } from './components/movies-header/movies-header';
+import {
+  hasActiveFilters,
+  MOVIE_DEFAULT_FILTERS,
+  toMoviesQuery,
+  type IMovieFilters,
+} from './constants/constants';
 
-export const MOVIES_DEFAULT_QUERY: IListMoviesQuery = {
-  sort: 'watchedAt',
-  order: 'desc',
-};
 const SEARCH_DEBOUNCE_MILLISECONDS = 300;
-const SKELETON_ROWS = [0, 1, 2, 3];
+const COLUMNS = 3;
+const SCREEN_PADDING = 20;
+const COLUMN_GAP = 10;
+const SKELETON_TILES = [0, 1, 2, 3, 4, 5];
 
 export function MoviesScreen() {
   const scheme = useAppTheme();
+  const { width: screenWidth } = useWindowDimensions();
+  const tileWidth =
+    (screenWidth - SCREEN_PADDING * 2 - COLUMN_GAP * (COLUMNS - 1)) / COLUMNS;
   const [searchText, setSearchText] = useState('');
+  const [filters, setFilters] = useState<IMovieFilters>(MOVIE_DEFAULT_FILTERS);
   const search = useDebouncedValue(
     searchText.trim(),
     SEARCH_DEBOUNCE_MILLISECONDS,
   );
-  const query: IListMoviesQuery = {
-    ...MOVIES_DEFAULT_QUERY,
-    ...(search && { search }),
-  };
-  const { data: page, isPending, isError, refetch } = useMoviesQuery(query);
+  const {
+    data: page,
+    isPending,
+    isError,
+    refetch,
+  } = useMoviesQuery(toMoviesQuery(filters, search));
   const [refreshing, setRefreshing] = useState(false);
 
   async function refresh() {
@@ -44,9 +59,9 @@ export function MoviesScreen() {
   function renderEmpty() {
     if (isPending) {
       return (
-        <View className="gap-3">
-          {SKELETON_ROWS.map((row) => (
-            <MovieCardSkeleton key={row} />
+        <View className="flex-row flex-wrap" style={{ gap: COLUMN_GAP }}>
+          {SKELETON_TILES.map((tile) => (
+            <MovieCardSkeleton key={tile} width={tileWidth} />
           ))}
         </View>
       );
@@ -59,7 +74,7 @@ export function MoviesScreen() {
         />
       );
     }
-    return <MoviesEmpty search={search} />;
+    return <MoviesEmpty search={search} filtered={hasActiveFilters(filters)} />;
   }
 
   return (
@@ -67,18 +82,22 @@ export function MoviesScreen() {
       <FlatList
         data={page?.items}
         keyExtractor={(movie) => movie.id}
-        renderItem={({ item }) => <MovieCard movie={item} />}
+        numColumns={COLUMNS}
+        renderItem={({ item }) => <MovieCard movie={item} width={tileWidth} />}
+        columnWrapperStyle={{ gap: COLUMN_GAP }}
         ListHeaderComponent={
           <View className="gap-4 pb-4">
             <MoviesHeader total={page?.total} />
             <MovieSearch value={searchText} onChangeText={setSearchText} />
+            <MovieFilters filters={filters} onChange={setFilters} />
           </View>
         }
         ListEmptyComponent={renderEmpty()}
-        ItemSeparatorComponent={() => <View className="h-3" />}
+        ItemSeparatorComponent={() => <View className="h-3.5" />}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
-        contentContainerClassName="px-5 pb-28 pt-4"
+        contentContainerClassName="pb-28 pt-4"
+        contentContainerStyle={{ paddingHorizontal: SCREEN_PADDING }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

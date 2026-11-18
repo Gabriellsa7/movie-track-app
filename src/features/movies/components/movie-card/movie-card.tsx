@@ -1,16 +1,18 @@
+import { Image } from 'expo-image';
 import { Link } from 'expo-router';
-import { Heart, Star } from 'lucide-react-native';
+import { Star } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
 import type { IMovie } from '@/api/types';
-import { Poster } from '@/components/poster';
+import { formatRating } from '@/components/rating-stars';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 
 interface IMovieCardProps {
   movie: IMovie;
+  width: number;
 }
 
-export function MovieCard({ movie }: IMovieCardProps) {
+export function MovieCard({ movie, width }: IMovieCardProps) {
   const scheme = useAppTheme();
 
   return (
@@ -21,44 +23,46 @@ export function MovieCard({ movie }: IMovieCardProps) {
       <Pressable
         accessibilityRole="link"
         accessibilityLabel={`${movie.title}, ${String(movie.releaseYear)}, rating ${String(movie.rating)}`}
-        className="flex-row gap-3 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-2.5 active:opacity-80"
+        className="gap-1.5 active:opacity-80"
+        style={{ width }}
       >
-        <Poster
-          title={movie.title}
-          posterUrl={movie.posterUrl}
-          showTitle={false}
-          className="h-[90px] w-[60px] rounded-lg"
-        />
-        <View className="flex-1 justify-center gap-1">
-          <Text
-            numberOfLines={2}
-            className="font-semibold text-base text-primary-text-color"
-          >
-            {movie.title}
-          </Text>
-          <Text className="font-sans text-sm text-tertiary-text-color">
-            {movie.releaseYear}
-          </Text>
-          <View className="flex-row items-center gap-1">
+        <View
+          className="justify-between overflow-hidden rounded-lg border border-primary-border-color bg-tertiary-bg-color px-2 pb-2 pt-1.5"
+          style={{ width, aspectRatio: 2 / 3 }}
+        >
+          {movie.posterUrl && (
+            <Image
+              source={{ uri: movie.posterUrl }}
+              contentFit="cover"
+              transition={150}
+              style={{ position: 'absolute', inset: 0 }}
+            />
+          )}
+          <View className="h-5 flex-row items-center gap-[3px] self-start rounded-[5px] bg-overlay-bg-color/80 px-1.5">
             <Star
-              size={14}
+              size={10}
               color={color(scheme, 'star-filled-color')}
               fill={color(scheme, 'star-filled-color')}
             />
-            <Text className="font-semibold text-sm text-primary-text-color">
-              {movie.rating}
+            <Text className="font-semibold text-[11px] text-primary-text-color">
+              {formatRating(movie.rating)}
             </Text>
           </View>
+          {!movie.posterUrl && (
+            <Text
+              numberOfLines={3}
+              className="font-display text-[17px] leading-[17px] text-primary-text-color"
+            >
+              {movie.title}
+            </Text>
+          )}
         </View>
-        {movie.isFavorite && (
-          <View accessibilityLabel="Favorite" className="pt-1">
-            <Heart
-              size={16}
-              color={color(scheme, 'accent-text-color')}
-              fill={color(scheme, 'accent-text-color')}
-            />
-          </View>
-        )}
+        <Text
+          numberOfLines={1}
+          className="font-semibold text-xs text-primary-text-color"
+        >
+          {movie.title}
+        </Text>
       </Pressable>
     </Link>
   );

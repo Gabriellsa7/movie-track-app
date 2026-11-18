@@ -52,11 +52,19 @@ async function fillRequiredFields() {
     screen.getByLabelText('Synopsis'),
     'Paul Atreides se une aos Fremen.',
   );
-  await fireEvent.press(screen.getByLabelText('Rating 9.5'));
+  await rate(9.5);
+}
+
+function rate(rating: number) {
+  const star = Math.ceil(rating);
+  const isHalf = !Number.isInteger(rating);
+  return fireEvent.press(screen.getByTestId(`rating-star-${String(star)}`), {
+    nativeEvent: { locationX: isHalf ? 0 : 100 },
+  });
 }
 
 function submit() {
-  return fireEvent.press(screen.getByRole('button', { name: 'Log a movie' }));
+  return fireEvent.press(screen.getByRole('button', { name: 'Save' }));
 }
 
 describe('When we register a movie', () => {
@@ -77,6 +85,7 @@ describe('When we register a movie', () => {
       genreIds: ['genre-2'],
       rating: 9.5,
       watchedAt: toIsoDate(new Date()),
+      watchCount: 1,
       isFavorite: false,
     });
   });
@@ -201,8 +210,10 @@ describe('When we fill the form from TMDB', () => {
     await renderForm();
 
     await pickFromTmdb();
-    expect(screen.getByLabelText('Title').props.value).toBe('Duna: Parte Dois');
-    await fireEvent.press(screen.getByLabelText('Rating 9'));
+    expect(screen.getByText('Duna: Parte Dois')).toBeOnTheScreen();
+    expect(screen.getByText('Science Fiction')).toBeOnTheScreen();
+    expect(screen.queryByLabelText('Title')).toBeNull();
+    await rate(9);
     await submit();
 
     await waitFor(() => {
@@ -226,9 +237,13 @@ describe('When we fill the form from TMDB', () => {
     await renderForm();
 
     await pickFromTmdb();
+    await fireEvent.press(
+      screen.getByRole('button', { name: 'Edit movie details' }),
+    );
+    expect(screen.getByLabelText('Title').props.value).toBe('Duna: Parte Dois');
     await fireEvent.press(screen.getByRole('button', { name: 'Choose photo' }));
     expect(await screen.findByText('Photo from your phone')).toBeOnTheScreen();
-    await fireEvent.press(screen.getByLabelText('Rating 9'));
+    await rate(9);
     await submit();
 
     await waitFor(() => {
@@ -301,5 +316,30 @@ describe('When we fill the form from TMDB', () => {
         { timeout: 2000 },
       ),
     ).toBeOnTheScreen();
+  });
+});
+
+describe('When we rate a movie and say how many times', () => {
+  it('should take half points, accessibility steps and the watch count', async () => {
+    mockApi.onPost('/movies').reply(201, A_MOVIE);
+    await renderForm();
+
+    await fillRequiredFields();
+    await fireEvent(
+      screen.getByRole('adjustable', { name: 'Your rating' }),
+      'accessibilityAction',
+      { nativeEvent: { actionName: 'decrement' } },
+    );
+    expect(screen.getByText('9')).toBeOnTheScreen();
+    await fireEvent.changeText(screen.getByLabelText('Times'), '3');
+    await submit();
+
+    await waitFor(() => {
+      expect(mockApi.history.post).toHaveLength(1);
+    });
+    expect(JSON.parse(mockApi.history.post[0]?.data as string)).toMatchObject({
+      rating: 9,
+      watchCount: 3,
+    });
   });
 });

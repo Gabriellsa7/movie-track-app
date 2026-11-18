@@ -1,34 +1,54 @@
 import { router } from 'expo-router';
-import { X } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
-import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
-import { color } from '@/theme/palette';
 
-export function MovieFormHeader({ title }: { title: string }) {
-  const scheme = useAppTheme();
+interface IMovieFormHeaderProps {
+  title: string;
+  isSaving: boolean;
+  onSave: () => void;
+}
 
+export function closeMovieForm() {
+  if (router.canGoBack()) {
+    router.back();
+  } else {
+    router.replace(ROUTES.movies);
+  }
+}
+
+export function MovieFormHeader({
+  title,
+  isSaving,
+  onSave,
+}: IMovieFormHeaderProps) {
   return (
-    <View className="flex-row items-center justify-between">
+    <View className="h-14 flex-row items-center justify-between border-b border-primary-border-color px-3">
+      <Pressable
+        accessibilityRole="button"
+        onPress={closeMovieForm}
+        className="h-11 justify-center px-2"
+      >
+        <Text className="font-semibold text-[15px] text-secondary-text-color">
+          Cancel
+        </Text>
+      </Pressable>
       <Text
         accessibilityRole="header"
-        className="font-display text-4xl text-primary-text-color"
+        className="font-semibold text-base text-primary-text-color"
       >
         {title}
       </Text>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Close"
-        onPress={() => {
-          if (router.canGoBack()) {
-            router.back();
-          } else {
-            router.replace(ROUTES.movies);
-          }
-        }}
-        className="-mr-2 h-11 w-11 items-center justify-center"
+        accessibilityLabel="Save"
+        accessibilityState={{ disabled: isSaving }}
+        disabled={isSaving}
+        onPress={onSave}
+        className="h-11 justify-center px-2 disabled:opacity-60"
       >
-        <X size={22} color={color(scheme, 'primary-text-color')} />
+        <Text className="font-bold text-[15px] text-accent-text-color">
+          {isSaving ? 'Saving…' : 'Save'}
+        </Text>
       </Pressable>
     </View>
   );

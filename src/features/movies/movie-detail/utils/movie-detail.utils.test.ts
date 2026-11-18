@@ -16,7 +16,7 @@ describe('When we format the movie details', () => {
   });
 
   it('should show how many times it was watched', () => {
-    expect(formatWatchCount(1)).toBe('Once');
-    expect(formatWatchCount(3)).toBe('3 times');
+    expect(formatWatchCount(1)).toBe('Watched once');
+    expect(formatWatchCount(3)).toBe('Watched 3 times');
   });
 });

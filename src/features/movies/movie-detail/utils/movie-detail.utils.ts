@@ -17,5 +17,7 @@ export function formatRuntime(durationMinutes: number): string {
 }
 
 export function formatWatchCount(watchCount: number): string {
-  return watchCount === 1 ? 'Once' : `${String(watchCount)} times`;
+  return watchCount === 1
+    ? 'Watched once'
+    : `Watched ${String(watchCount)} times`;
 }

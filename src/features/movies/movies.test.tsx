@@ -7,8 +7,16 @@ import { createTestQueryClient } from '@/test/render';
 import { MoviesScreen } from './movies';
 
 const PAGE = { page: 1, limit: 20 };
+const GENRES = [{ id: 'genre-1', name: 'Drama' }];
+
+function lastMoviesParams(): unknown {
+  return mockApi.history.get
+    .filter((request) => request.url === '/movies')
+    .at(-1)?.params;
+}
 
 async function renderMovies() {
+  mockApi.onGet('/genres').reply(200, GENRES);
   const client = createTestQueryClient();
   await renderRouter({
     index: () => (
@@ -30,10 +38,7 @@ describe('When we open my movies', () => {
     expect(
       screen.getByLabelText('Duna: Parte 2, 2024, rating 9'),
     ).toBeOnTheScreen();
-    expect(mockApi.history.get[0]?.params).toEqual({
-      sort: 'watchedAt',
-      order: 'desc',
-    });
+    expect(lastMoviesParams()).toEqual({ sort: 'watchedAt', order: 'desc' });
   });
 
   it('should tell when there is no movie yet', async () => {
@@ -85,11 +90,58 @@ describe('When we search my movies', () => {
       await screen.findByText('No movies found for “xyz”'),
     ).toBeOnTheScreen();
     await waitFor(() => {
-      expect(mockApi.history.get.at(-1)?.params).toEqual({
+      expect(lastMoviesParams()).toEqual({
         sort: 'watchedAt',
         order: 'desc',
         search: 'xyz',
       });
     });
+  });
+});
+
+describe('When we filter my movies', () => {
+  it('should send the favorite, genre and sort chosen in the chips', async () => {
+    mockApi
+      .onGet('/movies')
+      .reply(200, { ...PAGE, total: 1, items: [A_MOVIE] });
+    await renderMovies();
+    await screen.findByText('1 movie');
+
+    await fireEvent.press(screen.getByRole('switch', { name: 'Favorites' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Genre' }));
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Drama' }));
+    await fireEvent.press(
+      screen.getByRole('button', { name: 'Latest watched' }),
+    );
+    await fireEvent.press(
+      await screen.findByRole('radio', { name: 'Highest rating' }),
+    );
+
+    await waitFor(() => {
+      expect(lastMoviesParams()).toEqual({
+        sort: 'rating',
+        order: 'desc',
+        favorite: true,
+        genreId: 'genre-1',
+      });
+    });
+  });
+
+  it('should say when no movie matches the filters', async () => {
+    mockApi
+      .onGet('/movies')
+      .reply((config) =>
+        (config.params as { favorite?: boolean }).favorite
+          ? [200, { ...PAGE, total: 0, items: [] }]
+          : [200, { ...PAGE, total: 1, items: [A_MOVIE] }],
+      );
+    await renderMovies();
+    await screen.findByText('1 movie');
+
+    await fireEvent.press(screen.getByRole('switch', { name: 'Favorites' }));
+
+    expect(
+      await screen.findByText('No movies match these filters'),
+    ).toBeOnTheScreen();
   });
 });

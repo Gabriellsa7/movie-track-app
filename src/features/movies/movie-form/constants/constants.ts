@@ -13,6 +13,7 @@ const SYNOPSIS_MAX_LENGTH = 2000;
 const DIRECTOR_MAX_LENGTH = 200;
 const REVIEW_MAX_LENGTH = 5000;
 const MAX_DURATION_MINUTES = 1000;
+const MAX_WATCH_COUNT = 1000;
 
 function optionalText(maxLength: number) {
   return z
@@ -64,6 +65,17 @@ export const MOVIE_FORM_SCHEMA = z.object({
         )
         .optional(),
     ),
+  watchCount: z
+    .string()
+    .trim()
+    .transform((value) => (value ? Number(value) : 1))
+    .pipe(
+      z
+        .number('Enter how many times')
+        .int('Enter how many times')
+        .min(1, 'Enter how many times')
+        .max(MAX_WATCH_COUNT, `Use at most ${String(MAX_WATCH_COUNT)} times`),
+    ),
   review: optionalText(REVIEW_MAX_LENGTH),
   isFavorite: z.boolean(),
   tmdbId: z.number().optional(),
@@ -83,6 +95,7 @@ export const MOVIE_FORM_FIELDS = [
   'watchedAt',
   'director',
   'durationMinutes',
+  'watchCount',
   'review',
   'isFavorite',
   'posterUrl',
@@ -97,6 +110,7 @@ export function movieFormDefaultValues(): Partial<IMovieFormInput> {
     watchedAt: toIsoDate(new Date()),
     director: '',
     durationMinutes: '',
+    watchCount: '1',
     review: '',
     isFavorite: false,
   };
