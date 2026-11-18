@@ -10,11 +10,11 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import { FieldFrame, inputClassName } from './field-frame';
 
-export interface ITextFieldProps<TFields extends FieldValues> extends Omit<
-  TextInputProps,
-  'value' | 'onChangeText' | 'onBlur'
-> {
-  control: Control<TFields>;
+export interface ITextFieldProps<
+  TFields extends FieldValues,
+  TTransformed = TFields,
+> extends Omit<TextInputProps, 'value' | 'onChangeText' | 'onBlur'> {
+  control: Control<TFields, unknown, TTransformed>;
   name: FieldPath<TFields>;
   label: string;
   hint?: string;
@@ -22,14 +22,14 @@ export interface ITextFieldProps<TFields extends FieldValues> extends Omit<
   trailing?: ReactNode;
 }
 
-export function TextField<TFields extends FieldValues>({
+export function TextField<TFields extends FieldValues, TTransformed = TFields>({
   control,
   name,
   label,
   hint,
   trailing,
   ...inputProps
-}: ITextFieldProps<TFields>) {
+}: ITextFieldProps<TFields, TTransformed>) {
   const scheme = useAppTheme();
   const {
     field: { ref, value, onChange, onBlur },

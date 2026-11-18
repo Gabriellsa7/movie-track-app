@@ -3,6 +3,7 @@ import { FlatList, RefreshControl, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMoviesQuery } from '@/api/get-movies';
 import type { IListMoviesQuery } from '@/api/types';
+import { NewMovieButton } from '@/components/new-movie-button';
 import { SectionError } from '@/components/section-error';
 import { useDebouncedValue } from '@/lib/use-debounced-value';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
@@ -88,6 +89,7 @@ export function MoviesScreen() {
           />
         }
       />
+      <NewMovieButton />
     </SafeAreaView>
   );
 }
