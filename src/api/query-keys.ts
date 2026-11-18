@@ -22,6 +22,7 @@ export const queryKeys = {
     all: ['users'] as const,
     list: (query: IListUsersQuery) => ['users', 'list', query] as const,
     profile: (userId: string) => ['users', userId, 'profile'] as const,
+    account: (userId: string) => ['users', userId, 'account'] as const,
     stats: (userId: string) => ['users', userId, 'stats'] as const,
     movies: (userId: string, query: IListMoviesQuery) =>
       ['users', userId, 'movies', query] as const,

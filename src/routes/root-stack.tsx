@@ -20,6 +20,8 @@ export function RootStack() {
         <Stack.Screen name="watchlist/new" options={MODAL} />
         <Stack.Screen name="watchlist/[itemId]/edit" options={MODAL} />
         <Stack.Screen name="watchlist/[itemId]/watched" options={MODAL} />
+        <Stack.Screen name="account/details" options={MODAL} />
+        <Stack.Screen name="account/password" options={MODAL} />
       </Stack.Protected>
       <Stack.Protected guard={!isAuthenticated} redirectTo={ROUTES.home}>
         <Stack.Screen name="(auth)" />
