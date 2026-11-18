@@ -8,7 +8,7 @@ import { useMoviesQuery } from '@/api/get-movies';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
-import { SectionError } from '../section-error/section-error';
+import { SectionError } from '@/components/section-error';
 import { SectionHeader } from '../section-header/section-header';
 
 export const RECENT_MOVIES_QUERY = {

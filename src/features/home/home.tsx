@@ -14,7 +14,7 @@ import { HomeHeader } from './components/home-header/home-header';
 import { MoviesPerMonth } from './components/movies-per-month/movies-per-month';
 import { NextMovie } from './components/next-movie/next-movie';
 import { RecentMovies } from './components/recent-movies/recent-movies';
-import { SectionError } from './components/section-error/section-error';
+import { SectionError } from '@/components/section-error';
 import { StatsGrid } from './components/stats-grid/stats-grid';
 
 export function HomeScreen() {
