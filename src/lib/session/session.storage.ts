@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
-import type { TUser } from '@/api/types';
+import type { IUser } from '@/api/types';
 
 const REFRESH_TOKEN_KEY = 'movie-track.refresh-token';
 // The account is kept too, so the app opens offline with the cached data.
@@ -19,12 +19,12 @@ export async function writeRefreshToken(
   }
 }
 
-export async function readStoredUser(): Promise<TUser | null> {
+export async function readStoredUser(): Promise<IUser | null> {
   const stored = await SecureStore.getItemAsync(USER_KEY);
-  return stored ? (JSON.parse(stored) as TUser) : null;
+  return stored ? (JSON.parse(stored) as IUser) : null;
 }
 
-export async function writeStoredUser(user: TUser | null): Promise<void> {
+export async function writeStoredUser(user: IUser | null): Promise<void> {
   if (user) {
     await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
   } else {

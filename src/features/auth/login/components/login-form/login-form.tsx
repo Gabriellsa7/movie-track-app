@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { Pressable, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
-import { login } from '@/api/services/auth.service';
+import { login } from '@/api/post-login';
 import { PasswordField } from '@/components/form/password-field';
 import { TextField } from '@/components/form/text-field';
 import { authErrorMessage } from '@/lib/forms/auth-error-message';
@@ -13,7 +13,7 @@ import {
   LOGIN_DEFAULT_VALUES,
   LOGIN_ERROR_MESSAGES,
   LOGIN_SCHEMA,
-  type TLoginForm,
+  type ILoginForm,
 } from './constants/constants';
 
 export function LoginForm() {
@@ -22,12 +22,12 @@ export function LoginForm() {
     handleSubmit,
     setError,
     formState: { isSubmitting, errors },
-  } = useForm<TLoginForm>({
+  } = useForm<ILoginForm>({
     resolver: zodResolver(LOGIN_SCHEMA),
     defaultValues: LOGIN_DEFAULT_VALUES,
   });
 
-  const onSubmit = async (values: TLoginForm) => {
+  const onSubmit = async (values: ILoginForm) => {
     try {
       const tokens = await login(values);
       await startSession(tokens);

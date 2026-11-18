@@ -1,8 +1,8 @@
 import type { FieldValues } from 'react-hook-form';
-import { TextField, type TTextFieldProps } from './text-field';
+import { TextField, type ITextFieldProps } from './text-field';
 
 export function TextAreaField<TFields extends FieldValues>(
-  props: TTextFieldProps<TFields>,
+  props: ITextFieldProps<TFields>,
 ) {
   return (
     <TextField

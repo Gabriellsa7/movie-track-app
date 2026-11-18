@@ -3,7 +3,7 @@ import {
   nameSchema,
   passwordSchema,
 } from '@/lib/validation/rules';
-import { z } from 'zod';
+import { z, type infer as TInfer } from 'zod';
 
 export const SIGN_UP_SCHEMA = z.object({
   name: nameSchema,
@@ -11,11 +11,11 @@ export const SIGN_UP_SCHEMA = z.object({
   password: passwordSchema,
 });
 
-export type TSignUpForm = z.infer<typeof SIGN_UP_SCHEMA>;
+export interface ISignUpForm extends TInfer<typeof SIGN_UP_SCHEMA> {}
 
 export const SIGN_UP_FIELDS = ['name', 'email', 'password'] as const;
 
-export const SIGN_UP_DEFAULT_VALUES: TSignUpForm = {
+export const SIGN_UP_DEFAULT_VALUES: ISignUpForm = {
   name: '',
   email: '',
   password: '',

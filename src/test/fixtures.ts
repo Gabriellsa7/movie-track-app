@@ -1,12 +1,12 @@
 import type {
-  TMovie,
-  TUser,
-  TWatchlistItem,
-  TWatchlistPage,
+  IMovie,
+  IUser,
+  IWatchlistItem,
+  IWatchlistPage,
 } from '@/api/types';
 import { ITEM_ID, MOVIE_ID, USER_ID } from './constants';
 
-export const A_USER: TUser = {
+export const A_USER: IUser = {
   id: USER_ID,
   name: 'Gabriel',
   email: 'gabriel@email.com',
@@ -15,7 +15,7 @@ export const A_USER: TUser = {
   updatedAt: '2026-10-01T00:00:00.000Z',
 };
 
-export const A_MOVIE: TMovie = {
+export const A_MOVIE: IMovie = {
   id: MOVIE_ID,
   userId: USER_ID,
   title: 'Duna: Parte 2',
@@ -30,7 +30,7 @@ export const A_MOVIE: TMovie = {
   updatedAt: '2026-10-12T00:00:00.000Z',
 };
 
-export const A_WATCHLIST_ITEM: TWatchlistItem = {
+export const A_WATCHLIST_ITEM: IWatchlistItem = {
   id: ITEM_ID,
   userId: USER_ID,
   title: 'Perfect Days',
@@ -38,7 +38,7 @@ export const A_WATCHLIST_ITEM: TWatchlistItem = {
   addedAt: '2026-10-20T00:00:00.000Z',
 };
 
-export const A_WATCHLIST_PAGE: TWatchlistPage = {
+export const A_WATCHLIST_PAGE: IWatchlistPage = {
   items: [A_WATCHLIST_ITEM],
   total: 1,
   page: 1,

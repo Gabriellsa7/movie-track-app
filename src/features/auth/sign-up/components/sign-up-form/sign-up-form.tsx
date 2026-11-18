@@ -3,8 +3,8 @@ import { Link } from 'expo-router';
 import { useForm, useWatch } from 'react-hook-form';
 import { Pressable, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
-import { login } from '@/api/services/auth.service';
-import { signUp } from '@/api/services/user.service';
+import { login } from '@/api/post-login';
+import { signUp } from '@/features/auth/api/post-sign-up';
 import { PasswordField } from '@/components/form/password-field';
 import { PasswordRules } from '@/components/form/password-rules';
 import { TextField } from '@/components/form/text-field';
@@ -17,7 +17,7 @@ import {
   SIGN_UP_ERROR_MESSAGES,
   SIGN_UP_FIELDS,
   SIGN_UP_SCHEMA,
-  type TSignUpForm,
+  type ISignUpForm,
 } from '../../constants/constants';
 
 export function SignUpForm() {
@@ -26,14 +26,14 @@ export function SignUpForm() {
     handleSubmit,
     setError,
     formState: { isSubmitting, errors },
-  } = useForm<TSignUpForm>({
+  } = useForm<ISignUpForm>({
     resolver: zodResolver(SIGN_UP_SCHEMA),
     defaultValues: SIGN_UP_DEFAULT_VALUES,
   });
   const password = useWatch({ control, name: 'password' });
 
   // After the account is created, logs in with the same credentials and opens Início.
-  const onSubmit = async (values: TSignUpForm) => {
+  const onSubmit = async (values: ISignUpForm) => {
     try {
       await signUp(values);
       const tokens = await login({

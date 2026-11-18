@@ -1,4 +1,4 @@
-import type { TUserStats, TWatchlistItem } from '@/api/types';
+import type { IUserStats, IWatchlistItem } from '@/api/types';
 
 const MONTHS_IN_CHART = 12;
 const SHORT_MONTHS = [
@@ -16,7 +16,7 @@ const SHORT_MONTHS = [
   'dez',
 ] as const;
 
-const PRIORITY_LABELS: Record<TWatchlistItem['priority'], string> = {
+const PRIORITY_LABELS: Record<IWatchlistItem['priority'], string> = {
   high: 'Prioridade alta',
   medium: 'Prioridade média',
   low: 'Prioridade baixa',
@@ -54,7 +54,7 @@ function monthKey(year: number, monthIndex: number): string {
 
 // The API only returns months with movies; the chart always shows the last 12.
 export function lastTwelveMonths(
-  moviesPerMonth: TUserStats['moviesPerMonth'],
+  moviesPerMonth: IUserStats['moviesPerMonth'],
   today: Date,
 ): IMonthCount[] {
   const counts = new Map(
@@ -98,6 +98,6 @@ export function plannedLabel(plannedFor: string, today: Date): string {
   return `${planned.getUTCDate()} ${SHORT_MONTHS[planned.getUTCMonth()] ?? ''}`;
 }
 
-export function priorityLabel(priority: TWatchlistItem['priority']): string {
+export function priorityLabel(priority: IWatchlistItem['priority']): string {
   return PRIORITY_LABELS[priority];
 }

@@ -1,7 +1,7 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
-import type { TUserStats } from '@/api/types';
+import type { IUserStats } from '@/api/types';
 import { useSessionStore } from '@/stores/session.store';
 import { USER_ID } from '@/test/constants';
 import { A_MOVIE, A_USER, A_WATCHLIST_ITEM } from '@/test/fixtures';
@@ -9,7 +9,7 @@ import { mockApi } from '@/test/mock-api';
 import { createTestQueryClient } from '@/test/render';
 import { HomeScreen } from './home';
 
-const STATS: TUserStats = {
+const STATS: IUserStats = {
   totalMovies: 128,
   averageRating: 7.6,
   favoritesCount: 23,

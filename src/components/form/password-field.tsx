@@ -4,10 +4,10 @@ import type { FieldValues } from 'react-hook-form';
 import { Pressable } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
-import { TextField, type TTextFieldProps } from './text-field';
+import { TextField, type ITextFieldProps } from './text-field';
 
 export function PasswordField<TFields extends FieldValues>(
-  props: TTextFieldProps<TFields>,
+  props: ITextFieldProps<TFields>,
 ) {
   const scheme = useAppTheme();
   const [visible, setVisible] = useState(false);

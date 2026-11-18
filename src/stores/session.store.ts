@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 import { create } from 'zustand';
-import type { TUser } from '@/api/types';
+import type { IUser } from '@/api/types';
 
 export type TSessionStatus = 'loading' | 'authenticated' | 'anonymous';
 
@@ -9,9 +9,9 @@ interface ISessionState {
   // Memory only; SecureStore keeps the refresh token (see session.storage.ts).
   accessToken: string | null;
   userId: string | null;
-  user: TUser | null;
+  user: IUser | null;
   setAccessToken: (accessToken: string) => void;
-  setUser: (user: TUser) => void;
+  setUser: (user: IUser) => void;
   clear: () => void;
 }
 
@@ -30,3 +30,12 @@ export const useSessionStore = create<ISessionState>()((set) => ({
     set({ status: 'anonymous', accessToken: null, userId: null, user: null });
   },
 }));
+
+// For account calls: they need the logged-in user's id.
+export function requireUserId(): string {
+  const { userId } = useSessionStore.getState();
+  if (!userId) {
+    throw new Error('Not logged in');
+  }
+  return userId;
+}

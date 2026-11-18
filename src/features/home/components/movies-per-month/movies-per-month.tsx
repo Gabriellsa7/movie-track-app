@@ -1,12 +1,12 @@
 import { Text, View } from 'react-native';
-import type { TUserStats } from '@/api/types';
+import type { IUserStats } from '@/api/types';
 import { Skeleton } from '@/components/skeleton';
 import { lastTwelveMonths } from '../../utils/home.utils';
 
 const CHART_HEIGHT = 70;
 const EMPTY_BAR_HEIGHT = 3;
 
-export function MoviesPerMonth({ stats }: { stats: TUserStats | undefined }) {
+export function MoviesPerMonth({ stats }: { stats: IUserStats | undefined }) {
   if (!stats) {
     return <Skeleton className="h-[122px] rounded-[14px]" />;
   }
