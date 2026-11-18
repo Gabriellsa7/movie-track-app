@@ -1,7 +1,7 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
-import { Share } from 'react-native';
+import { Share, Text } from 'react-native';
 import { toast } from 'sonner-native';
 import { MOVIE_ID } from '@/test/constants';
 import { A_MOVIE } from '@/test/fixtures';
@@ -29,6 +29,7 @@ async function renderDetail() {
           <MovieDetailScreen />
         </QueryClientProvider>
       ),
+      'movies/[movieId]/edit': () => <Text>Edit movie screen</Text>,
     },
     { initialUrl: `/movies/${MOVIE_ID}` },
   );
@@ -167,5 +168,19 @@ describe('When we act on a movie from its page', () => {
       expect(toast.success).toHaveBeenCalledWith('Movie deleted');
     });
     expect(mockApi.history.delete).toHaveLength(1);
+  });
+
+  it('should open the edit screen from the more options menu', async () => {
+    mockApi.onGet(`/movies/${MOVIE_ID}`).reply(200, A_MOVIE);
+    await renderDetail();
+
+    await fireEvent.press(
+      await screen.findByRole('button', { name: 'More options' }),
+    );
+    await fireEvent.press(
+      await screen.findByRole('button', { name: 'Edit movie' }),
+    );
+
+    expect(await screen.findByText('Edit movie screen')).toBeOnTheScreen();
   });
 });

@@ -1,12 +1,12 @@
-import { useLocalSearchParams } from 'expo-router';
-import { Trash2 } from 'lucide-react-native';
-import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
 import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
 import { useGenreNames } from '@/api/get-genres';
 import { ActionSheet } from '@/components/action-sheet';
 import { SectionError } from '@/components/section-error';
+import { useLocalSearchParams } from 'expo-router';
+import { Pencil, Trash2 } from 'lucide-react-native';
+import { useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 import { useMovieQuery } from '../api/get-movie';
 import { MovieActions } from './components/movie-actions/movie-actions';
 import { MovieDetailHero } from './components/movie-detail-hero/movie-detail-hero';
@@ -112,6 +112,11 @@ export function MovieDetailScreen() {
         visible={sheet === 'options'}
         onClose={closeSheet}
         actions={[
+          {
+            label: 'Edit movie',
+            icon: Pencil,
+            onPress: actions.edit,
+          },
           {
             label: 'Delete movie',
             icon: Trash2,

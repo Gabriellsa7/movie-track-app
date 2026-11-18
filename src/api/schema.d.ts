@@ -688,7 +688,8 @@ export interface components {
             rating: number;
             review?: string;
             director?: string;
-            durationMinutes?: number;
+            /** @description null clears the runtime */
+            durationMinutes?: number | null;
             /**
              * Format: date
              * @description Defaults to today; cannot be in the future (else INVALID_WATCHED_AT)

@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NewMovieForm } from './components/new-movie-form/new-movie-form';
+import { MovieEditor } from './components/movie-editor/movie-editor';
 
 export function MovieFormScreen() {
   return (
@@ -9,7 +9,7 @@ export function MovieFormScreen() {
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <NewMovieForm />
+        <MovieEditor />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

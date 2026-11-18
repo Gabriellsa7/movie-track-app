@@ -1,4 +1,5 @@
 import { z, type input as TInput, type output as TOutput } from 'zod';
+import type { IMovie, IUpdateMovieBody } from '@/api/types';
 import type { IUploadFile } from '@/api/upload-file';
 import {
   MOVIE_DETAILS_SHAPE,
@@ -53,23 +54,46 @@ export const MOVIE_FORM_FIELDS = [
   'posterUrl',
 ] as const;
 
-export function movieFormDefaultValues(): Partial<IMovieFormInput> {
+export function movieFormDefaultValues(
+  movie?: IMovie,
+): Partial<IMovieFormInput> {
   return {
-    title: '',
-    synopsis: '',
-    releaseYear: '',
-    genreIds: [],
-    watchedAt: toIsoDate(new Date()),
-    director: '',
-    durationMinutes: '',
-    watchCount: '1',
-    review: '',
-    isFavorite: false,
+    title: movie?.title ?? '',
+    synopsis: movie?.synopsis ?? '',
+    releaseYear: movie ? String(movie.releaseYear) : '',
+    genreIds: movie?.genreIds ?? [],
+    rating: movie?.rating,
+    watchedAt: movie ? movie.watchedAt.slice(0, 10) : toIsoDate(new Date()),
+    director: movie?.director ?? '',
+    durationMinutes: movie?.durationMinutes
+      ? String(movie.durationMinutes)
+      : '',
+    watchCount: movie ? String(movie.watchCount) : '1',
+    review: movie?.review ?? '',
+    isFavorite: movie?.isFavorite ?? false,
+    tmdbId: movie?.tmdbId,
+    posterUrl: movie?.posterUrl,
+  };
+}
+
+export function toUpdateMovieBody({
+  poster,
+  ...values
+}: IMovieFormOutput): IUpdateMovieBody {
+  return {
+    ...values,
+    review: values.review ?? '',
+    director: values.director ?? '',
+    durationMinutes: values.durationMinutes ?? null,
+    posterUrl: poster ? values.posterUrl : (values.posterUrl ?? null),
   };
 }
 
 export const MOVIE_FORM_MESSAGES = {
   created: 'Movie logged',
+  updated: 'Movie updated',
+  saveFailed: "Couldn't save the movie. Try again.",
+  posterNotSaved: 'Movie saved, but the poster was not uploaded.',
   unexpected: "Couldn't log the movie. Try again.",
   posterNotSent: 'Movie logged, but the poster was not uploaded.',
 } as const;
