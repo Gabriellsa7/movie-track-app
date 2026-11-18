@@ -16,7 +16,7 @@ export function MoviesEmpty({ search }: IMoviesEmptyProps) {
       <Text className="font-sans text-caption text-tertiary-text-color">
         {search
           ? 'Confira o título ou tente outra busca.'
-          : 'Toque no + na tela inicial para registrar o primeiro.'}
+          : 'Toque no + para registrar o primeiro.'}
       </Text>
     </View>
   );

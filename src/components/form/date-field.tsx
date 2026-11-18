@@ -10,8 +10,8 @@ import { Platform, Pressable, Text } from 'react-native';
 import { toIsoDate } from '@/lib/validation/rules';
 import { FieldFrame, inputClassName } from './field-frame';
 
-interface IDateFieldProps<TFields extends FieldValues> {
-  control: Control<TFields>;
+interface IDateFieldProps<TFields extends FieldValues, TTransformed = TFields> {
+  control: Control<TFields, unknown, TTransformed>;
   name: FieldPath<TFields>;
   label: string;
   hint?: string;
@@ -33,13 +33,13 @@ function formatDate(value: unknown): string {
     : 'Escolher data';
 }
 
-export function DateField<TFields extends FieldValues>({
+export function DateField<TFields extends FieldValues, TTransformed = TFields>({
   control,
   name,
   label,
   hint,
   maximumDate,
-}: IDateFieldProps<TFields>) {
+}: IDateFieldProps<TFields, TTransformed>) {
   const {
     field: { value, onChange },
     fieldState,

@@ -1,9 +1,10 @@
 import type { FieldValues } from 'react-hook-form';
 import { TextField, type ITextFieldProps } from './text-field';
 
-export function TextAreaField<TFields extends FieldValues>(
-  props: ITextFieldProps<TFields>,
-) {
+export function TextAreaField<
+  TFields extends FieldValues,
+  TTransformed = TFields,
+>(props: ITextFieldProps<TFields, TTransformed>) {
   return (
     <TextField
       multiline

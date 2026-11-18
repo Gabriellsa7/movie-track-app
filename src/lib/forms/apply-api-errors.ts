@@ -18,6 +18,10 @@ const FIELD_ERRORS: Partial<
     field: 'currentPassword',
     message: 'Confirme sua senha para trocar o e-mail',
   },
+  [EApiErrorCode.MOVIE_ALREADY_LOGGED]: {
+    field: 'title',
+    message: 'Você já registrou esse filme',
+  },
   [EApiErrorCode.INVALID_RATING]: { field: 'rating', message: 'Nota inválida' },
   [EApiErrorCode.INVALID_RELEASE_YEAR]: {
     field: 'releaseYear',

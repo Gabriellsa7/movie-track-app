@@ -6,9 +6,10 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import { TextField, type ITextFieldProps } from './text-field';
 
-export function PasswordField<TFields extends FieldValues>(
-  props: ITextFieldProps<TFields>,
-) {
+export function PasswordField<
+  TFields extends FieldValues,
+  TTransformed = TFields,
+>(props: ITextFieldProps<TFields, TTransformed>) {
   const scheme = useAppTheme();
   const [visible, setVisible] = useState(false);
   const Icon = visible ? EyeOff : Eye;

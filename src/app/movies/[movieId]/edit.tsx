@@ -1,1 +1,1 @@
-export { MovieFormScreen as default } from '@/features/movies';
+export { MovieEditScreen as default } from '@/features/movies';
