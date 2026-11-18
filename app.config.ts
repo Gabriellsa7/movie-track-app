@@ -15,6 +15,12 @@ const config: ExpoConfig = {
   ios: {
     bundleIdentifier: 'com.gabriellsa7.movietrack',
     supportsTablet: false,
+    infoPlist: {
+      CFBundleAllowMixedLocalizations: true,
+    },
+  },
+  locales: {
+    'pt-BR': './assets/locales/pt-BR.json',
   },
   android: {
     package: 'com.gabriellsa7.movietrack',
@@ -33,12 +39,20 @@ const config: ExpoConfig = {
   },
   plugins: [
     'expo-router',
-    'expo-localization',
+    [
+      'expo-localization',
+      {
+        supportedLocales: {
+          ios: ['en', 'pt-BR'],
+          android: ['en', 'pt-BR'],
+        },
+      },
+    ],
     [
       'expo-image-picker',
       {
         photosPermission:
-          'O Movie Track usa suas fotos para o avatar e os pôsteres dos filmes.',
+          'Movie Track uses your photos for your avatar and movie posters.',
         cameraPermission: false,
       },
     ],
