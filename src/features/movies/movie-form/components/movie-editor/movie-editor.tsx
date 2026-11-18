@@ -5,7 +5,7 @@ import { ScrollView, Switch, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
 import { useInvalidateMyMovies } from '@/api/get-movies';
 import { useFetchTmdbDetailsValues } from '@/api/get-tmdb-movie-details';
-import type { ITmdbMovie } from '@/api/types';
+import type { IMovie, ITmdbMovie } from '@/api/types';
 import { DateField } from '@/components/form/date-field';
 import { GenrePicker } from '@/components/form/genre-picker';
 import { RatingField } from '@/components/form/rating-field';
@@ -13,6 +13,7 @@ import { TextAreaField } from '@/components/form/text-area-field';
 import { TextField } from '@/components/form/text-field';
 import { TmdbSearch } from '@/components/tmdb-search';
 import { useCreateMovieMutation } from '@/features/movies/api/post-movie';
+import { useUpdateMovieMutation } from '@/features/movies/api/put-movie';
 import { uploadMoviePoster } from '@/features/movies/api/put-movie-poster';
 import { applyApiErrors } from '@/lib/forms/apply-api-errors';
 import { notifySaveError } from '@/lib/forms/notify-save-error';
@@ -24,6 +25,7 @@ import {
   MOVIE_FORM_MESSAGES,
   MOVIE_FORM_SCHEMA,
   movieFormDefaultValues,
+  toUpdateMovieBody,
   type IMovieFormInput,
   type IMovieFormOutput,
 } from '../../constants/constants';
@@ -34,9 +36,11 @@ import {
 import { MovieSummaryCard } from '@/components/movie-summary-card';
 import { PosterPicker } from '@/components/poster-picker';
 
-export function NewMovieForm() {
+export function MovieEditor({ movie }: { movie?: IMovie }) {
   const scheme = useAppTheme();
+  const isEditing = movie !== undefined;
   const createMovie = useCreateMovieMutation();
+  const updateMovie = useUpdateMovieMutation(movie?.id ?? '');
   const invalidateMyMovies = useInvalidateMyMovies();
   const fetchTmdbDetails = useFetchTmdbDetailsValues();
   const [isEditingDetails, setIsEditingDetails] = useState(false);
@@ -50,7 +54,7 @@ export function NewMovieForm() {
     formState: { isSubmitting },
   } = useForm<IMovieFormInput, unknown, IMovieFormOutput>({
     resolver: zodResolver(MOVIE_FORM_SCHEMA),
-    defaultValues: movieFormDefaultValues(),
+    defaultValues: movieFormDefaultValues(movie),
   });
   const [
     title,
@@ -109,29 +113,52 @@ export function NewMovieForm() {
     setValue('posterUrl', undefined);
   }
 
-  const onSubmit = async ({ poster: photo, ...values }: IMovieFormOutput) => {
+  async function sendPoster(
+    movieId: string,
+    photo: IMovieFormOutput['poster'],
+  ) {
+    if (!photo) {
+      return true;
+    }
     try {
-      const movie = await createMovie.mutateAsync(
-        photo ? { ...values, posterUrl: undefined } : values,
+      await uploadMoviePoster(movieId, photo);
+      await invalidateMyMovies();
+      return true;
+    } catch {
+      toast.error(
+        isEditing
+          ? MOVIE_FORM_MESSAGES.posterNotSaved
+          : MOVIE_FORM_MESSAGES.posterNotSent,
       );
-      if (photo) {
-        try {
-          await uploadMoviePoster(movie.id, photo);
-          await invalidateMyMovies();
-        } catch {
-          toast.error(MOVIE_FORM_MESSAGES.posterNotSent);
-          closeMovieForm();
-          return;
-        }
+      return false;
+    }
+  }
+
+  const onSubmit = async (values: IMovieFormOutput) => {
+    try {
+      const { poster: photo, ...body } = values;
+      const saved = isEditing
+        ? await updateMovie.mutateAsync(toUpdateMovieBody(values))
+        : await createMovie.mutateAsync(
+            photo ? { ...body, posterUrl: undefined } : body,
+          );
+      if (await sendPoster(saved.id, photo)) {
+        toast.success(
+          isEditing ? MOVIE_FORM_MESSAGES.updated : MOVIE_FORM_MESSAGES.created,
+        );
       }
-      toast.success(MOVIE_FORM_MESSAGES.created);
       closeMovieForm();
     } catch (error) {
       if (applyApiErrors(error, setError, MOVIE_FORM_FIELDS)) {
         setIsEditingDetails(true);
         return;
       }
-      notifySaveError(error, MOVIE_FORM_MESSAGES.unexpected);
+      notifySaveError(
+        error,
+        isEditing
+          ? MOVIE_FORM_MESSAGES.saveFailed
+          : MOVIE_FORM_MESSAGES.unexpected,
+      );
     }
   };
 
@@ -144,7 +171,7 @@ export function NewMovieForm() {
   return (
     <View className="flex-1">
       <MovieFormHeader
-        title="Log a movie"
+        title={isEditing ? 'Edit movie' : 'Log a movie'}
         isSaving={isSubmitting}
         onSave={() => void save()}
       />
@@ -177,6 +204,11 @@ export function NewMovieForm() {
               title={title}
               photo={poster}
               posterUrl={posterUrl}
+              posterUrlLabel={
+                isEditing && posterUrl === movie.posterUrl
+                  ? 'Current poster'
+                  : undefined
+              }
               onPick={(photo) => {
                 setValue('poster', photo);
               }}

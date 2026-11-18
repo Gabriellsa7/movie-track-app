@@ -1,4 +1,5 @@
 import * as Linking from 'expo-linking';
+import { router } from 'expo-router';
 import { toast } from 'sonner-native';
 import type { IMovie } from '@/api/types';
 import { goBackOr } from '@/lib/navigation';
@@ -41,6 +42,10 @@ export function useMovieDetailActions(
     }
   }
 
+  function edit() {
+    router.push({ pathname: '/movies/[movieId]/edit', params: { movieId } });
+  }
+
   function remove() {
     deleteMovie.mutate(movieId, {
       onSuccess: () => {
@@ -57,6 +62,7 @@ export function useMovieDetailActions(
     toggleFavorite,
     watchedAgain,
     share,
+    edit,
     remove,
     isRewatching: rewatch.isPending,
   };
