@@ -48,19 +48,19 @@ describe('When we open the home screen', () => {
     replyWith();
     await renderHome();
 
-    expect(await screen.findByLabelText('Filmes: 128')).toBeOnTheScreen();
-    expect(screen.getByLabelText('Nota média: 7.6')).toBeOnTheScreen();
-    expect(screen.getByLabelText('Favoritos: 23')).toBeOnTheScreen();
-    expect(screen.getByLabelText('Horas: 246h')).toBeOnTheScreen();
+    expect(await screen.findByLabelText('Movies: 128')).toBeOnTheScreen();
+    expect(screen.getByLabelText('Average rating: 7.6')).toBeOnTheScreen();
+    expect(screen.getByLabelText('Favorites: 23')).toBeOnTheScreen();
+    expect(screen.getByLabelText('Hours: 246h')).toBeOnTheScreen();
     expect(await screen.findByText('Perfect Days')).toBeOnTheScreen();
     expect(
-      screen.getByText('5 jan · Prioridade média', { exact: false }),
+      screen.getByText('Jan 5 · Medium priority', { exact: false }),
     ).toBeOnTheScreen();
     expect(
-      await screen.findByLabelText('Duna: Parte 2, nota 9'),
+      await screen.findByLabelText('Duna: Parte 2, rating 9'),
     ).toBeOnTheScreen();
     expect(
-      screen.getByText(/^(Bom dia|Boa tarde|Boa noite), Gabriel$/),
+      screen.getByText(/^(Good morning|Good afternoon|Good evening), Gabriel$/),
     ).toBeOnTheScreen();
   });
 
@@ -87,12 +87,8 @@ describe('When we open the home screen', () => {
     replyWith({ movies: [], watchlist: [] });
     await renderHome();
 
-    expect(
-      await screen.findByText('Nenhum filme registrado ainda'),
-    ).toBeOnTheScreen();
-    expect(
-      await screen.findByText('Nenhum filme com data marcada'),
-    ).toBeOnTheScreen();
+    expect(await screen.findByText('No movies logged yet')).toBeOnTheScreen();
+    expect(await screen.findByText('No movie scheduled')).toBeOnTheScreen();
   });
 
   it('should let the user retry a section that failed', async () => {
@@ -103,14 +99,12 @@ describe('When we open the home screen', () => {
     await renderHome();
 
     expect(
-      await screen.findByText('Não foi possível carregar seus filmes.'),
+      await screen.findByText("Couldn't load your movies."),
     ).toBeOnTheScreen();
-    await fireEvent.press(
-      screen.getByRole('button', { name: 'Tentar de novo' }),
-    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
 
     expect(
-      await screen.findByLabelText('Duna: Parte 2, nota 9'),
+      await screen.findByLabelText('Duna: Parte 2, rating 9'),
     ).toBeOnTheScreen();
   });
 
@@ -138,7 +132,7 @@ describe('When we open the home screen', () => {
     await renderHome();
 
     expect(
-      await screen.findByText('Não foi possível carregar suas estatísticas.'),
+      await screen.findByText("Couldn't load your stats."),
     ).toBeOnTheScreen();
   });
 });

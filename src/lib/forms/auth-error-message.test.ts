@@ -15,19 +15,19 @@ function apiError(status: number, code: string, field?: string) {
 
 describe('When we explain a failed auth request', () => {
   it.each([
-    [apiError(401, 'INVALID_CREDENTIALS'), 'E-mail ou senha incorretos'],
-    [apiError(409, 'EMAIL_TAKEN'), 'Este e-mail já tem uma conta'],
+    [apiError(401, 'INVALID_CREDENTIALS'), 'Wrong e-mail or password'],
+    [apiError(409, 'EMAIL_TAKEN'), 'This e-mail already has an account'],
     [
       apiError(429, 'TOO_MANY_ATTEMPTS'),
-      'Muitas tentativas. Espere alguns minutos e tente de novo.',
+      'Too many attempts. Wait a few minutes and try again.',
     ],
     [
       apiError(503, 'SERVICE_UNAVAILABLE'),
-      'Serviço indisponível no momento. Tente de novo em instantes.',
+      'Service unavailable right now. Try again in a moment.',
     ],
-    [apiError(400, 'VALIDATION_ERROR', 'name'), 'Nome inválido'],
-    [apiError(400, 'VALIDATION_ERROR', 'email'), 'E-mail inválido'],
-    [apiError(400, 'VALIDATION_ERROR', 'password'), 'Senha inválida'],
+    [apiError(400, 'VALIDATION_ERROR', 'name'), 'Invalid name'],
+    [apiError(400, 'VALIDATION_ERROR', 'email'), 'Invalid e-mail'],
+    [apiError(400, 'VALIDATION_ERROR', 'password'), 'Invalid password'],
     [apiError(500, 'INTERNAL_ERROR'), FALLBACK],
   ])('should map %p to its message', (error, message) => {
     expect(authErrorMessage(error, FALLBACK)).toBe(message);
@@ -35,7 +35,7 @@ describe('When we explain a failed auth request', () => {
 
   it('should say there is no connection when the request got no answer', () => {
     expect(authErrorMessage(new AxiosError('Network Error'), FALLBACK)).toBe(
-      'Sem conexão com o servidor. Verifique sua internet e tente de novo.',
+      "Can't reach the server. Check your connection and try again.",
     );
   });
 });

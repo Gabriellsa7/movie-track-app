@@ -21,7 +21,7 @@ export function Poster({
       {posterUrl ? (
         <Image
           source={{ uri: posterUrl }}
-          accessibilityLabel={`Pôster de ${title}`}
+          accessibilityLabel={`Poster of ${title}`}
           contentFit="cover"
           transition={150}
           style={{ flex: 1 }}

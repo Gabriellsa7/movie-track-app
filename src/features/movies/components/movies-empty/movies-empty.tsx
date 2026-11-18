@@ -8,14 +8,12 @@ export function MoviesEmpty({ search }: IMoviesEmptyProps) {
   return (
     <View className="gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-4">
       <Text className="font-semibold text-sm text-primary-text-color">
-        {search
-          ? `Nenhum filme encontrado para “${search}”`
-          : 'Nenhum filme registrado ainda'}
+        {search ? `No movies found for “${search}”` : 'No movies logged yet'}
       </Text>
       <Text className="font-sans text-caption text-tertiary-text-color">
         {search
-          ? 'Confira o título ou tente outra busca.'
-          : 'Toque no + para registrar o primeiro.'}
+          ? 'Check the title or try another search.'
+          : 'Tap + to log your first one.'}
       </Text>
     </View>
   );

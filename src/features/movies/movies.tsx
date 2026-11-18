@@ -54,7 +54,7 @@ export function MoviesScreen() {
     if (isError) {
       return (
         <SectionError
-          message="Não foi possível carregar seus filmes."
+          message="Couldn't load your movies."
           onRetry={() => void refetch()}
         />
       );

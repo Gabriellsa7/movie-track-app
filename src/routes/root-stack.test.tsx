@@ -14,19 +14,19 @@ const groupLayout = () => <Stack screenOptions={{ headerShown: false }} />;
 const SCREENS = {
   _layout: () => <RootStack />,
   '(tabs)/_layout': groupLayout,
-  '(tabs)/index': screenWithText('Início'),
+  '(tabs)/index': screenWithText('Home'),
   '(auth)/_layout': groupLayout,
-  '(auth)/login': screenWithText('Entrar'),
-  explore: screenWithText('Explorar'),
-  'movies/new': screenWithText('Registrar filme'),
-  'movies/[movieId]/index': screenWithText('Filme'),
-  'movies/[movieId]/edit': screenWithText('Editar filme'),
-  'watchlist/new': screenWithText('Adicionar à lista'),
-  'watchlist/[itemId]/edit': screenWithText('Editar item'),
-  'watchlist/[itemId]/watched': screenWithText('Assisti'),
-  'reset-password': screenWithText('Nova senha'),
-  'verify-email': screenWithText('Confirmar e-mail'),
-  'users/[userId]/index': screenWithText('Perfil'),
+  '(auth)/login': screenWithText('Log in'),
+  explore: screenWithText('Explore'),
+  'movies/new': screenWithText('Log a movie'),
+  'movies/[movieId]/index': screenWithText('Movie'),
+  'movies/[movieId]/edit': screenWithText('Edit movie'),
+  'watchlist/new': screenWithText('Add to watchlist'),
+  'watchlist/[itemId]/edit': screenWithText('Edit item'),
+  'watchlist/[itemId]/watched': screenWithText('Watched it'),
+  'reset-password': screenWithText('New password'),
+  'verify-email': screenWithText('Confirm e-mail'),
+  'users/[userId]/index': screenWithText('Profile'),
   'users/[userId]/movies/[movieId]': screenWithText('Review'),
 };
 
@@ -36,7 +36,7 @@ describe('When a visitor opens the app', () => {
 
     await renderRouter(SCREENS, { initialUrl: '/' });
 
-    expect(await screen.findByText('Entrar')).toBeOnTheScreen();
+    expect(await screen.findByText('Log in')).toBeOnTheScreen();
     expect(screen).toHavePathname('/login');
   });
 
@@ -45,7 +45,7 @@ describe('When a visitor opens the app', () => {
 
     await renderRouter(SCREENS, { initialUrl: '/users/u1' });
 
-    expect(await screen.findByText('Perfil')).toBeOnTheScreen();
+    expect(await screen.findByText('Profile')).toBeOnTheScreen();
   });
 });
 
@@ -55,6 +55,6 @@ describe('When a logged user opens the login', () => {
 
     await renderRouter(SCREENS, { initialUrl: '/login' });
 
-    expect(await screen.findByText('Início')).toBeOnTheScreen();
+    expect(await screen.findByText('Home')).toBeOnTheScreen();
   });
 });

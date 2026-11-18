@@ -23,12 +23,12 @@ export function MoviesPerMonth({ stats }: { stats: IUserStats | undefined }) {
         accessibilityRole="header"
         className="mb-3.5 font-semibold text-sm text-primary-text-color"
       >
-        Filmes por mês
+        Movies per month
       </Text>
       <View
         accessible
         accessibilityRole="image"
-        accessibilityLabel={`Filmes assistidos por mês. ${summary}`}
+        accessibilityLabel={`Movies watched per month. ${summary}`}
         className="flex-row items-end gap-1.5"
         style={{ height: CHART_HEIGHT }}
       >

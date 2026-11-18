@@ -27,7 +27,7 @@ function RecentMovieCard({ movie }: { movie: IMovie }) {
     >
       <Pressable
         accessibilityRole="link"
-        accessibilityLabel={`${movie.title}, nota ${movie.rating}`}
+        accessibilityLabel={`${movie.title}, rating ${movie.rating}`}
         className="w-[104px] gap-1.5"
       >
         <Poster
@@ -69,7 +69,7 @@ function RecentMoviesBody() {
   if (isError) {
     return (
       <SectionError
-        message="Não foi possível carregar seus filmes."
+        message="Couldn't load your movies."
         onRetry={() => void refetch()}
       />
     );
@@ -78,10 +78,10 @@ function RecentMoviesBody() {
     return (
       <View className="gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-4">
         <Text className="font-semibold text-sm text-primary-text-color">
-          Nenhum filme registrado ainda
+          No movies logged yet
         </Text>
         <Text className="font-sans text-caption text-tertiary-text-color">
-          Toque no + para registrar o primeiro.
+          Tap + to log your first one.
         </Text>
       </View>
     );
@@ -105,8 +105,8 @@ export function RecentMovies() {
   return (
     <View className="gap-2.5">
       <SectionHeader
-        title="Assistidos recentemente"
-        linkLabel="Ver todos"
+        title="Recently watched"
+        linkLabel="See all"
         href={ROUTES.movies}
       />
       <RecentMoviesBody />

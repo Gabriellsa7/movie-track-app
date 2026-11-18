@@ -10,10 +10,10 @@ export function LoginHeader() {
           accessibilityRole="header"
           className="font-display text-[52px] leading-[58px] tracking-[1px] text-primary-text-color"
         >
-          {'SEU DIÁRIO\nDE CINEMA'}
+          {'YOUR MOVIE\nDIARY'}
         </Text>
         <Text className="font-sans text-body text-tertiary-text-color">
-          Registre o que assistiu, dê sua nota e planeje os próximos filmes.
+          Log what you watched, rate it and plan what to watch next.
         </Text>
       </View>
     </View>

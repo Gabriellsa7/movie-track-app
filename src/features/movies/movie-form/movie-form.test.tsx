@@ -28,7 +28,7 @@ const TMDB_DUNE = {
 
 const GENRES = [
   { id: 'genre-1', name: 'Drama' },
-  { id: 'genre-2', name: 'Ficção científica' },
+  { id: 'genre-2', name: 'Science Fiction' },
 ];
 
 async function renderForm() {
@@ -45,26 +45,18 @@ async function renderForm() {
 }
 
 async function fillRequiredFields() {
+  await fireEvent.changeText(screen.getByLabelText('Title'), ' Duna: Parte 2 ');
+  await fireEvent.changeText(screen.getByLabelText('Release year'), '2024');
+  await fireEvent.press(screen.getByText('Science Fiction'));
   await fireEvent.changeText(
-    screen.getByLabelText('Título'),
-    ' Duna: Parte 2 ',
-  );
-  await fireEvent.changeText(
-    screen.getByLabelText('Ano de lançamento'),
-    '2024',
-  );
-  await fireEvent.press(screen.getByText('Ficção científica'));
-  await fireEvent.changeText(
-    screen.getByLabelText('Sinopse'),
+    screen.getByLabelText('Synopsis'),
     'Paul Atreides se une aos Fremen.',
   );
-  await fireEvent.press(screen.getByLabelText('Nota 9,5'));
+  await fireEvent.press(screen.getByLabelText('Rating 9.5'));
 }
 
 function submit() {
-  return fireEvent.press(
-    screen.getByRole('button', { name: 'Registrar filme' }),
-  );
+  return fireEvent.press(screen.getByRole('button', { name: 'Log a movie' }));
 }
 
 describe('When we register a movie', () => {
@@ -76,7 +68,7 @@ describe('When we register a movie', () => {
     await submit();
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('Filme registrado');
+      expect(toast.success).toHaveBeenCalledWith('Movie logged');
     });
     expect(JSON.parse(mockApi.history.post[0]?.data as string)).toEqual({
       title: 'Duna: Parte 2',
@@ -94,11 +86,11 @@ describe('When we register a movie', () => {
 
     await submit();
 
-    expect(await screen.findByText('Informe o título')).toBeOnTheScreen();
-    expect(screen.getByText('Informe o ano')).toBeOnTheScreen();
-    expect(screen.getByText('Escolha pelo menos um gênero')).toBeOnTheScreen();
-    expect(screen.getByText('Escreva uma sinopse')).toBeOnTheScreen();
-    expect(screen.getByText('Dê uma nota')).toBeOnTheScreen();
+    expect(await screen.findByText('Enter the title')).toBeOnTheScreen();
+    expect(screen.getByText('Enter the year')).toBeOnTheScreen();
+    expect(screen.getByText('Pick at least one genre')).toBeOnTheScreen();
+    expect(screen.getByText('Write a synopsis')).toBeOnTheScreen();
+    expect(screen.getByText('Give it a rating')).toBeOnTheScreen();
     expect(mockApi.history.post).toHaveLength(0);
   });
 
@@ -108,14 +100,14 @@ describe('When we register a movie', () => {
 
     await fillRequiredFields();
     await fireEvent.changeText(
-      screen.getByLabelText('Direção'),
+      screen.getByLabelText('Director'),
       'Denis Villeneuve',
     );
     await fireEvent.changeText(
-      screen.getByLabelText('Duração (minutos)'),
+      screen.getByLabelText('Runtime (minutes)'),
       '166',
     );
-    await fireEvent(screen.getByLabelText('Favorito'), 'valueChange', true);
+    await fireEvent(screen.getByLabelText('Favorite'), 'valueChange', true);
     await submit();
 
     await waitFor(() => {
@@ -138,7 +130,7 @@ describe('When we register a movie', () => {
     await submit();
 
     expect(
-      await screen.findByText('Você já registrou esse filme'),
+      await screen.findByText("You've already logged this movie"),
     ).toBeOnTheScreen();
   });
 
@@ -151,7 +143,7 @@ describe('When we register a movie', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
-        'Sem conexão com o servidor. Verifique sua internet e tente de novo.',
+        "Can't reach the server. Check your connection and try again.",
       );
     });
   });
@@ -161,7 +153,7 @@ describe('When we register a movie', () => {
       200,
       Array.from({ length: 6 }, (_, index) => ({
         id: `genre-${String(index)}`,
-        name: `Gênero ${String(index)}`,
+        name: `Genre ${String(index)}`,
       })),
     );
     const client = createTestQueryClient();
@@ -174,11 +166,11 @@ describe('When we register a movie', () => {
     });
 
     for (const index of [0, 1, 2, 3, 4]) {
-      await fireEvent.press(await screen.findByText(`Gênero ${String(index)}`));
+      await fireEvent.press(await screen.findByText(`Genre ${String(index)}`));
     }
 
     expect(
-      screen.getByRole('checkbox', { name: 'Gênero 5' }).props
+      screen.getByRole('checkbox', { name: 'Genre 5' }).props
         .accessibilityState,
     ).toMatchObject({ checked: false, disabled: true });
   });
@@ -192,10 +184,10 @@ describe('When we fill the form from TMDB', () => {
       page: 1,
       limit: 20,
     });
-    await fireEvent.changeText(screen.getByLabelText('Buscar no TMDB'), 'duna');
+    await fireEvent.changeText(screen.getByLabelText('Search TMDB'), 'duna');
     await fireEvent.press(
       await screen.findByLabelText(
-        'Preencher com Duna: Parte Dois, 2024',
+        'Fill with Duna: Parte Dois, 2024',
         {},
         {
           timeout: 2000,
@@ -209,10 +201,8 @@ describe('When we fill the form from TMDB', () => {
     await renderForm();
 
     await pickFromTmdb();
-    expect(screen.getByLabelText('Título').props.value).toBe(
-      'Duna: Parte Dois',
-    );
-    await fireEvent.press(screen.getByLabelText('Nota 9'));
+    expect(screen.getByLabelText('Title').props.value).toBe('Duna: Parte Dois');
+    await fireEvent.press(screen.getByLabelText('Rating 9'));
     await submit();
 
     await waitFor(() => {
@@ -236,11 +226,9 @@ describe('When we fill the form from TMDB', () => {
     await renderForm();
 
     await pickFromTmdb();
-    await fireEvent.press(
-      screen.getByRole('button', { name: 'Escolher foto' }),
-    );
-    expect(await screen.findByText('Foto do celular')).toBeOnTheScreen();
-    await fireEvent.press(screen.getByLabelText('Nota 9'));
+    await fireEvent.press(screen.getByRole('button', { name: 'Choose photo' }));
+    expect(await screen.findByText('Photo from your phone')).toBeOnTheScreen();
+    await fireEvent.press(screen.getByLabelText('Rating 9'));
     await submit();
 
     await waitFor(() => {
@@ -250,7 +238,7 @@ describe('When we fill the form from TMDB', () => {
       JSON.parse(mockApi.history.post[0]?.data as string),
     ).not.toHaveProperty('posterUrl');
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('Filme registrado');
+      expect(toast.success).toHaveBeenCalledWith('Movie logged');
     });
   });
 
@@ -263,15 +251,13 @@ describe('When we fill the form from TMDB', () => {
     await renderForm();
 
     await fillRequiredFields();
-    await fireEvent.press(
-      screen.getByRole('button', { name: 'Escolher foto' }),
-    );
-    await screen.findByText('Foto do celular');
+    await fireEvent.press(screen.getByRole('button', { name: 'Choose photo' }));
+    await screen.findByText('Photo from your phone');
     await submit();
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
-        'Filme registrado, mas a capa não foi enviada.',
+        'Movie logged, but the poster was not uploaded.',
       );
     });
   });
@@ -282,25 +268,21 @@ describe('When we fill the form from TMDB', () => {
       .mockResolvedValueOnce({ status: 'picked', file: PHOTO })
       .mockResolvedValueOnce({
         status: 'invalid',
-        message: 'A imagem pode ter até 5 MB',
+        message: 'The image can be up to 5 MB',
       });
     await renderForm();
 
+    await fireEvent.press(screen.getByRole('button', { name: 'Choose photo' }));
     await fireEvent.press(
-      screen.getByRole('button', { name: 'Escolher foto' }),
-    );
-    await fireEvent.press(
-      await screen.findByRole('button', { name: 'Remover capa' }),
+      await screen.findByRole('button', { name: 'Remove poster' }),
     );
     expect(
-      screen.getByText('Opcional · JPEG, PNG ou WebP até 5 MB'),
+      screen.getByText('Optional · JPEG, PNG or WebP up to 5 MB'),
     ).toBeOnTheScreen();
 
-    await fireEvent.press(
-      screen.getByRole('button', { name: 'Escolher foto' }),
-    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Choose photo' }));
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('A imagem pode ter até 5 MB');
+      expect(toast.error).toHaveBeenCalledWith('The image can be up to 5 MB');
     });
   });
 
@@ -310,11 +292,11 @@ describe('When we fill the form from TMDB', () => {
       .reply(...apiErrorReply(503, 'MOVIE_CATALOG_UNAVAILABLE'));
     await renderForm();
 
-    await fireEvent.changeText(screen.getByLabelText('Buscar no TMDB'), 'duna');
+    await fireEvent.changeText(screen.getByLabelText('Search TMDB'), 'duna');
 
     expect(
       await screen.findByText(
-        'Busca indisponível no momento. Preencha os campos abaixo.',
+        'Search is unavailable right now. Fill in the fields below.',
         {},
         { timeout: 2000 },
       ),

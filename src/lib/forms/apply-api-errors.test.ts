@@ -40,7 +40,7 @@ describe('When we show API errors on a form', () => {
     expect(applyApiErrors<IForm>(error, setError, FIELDS)).toBe(true);
     expect(setError).toHaveBeenCalledWith('email', {
       type: 'server',
-      message: 'Este e-mail já tem uma conta',
+      message: 'This e-mail already has an account',
     });
   });
 

@@ -18,7 +18,7 @@ function optionalText(maxLength: number) {
   return z
     .string()
     .trim()
-    .max(maxLength, `Use no máximo ${String(maxLength)} caracteres`)
+    .max(maxLength, `Use at most ${String(maxLength)} characters`)
     .transform((value) => value || undefined);
 }
 
@@ -26,23 +26,23 @@ export const MOVIE_FORM_SCHEMA = z.object({
   title: z
     .string()
     .trim()
-    .min(1, 'Informe o título')
+    .min(1, 'Enter the title')
     .max(
       TITLE_MAX_LENGTH,
-      `Use no máximo ${String(TITLE_MAX_LENGTH)} caracteres`,
+      `Use at most ${String(TITLE_MAX_LENGTH)} characters`,
     ),
   synopsis: z
     .string()
     .trim()
-    .min(1, 'Escreva uma sinopse')
+    .min(1, 'Write a synopsis')
     .max(
       SYNOPSIS_MAX_LENGTH,
-      `Use no máximo ${String(SYNOPSIS_MAX_LENGTH)} caracteres`,
+      `Use at most ${String(SYNOPSIS_MAX_LENGTH)} characters`,
     ),
   releaseYear: z
     .string()
     .trim()
-    .min(1, 'Informe o ano')
+    .min(1, 'Enter the year')
     .transform(Number)
     .pipe(releaseYearSchema),
   genreIds: genreIdsSchema,
@@ -55,12 +55,12 @@ export const MOVIE_FORM_SCHEMA = z.object({
     .transform((value) => (value ? Number(value) : undefined))
     .pipe(
       z
-        .number('Informe a duração em minutos')
-        .int('Informe a duração em minutos')
-        .min(1, 'Informe a duração em minutos')
+        .number('Enter the runtime in minutes')
+        .int('Enter the runtime in minutes')
+        .min(1, 'Enter the runtime in minutes')
         .max(
           MAX_DURATION_MINUTES,
-          `Use no máximo ${String(MAX_DURATION_MINUTES)} minutos`,
+          `Use at most ${String(MAX_DURATION_MINUTES)} minutes`,
         )
         .optional(),
     ),
@@ -103,9 +103,8 @@ export function movieFormDefaultValues(): Partial<IMovieFormInput> {
 }
 
 export const MOVIE_FORM_MESSAGES = {
-  created: 'Filme registrado',
-  noConnection:
-    'Sem conexão com o servidor. Verifique sua internet e tente de novo.',
-  unexpected: 'Não foi possível registrar o filme. Tente de novo.',
-  posterNotSent: 'Filme registrado, mas a capa não foi enviada.',
+  created: 'Movie logged',
+  noConnection: "Can't reach the server. Check your connection and try again.",
+  unexpected: "Couldn't log the movie. Try again.",
+  posterNotSent: 'Movie logged, but the poster was not uploaded.',
 } as const;

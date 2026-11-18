@@ -122,42 +122,42 @@ export function NewMovieForm() {
         }}
         onRemove={removePoster}
       />
-      <TextField control={control} name="title" label="Título" />
+      <TextField control={control} name="title" label="Title" />
       <TextField
         control={control}
         name="releaseYear"
-        label="Ano de lançamento"
+        label="Release year"
         keyboardType="number-pad"
         maxLength={4}
       />
-      <GenrePicker control={control} name="genreIds" label="Gêneros" />
-      <TextAreaField control={control} name="synopsis" label="Sinopse" />
-      <RatingPicker control={control} name="rating" label="Sua nota" />
+      <GenrePicker control={control} name="genreIds" label="Genres" />
+      <TextAreaField control={control} name="synopsis" label="Synopsis" />
+      <RatingPicker control={control} name="rating" label="Your rating" />
       <DateField
         control={control}
         name="watchedAt"
-        label="Assistido em"
+        label="Watched on"
         maximumDate={new Date()}
       />
       <TextField
         control={control}
         name="director"
-        label="Direção"
-        hint="Opcional"
+        label="Director"
+        hint="Optional"
       />
       <TextField
         control={control}
         name="durationMinutes"
-        label="Duração (minutos)"
-        hint="Opcional"
+        label="Runtime (minutes)"
+        hint="Optional"
         keyboardType="number-pad"
         maxLength={4}
       />
       <TextAreaField
         control={control}
         name="review"
-        label="Sua resenha"
-        hint="Opcional"
+        label="Your review"
+        hint="Optional"
       />
       <Controller
         control={control}
@@ -165,10 +165,10 @@ export function NewMovieForm() {
         render={({ field: { value, onChange } }) => (
           <View className="flex-row items-center justify-between">
             <Text className="font-semibold text-sm text-primary-text-color">
-              Favorito
+              Favorite
             </Text>
             <Switch
-              accessibilityLabel="Favorito"
+              accessibilityLabel="Favorite"
               value={value}
               onValueChange={onChange}
               trackColor={{ true: color(scheme, 'accent-bg-color') }}
@@ -185,7 +185,7 @@ export function NewMovieForm() {
         className="mt-2 h-[52px] items-center justify-center rounded-xl bg-accent-bg-color active:bg-accent-hover-bg-color disabled:opacity-60"
       >
         <Text className="font-semibold text-base text-on-accent-text-color">
-          {isSubmitting ? 'Salvando…' : 'Registrar filme'}
+          {isSubmitting ? 'Saving…' : 'Log a movie'}
         </Text>
       </Pressable>
     </View>

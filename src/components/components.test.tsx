@@ -13,13 +13,11 @@ describe('When we render the shared components', () => {
           insets: { top: 0, left: 0, right: 0, bottom: 0 },
         }}
       >
-        <ScreenPlaceholder title="Meus filmes" />
+        <ScreenPlaceholder title="My movies" />
       </SafeAreaProvider>,
     );
 
-    expect(
-      screen.getByRole('header', { name: 'Meus filmes' }),
-    ).toBeOnTheScreen();
+    expect(screen.getByRole('header', { name: 'My movies' })).toBeOnTheScreen();
   });
 
   it('should render the toaster for the current scheme', async () => {

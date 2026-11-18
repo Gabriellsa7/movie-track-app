@@ -15,8 +15,8 @@ async function renderForm() {
 
 async function fillAndSubmit(email: string, password: string) {
   await fireEvent.changeText(screen.getByLabelText('E-mail'), email);
-  await fireEvent.changeText(screen.getByLabelText('Senha'), password);
-  await fireEvent.press(screen.getByRole('button', { name: 'Entrar' }));
+  await fireEvent.changeText(screen.getByLabelText('Password'), password);
+  await fireEvent.press(screen.getByRole('button', { name: 'Log in' }));
 }
 
 describe('When we submit the login form', () => {
@@ -25,10 +25,8 @@ describe('When we submit the login form', () => {
 
     await fillAndSubmit('not-an-email', '');
 
-    expect(
-      await screen.findByText('Informe um e-mail válido'),
-    ).toBeOnTheScreen();
-    expect(screen.getByText('Informe sua senha')).toBeOnTheScreen();
+    expect(await screen.findByText('Enter a valid e-mail')).toBeOnTheScreen();
+    expect(screen.getByText('Enter your password')).toBeOnTheScreen();
     expect(mockApi.history.post).toHaveLength(0);
   });
 
@@ -56,9 +54,9 @@ describe('When we submit the login form', () => {
     await fillAndSubmit('gabriel@email.com', 'errada123');
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'E-mail ou senha incorretos',
+      'Wrong e-mail or password',
     );
-    expect(toast.error).toHaveBeenCalledWith('E-mail ou senha incorretos');
+    expect(toast.error).toHaveBeenCalledWith('Wrong e-mail or password');
   });
 
   it('should warn in a toast when the server cannot be reached', async () => {
@@ -69,7 +67,7 @@ describe('When we submit the login form', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
-        'Sem conexão com o servidor. Verifique sua internet e tente de novo.',
+        "Can't reach the server. Check your connection and try again.",
       );
     });
   });
@@ -81,13 +79,13 @@ describe('When we submit the login form', () => {
     await fillAndSubmit('gabriel@email.com', 'senha1234');
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'Não foi possível entrar. Tente de novo.',
+      "Couldn't log in. Try again.",
     );
   });
 
   it('should show the forgot password link', async () => {
     await renderForm();
 
-    expect(screen.getByText('Esqueci a senha')).toBeOnTheScreen();
+    expect(screen.getByText('Forgot password')).toBeOnTheScreen();
   });
 });

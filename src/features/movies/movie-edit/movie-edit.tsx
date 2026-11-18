@@ -1,5 +1,5 @@
 import { ScreenPlaceholder } from '@/components/screen-placeholder';
 
 export function MovieEditScreen() {
-  return <ScreenPlaceholder title="Editar filme" />;
+  return <ScreenPlaceholder title="Edit movie" />;
 }

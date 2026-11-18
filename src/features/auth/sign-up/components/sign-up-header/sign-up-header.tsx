@@ -12,7 +12,7 @@ export function SignUpHeader() {
     <View className="gap-5">
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Voltar"
+        accessibilityLabel="Back"
         onPress={() => {
           if (router.canGoBack()) {
             router.back();
@@ -33,10 +33,10 @@ export function SignUpHeader() {
           accessibilityRole="header"
           className="font-display text-[48px] leading-[54px] tracking-[1px] text-primary-text-color"
         >
-          CRIAR CONTA
+          SIGN UP
         </Text>
         <Text className="font-sans text-sm text-tertiary-text-color">
-          Leva menos de um minuto.
+          It takes less than a minute.
         </Text>
       </View>
     </View>

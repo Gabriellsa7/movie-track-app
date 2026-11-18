@@ -8,7 +8,7 @@ export function PasswordRules({ password }: { password: string }) {
   const scheme = useAppTheme();
 
   return (
-    <View accessibilityLabel="Requisitos da senha" className="-mt-1 gap-1.5">
+    <View accessibilityLabel="Password requirements" className="-mt-1 gap-1.5">
       {PASSWORD_RULES.map(({ label, test }) => {
         const met = test(password);
         return (

@@ -2,24 +2,24 @@ import type { IUserStats, IWatchlistItem } from '@/api/types';
 
 const MONTHS_IN_CHART = 12;
 const SHORT_MONTHS = [
-  'jan',
-  'fev',
-  'mar',
-  'abr',
-  'mai',
-  'jun',
-  'jul',
-  'ago',
-  'set',
-  'out',
-  'nov',
-  'dez',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ] as const;
 
 const PRIORITY_LABELS: Record<IWatchlistItem['priority'], string> = {
-  high: 'Prioridade alta',
-  medium: 'Prioridade média',
-  low: 'Prioridade baixa',
+  high: 'High priority',
+  medium: 'Medium priority',
+  low: 'Low priority',
 };
 
 export interface IMonthCount {
@@ -32,10 +32,10 @@ export function greetingFor(date: Date, name?: string): string {
   const hour = date.getHours();
   const greeting =
     hour >= 5 && hour < 12
-      ? 'Bom dia'
+      ? 'Good morning'
       : hour >= 12 && hour < 18
-        ? 'Boa tarde'
-        : 'Boa noite';
+        ? 'Good afternoon'
+        : 'Good evening';
   const firstName = name?.trim().split(/\s+/)[0];
   return firstName ? `${greeting}, ${firstName}` : greeting;
 }
@@ -88,12 +88,12 @@ export function plannedLabel(plannedFor: string, today: Date): string {
   );
   const days = Math.round((plannedDay - todayDay) / 86_400_000);
   if (days === 0) {
-    return 'Hoje';
+    return 'Today';
   }
   if (days === 1) {
-    return 'Amanhã';
+    return 'Tomorrow';
   }
-  return `${planned.getUTCDate()} ${SHORT_MONTHS[planned.getUTCMonth()] ?? ''}`;
+  return `${SHORT_MONTHS[planned.getUTCMonth()] ?? ''} ${planned.getUTCDate()}`;
 }
 
 export function priorityLabel(priority: IWatchlistItem['priority']): string {

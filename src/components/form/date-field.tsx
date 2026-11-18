@@ -28,8 +28,8 @@ function fromIsoDate(value: unknown): Date {
 
 function formatDate(value: unknown): string {
   return typeof value === 'string' && value
-    ? fromIsoDate(value).toLocaleDateString('pt-BR')
-    : 'Escolher data';
+    ? fromIsoDate(value).toLocaleDateString('en-US')
+    : 'Pick a date';
 }
 
 export function DateField<TFields extends FieldValues, TTransformed = TFields>({

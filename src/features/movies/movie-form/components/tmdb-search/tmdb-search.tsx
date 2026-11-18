@@ -37,7 +37,7 @@ export function TmdbSearch({ onSelect }: ITmdbSearchProps) {
   return (
     <View className="gap-2">
       <Text className="font-semibold text-sm text-primary-text-color">
-        Buscar no TMDB
+        Search TMDB
       </Text>
       <View className="justify-center">
         <View className="absolute left-3.5 z-10">
@@ -46,8 +46,8 @@ export function TmdbSearch({ onSelect }: ITmdbSearchProps) {
         <TextInput
           value={text}
           onChangeText={setText}
-          accessibilityLabel="Buscar no TMDB"
-          placeholder="Digite o nome do filme para preencher"
+          accessibilityLabel="Search TMDB"
+          placeholder="Type a movie title to fill the form"
           placeholderTextColor={color(scheme, 'tertiary-text-color')}
           autoCorrect={false}
           returnKeyType="search"
@@ -62,12 +62,12 @@ export function TmdbSearch({ onSelect }: ITmdbSearchProps) {
 
       {search.isError && text.trim() ? (
         <Text className="font-sans text-xs text-tertiary-text-color">
-          Busca indisponível no momento. Preencha os campos abaixo.
+          Search is unavailable right now. Fill in the fields below.
         </Text>
       ) : null}
       {results?.length === 0 && query && !isSearching && !search.isError ? (
         <Text className="font-sans text-xs text-tertiary-text-color">
-          Nenhum resultado. Preencha os campos abaixo.
+          No results. Fill in the fields below.
         </Text>
       ) : null}
 
@@ -75,7 +75,7 @@ export function TmdbSearch({ onSelect }: ITmdbSearchProps) {
         <Pressable
           key={movie.tmdbId}
           accessibilityRole="button"
-          accessibilityLabel={`Preencher com ${movie.title}${
+          accessibilityLabel={`Fill with ${movie.title}${
             movie.releaseYear ? `, ${String(movie.releaseYear)}` : ''
           }`}
           onPress={() => {
@@ -97,7 +97,7 @@ export function TmdbSearch({ onSelect }: ITmdbSearchProps) {
               {movie.title}
             </Text>
             <Text className="font-sans text-xs text-tertiary-text-color">
-              {movie.releaseYear ?? 'Ano desconhecido'}
+              {movie.releaseYear ?? 'Unknown year'}
             </Text>
           </View>
         </Pressable>

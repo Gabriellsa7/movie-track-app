@@ -2,22 +2,22 @@ import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
 
 const MESSAGES_BY_CODE: Partial<Record<EApiErrorCode, string>> = {
-  [EApiErrorCode.INVALID_CREDENTIALS]: 'E-mail ou senha incorretos',
-  [EApiErrorCode.EMAIL_TAKEN]: 'Este e-mail já tem uma conta',
+  [EApiErrorCode.INVALID_CREDENTIALS]: 'Wrong e-mail or password',
+  [EApiErrorCode.EMAIL_TAKEN]: 'This e-mail already has an account',
   [EApiErrorCode.TOO_MANY_ATTEMPTS]:
-    'Muitas tentativas. Espere alguns minutos e tente de novo.',
+    'Too many attempts. Wait a few minutes and try again.',
   [EApiErrorCode.TOO_MANY_REQUESTS]:
-    'Muitas tentativas. Espere alguns minutos e tente de novo.',
+    'Too many attempts. Wait a few minutes and try again.',
   [EApiErrorCode.NETWORK_ERROR]:
-    'Sem conexão com o servidor. Verifique sua internet e tente de novo.',
+    "Can't reach the server. Check your connection and try again.",
   [EApiErrorCode.SERVICE_UNAVAILABLE]:
-    'Serviço indisponível no momento. Tente de novo em instantes.',
+    'Service unavailable right now. Try again in a moment.',
 };
 
 const FIELD_LABELS: Record<string, string> = {
-  name: 'Nome inválido',
-  email: 'E-mail inválido',
-  password: 'Senha inválida',
+  name: 'Invalid name',
+  email: 'Invalid e-mail',
+  password: 'Invalid password',
 };
 
 export function authErrorMessage(error: unknown, fallback: string): string {

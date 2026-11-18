@@ -19,8 +19,8 @@ export function MovieSearch({ value, onChangeText }: IMovieSearchProps) {
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        accessibilityLabel="Buscar filme"
-        placeholder="Buscar pelo título"
+        accessibilityLabel="Search movies"
+        placeholder="Search by title"
         placeholderTextColor={color(scheme, 'tertiary-text-color')}
         autoCapitalize="none"
         autoCorrect={false}

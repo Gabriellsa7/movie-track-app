@@ -25,7 +25,7 @@ const RATINGS = Array.from(
 );
 
 function formatRating(rating: number): string {
-  return rating.toLocaleString('pt-BR');
+  return rating.toLocaleString('en-US');
 }
 
 export function RatingPicker<
@@ -51,7 +51,7 @@ export function RatingPicker<
             <Pressable
               key={rating}
               accessibilityRole="radio"
-              accessibilityLabel={`Nota ${formatRating(rating)}`}
+              accessibilityLabel={`Rating ${formatRating(rating)}`}
               accessibilityState={{ selected: isSelected }}
               onPress={() => {
                 onChange(rating);

@@ -23,7 +23,7 @@ export function PasswordField<
       trailing={
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={visible ? 'Ocultar senha' : 'Mostrar senha'}
+          accessibilityLabel={visible ? 'Hide password' : 'Show password'}
           onPress={() => {
             setVisible((current) => !current);
           }}

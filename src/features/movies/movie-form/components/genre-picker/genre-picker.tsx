@@ -46,7 +46,7 @@ export function GenrePicker<
     <FieldFrame
       label={label}
       error={fieldState.error?.message}
-      hint={`Até ${String(MAX_GENRES)}`}
+      hint={`Up to ${String(MAX_GENRES)}`}
     >
       {genres.isPending ? (
         <View className="flex-row flex-wrap gap-2">
@@ -56,7 +56,7 @@ export function GenrePicker<
         </View>
       ) : genres.isError ? (
         <SectionError
-          message="Não foi possível carregar os gêneros."
+          message="Couldn't load the genres."
           onRetry={() => void genres.refetch()}
         />
       ) : (

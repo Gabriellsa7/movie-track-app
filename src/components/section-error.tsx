@@ -18,7 +18,7 @@ export function SectionError({
         className="h-11 justify-center"
       >
         <Text className="font-semibold text-label text-accent-text-color">
-          Tentar de novo
+          Try again
         </Text>
       </Pressable>
     </View>

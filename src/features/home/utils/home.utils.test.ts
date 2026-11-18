@@ -11,14 +11,16 @@ const at = (hour: number) => new Date(2026, 10, 16, hour);
 
 describe('When we greet the user', () => {
   it('should pick the greeting from the hour', () => {
-    expect(greetingFor(at(4))).toBe('Boa noite');
-    expect(greetingFor(at(5))).toBe('Bom dia');
-    expect(greetingFor(at(12))).toBe('Boa tarde');
-    expect(greetingFor(at(18))).toBe('Boa noite');
+    expect(greetingFor(at(4))).toBe('Good evening');
+    expect(greetingFor(at(5))).toBe('Good morning');
+    expect(greetingFor(at(12))).toBe('Good afternoon');
+    expect(greetingFor(at(18))).toBe('Good evening');
   });
 
   it('should use only the first name', () => {
-    expect(greetingFor(at(9), ' Gabriel Santana ')).toBe('Bom dia, Gabriel');
+    expect(greetingFor(at(9), ' Gabriel Santana ')).toBe(
+      'Good morning, Gabriel',
+    );
   });
 });
 
@@ -46,9 +48,9 @@ describe('When we build the months chart', () => {
     );
 
     expect(months).toHaveLength(12);
-    expect(months[0]).toEqual({ month: '2025-12', label: 'dez', count: 2 });
-    expect(months[1]).toEqual({ month: '2026-01', label: 'jan', count: 0 });
-    expect(months[11]).toEqual({ month: '2026-11', label: 'nov', count: 5 });
+    expect(months[0]).toEqual({ month: '2025-12', label: 'Dec', count: 2 });
+    expect(months[1]).toEqual({ month: '2026-01', label: 'Jan', count: 0 });
+    expect(months[11]).toEqual({ month: '2026-11', label: 'Nov', count: 5 });
   });
 });
 
@@ -56,16 +58,16 @@ describe('When we describe the planned date', () => {
   const today = new Date(2026, 10, 16, 22);
 
   it('should say today and tomorrow', () => {
-    expect(plannedLabel('2026-11-16T00:00:00.000Z', today)).toBe('Hoje');
-    expect(plannedLabel('2026-11-17T00:00:00.000Z', today)).toBe('Amanhã');
+    expect(plannedLabel('2026-11-16T00:00:00.000Z', today)).toBe('Today');
+    expect(plannedLabel('2026-11-17T00:00:00.000Z', today)).toBe('Tomorrow');
   });
 
   it('should show the day and month otherwise', () => {
-    expect(plannedLabel('2026-12-03T00:00:00.000Z', today)).toBe('3 dez');
+    expect(plannedLabel('2026-12-03T00:00:00.000Z', today)).toBe('Dec 3');
   });
 
   it('should name the priority', () => {
-    expect(priorityLabel('high')).toBe('Prioridade alta');
-    expect(priorityLabel('low')).toBe('Prioridade baixa');
+    expect(priorityLabel('high')).toBe('High priority');
+    expect(priorityLabel('low')).toBe('Low priority');
   });
 });

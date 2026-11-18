@@ -49,7 +49,7 @@ export function HomeScreen() {
         <HomeHeader />
         {stats.isError ? (
           <SectionError
-            message="Não foi possível carregar suas estatísticas."
+            message="Couldn't load your stats."
             onRetry={() => void stats.refetch()}
           />
         ) : (

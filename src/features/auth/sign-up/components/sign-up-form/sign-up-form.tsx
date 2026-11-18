@@ -57,7 +57,7 @@ export function SignUpForm() {
       <TextField
         control={control}
         name="name"
-        label="Nome ou apelido"
+        label="Name or nickname"
         autoComplete="nickname"
         autoCapitalize="words"
       />
@@ -72,7 +72,7 @@ export function SignUpForm() {
       <PasswordField
         control={control}
         name="password"
-        label="Senha"
+        label="Password"
         autoComplete="new-password"
       />
       <PasswordRules password={password} />
@@ -95,14 +95,14 @@ export function SignUpForm() {
           className="h-[52px] items-center justify-center rounded-xl bg-accent-bg-color active:bg-accent-hover-bg-color disabled:opacity-60"
         >
           <Text className="font-semibold text-base text-on-accent-text-color">
-            {isSubmitting ? 'Criando conta…' : 'Criar conta'}
+            {isSubmitting ? 'Signing up…' : 'Sign up'}
           </Text>
         </Pressable>
 
         <Text className="text-center font-sans text-sm text-tertiary-text-color">
-          Já tem conta?{' '}
+          Already have an account?{' '}
           <Link href={ROUTES.login} asChild>
-            <Text className="font-semibold text-accent-text-color">Entrar</Text>
+            <Text className="font-semibold text-accent-text-color">Log in</Text>
           </Link>
         </Text>
       </View>

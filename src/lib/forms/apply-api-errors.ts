@@ -7,32 +7,35 @@ const FIELD_ERRORS: Partial<
 > = {
   [EApiErrorCode.EMAIL_TAKEN]: {
     field: 'email',
-    message: 'Este e-mail já tem uma conta',
+    message: 'This e-mail already has an account',
   },
   [EApiErrorCode.INVALID_CREDENTIALS]: {
     field: 'currentPassword',
-    message: 'Senha incorreta',
+    message: 'Wrong password',
   },
   [EApiErrorCode.CURRENT_PASSWORD_REQUIRED]: {
     field: 'currentPassword',
-    message: 'Confirme sua senha para trocar o e-mail',
+    message: 'Confirm your password to change the e-mail',
   },
   [EApiErrorCode.MOVIE_ALREADY_LOGGED]: {
     field: 'title',
-    message: 'Você já registrou esse filme',
+    message: "You've already logged this movie",
   },
-  [EApiErrorCode.INVALID_RATING]: { field: 'rating', message: 'Nota inválida' },
+  [EApiErrorCode.INVALID_RATING]: {
+    field: 'rating',
+    message: 'Invalid rating',
+  },
   [EApiErrorCode.INVALID_RELEASE_YEAR]: {
     field: 'releaseYear',
-    message: 'Ano inválido',
+    message: 'Invalid year',
   },
   [EApiErrorCode.INVALID_WATCHED_AT]: {
     field: 'watchedAt',
-    message: 'A data não pode estar no futuro',
+    message: "The date can't be in the future",
   },
   [EApiErrorCode.INVALID_GENRE]: {
     field: 'genreIds',
-    message: 'Gênero inválido',
+    message: 'Invalid genre',
   },
 };
 

@@ -16,12 +16,9 @@ const TEMPORARY_FAILURE_TOAST_ID = 'temporary-failure';
 
 function notifyTemporaryFailure(error: unknown) {
   if (TEMPORARY_FAILURE_CODES.includes(ApiError.from(error).code)) {
-    toast.error(
-      'Serviço indisponível no momento. Tente de novo em instantes.',
-      {
-        id: TEMPORARY_FAILURE_TOAST_ID,
-      },
-    );
+    toast.error('Service unavailable right now. Try again in a moment.', {
+      id: TEMPORARY_FAILURE_TOAST_ID,
+    });
   }
 }
 

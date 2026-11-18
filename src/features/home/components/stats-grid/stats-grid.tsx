@@ -36,10 +36,13 @@ export function StatsGrid({ stats }: { stats: IUserStats | undefined }) {
 
   return (
     <View accessibilityLabel="Resumo" className="flex-row flex-wrap gap-2.5">
-      <StatCard label="Filmes" value={String(stats.totalMovies)} />
-      <StatCard label="Nota média" value={formatAverage(stats.averageRating)} />
-      <StatCard label="Favoritos" value={String(stats.favoritesCount)} />
-      <StatCard label="Horas" value={formatHours(stats.totalMinutes)} />
+      <StatCard label="Movies" value={String(stats.totalMovies)} />
+      <StatCard
+        label="Average rating"
+        value={formatAverage(stats.averageRating)}
+      />
+      <StatCard label="Favorites" value={String(stats.favoritesCount)} />
+      <StatCard label="Hours" value={formatHours(stats.totalMinutes)} />
     </View>
   );
 }

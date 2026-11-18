@@ -28,7 +28,7 @@ function NextMovieBody() {
   if (isError) {
     return (
       <SectionError
-        message="Não foi possível carregar o próximo filme."
+        message="Couldn't load the next movie."
         onRetry={() => void refetch()}
       />
     );
@@ -39,10 +39,10 @@ function NextMovieBody() {
     return (
       <View className="gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-4">
         <Text className="font-semibold text-sm text-primary-text-color">
-          Nenhum filme com data marcada
+          No movie scheduled
         </Text>
         <Text className="font-sans text-caption text-tertiary-text-color">
-          Escolha um dia para algum filme da sua lista.
+          Pick a day for a movie on your watchlist.
         </Text>
       </View>
     );
@@ -76,7 +76,7 @@ function NextMovieBody() {
         >
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`Marcar ${item.title} como assistido`}
+            accessibilityLabel={`Mark ${item.title} as watched`}
             className="mt-auto h-9 flex-row items-center gap-1.5 self-start rounded-lg bg-accent-bg-color px-3.5"
           >
             <Check
@@ -85,7 +85,7 @@ function NextMovieBody() {
               color={color(scheme, 'on-accent-text-color')}
             />
             <Text className="font-semibold text-label text-on-accent-text-color">
-              Assisti
+              Watched it
             </Text>
           </Pressable>
         </Link>
@@ -98,8 +98,8 @@ export function NextMovie() {
   return (
     <View className="gap-2.5">
       <SectionHeader
-        title="Próximo filme"
-        linkLabel="Ver lista"
+        title="Next movie"
+        linkLabel="See list"
         href={ROUTES.watchlist}
       />
       <NextMovieBody />

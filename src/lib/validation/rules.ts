@@ -19,28 +19,28 @@ export const emailSchema = z
   .string()
   .trim()
   .toLowerCase()
-  .pipe(z.email('Informe um e-mail válido'));
+  .pipe(z.email('Enter a valid e-mail'));
 
 export const passwordSchema = z
   .string()
-  .min(PASSWORD_MIN_LENGTH, `Use pelo menos ${PASSWORD_MIN_LENGTH} caracteres`)
-  .max(PASSWORD_MAX_LENGTH, `Use no máximo ${PASSWORD_MAX_LENGTH} caracteres`)
-  .regex(/[A-Za-z]/, 'Use pelo menos uma letra')
-  .regex(/\d/, 'Use pelo menos um número');
+  .min(PASSWORD_MIN_LENGTH, `Use at least ${PASSWORD_MIN_LENGTH} characters`)
+  .max(PASSWORD_MAX_LENGTH, `Use at most ${PASSWORD_MAX_LENGTH} characters`)
+  .regex(/[A-Za-z]/, 'Use at least one letter')
+  .regex(/\d/, 'Use at least one number');
 
 export const PASSWORD_RULES = [
   {
-    label: `Entre ${PASSWORD_MIN_LENGTH} e ${PASSWORD_MAX_LENGTH} caracteres`,
+    label: `Between ${PASSWORD_MIN_LENGTH} and ${PASSWORD_MAX_LENGTH} characters`,
     test: (password: string) =>
       password.length >= PASSWORD_MIN_LENGTH &&
       password.length <= PASSWORD_MAX_LENGTH,
   },
   {
-    label: 'Pelo menos uma letra',
+    label: 'At least one letter',
     test: (password: string) => /[A-Za-z]/.test(password),
   },
   {
-    label: 'Pelo menos um número',
+    label: 'At least one number',
     test: (password: string) => /\d/.test(password),
   },
 ] as const;
@@ -48,36 +48,36 @@ export const PASSWORD_RULES = [
 export const nameSchema = z
   .string()
   .trim()
-  .min(NAME_MIN_LENGTH, `Use pelo menos ${NAME_MIN_LENGTH} caracteres`)
-  .max(NAME_MAX_LENGTH, `Use no máximo ${NAME_MAX_LENGTH} caracteres`);
+  .min(NAME_MIN_LENGTH, `Use at least ${NAME_MIN_LENGTH} characters`)
+  .max(NAME_MAX_LENGTH, `Use at most ${NAME_MAX_LENGTH} characters`);
 
 export const ratingSchema = z
-  .number('Dê uma nota')
-  .min(1, 'A nota vai de 1 a 10')
-  .max(10, 'A nota vai de 1 a 10')
-  .multipleOf(RATING_STEP, 'Use meio ponto: 7, 7.5, 8…');
+  .number('Give it a rating')
+  .min(1, 'The rating goes from 1 to 10')
+  .max(10, 'The rating goes from 1 to 10')
+  .multipleOf(RATING_STEP, 'Use half points: 7, 7.5, 8…');
 
 export const releaseYearSchema = z
-  .number('Informe o ano')
-  .int('Informe um ano válido')
-  .min(FIRST_FILM_YEAR, `O primeiro filme é de ${FIRST_FILM_YEAR}`)
+  .number('Enter the year')
+  .int('Enter a valid year')
+  .min(FIRST_FILM_YEAR, `The first movie is from ${FIRST_FILM_YEAR}`)
   .refine(
     (year) => year <= new Date().getFullYear() + 1,
-    'Ano muito no futuro',
+    'Year too far in the future',
   );
 
 export const genreIdsSchema = z
   .array(z.string())
-  .min(1, 'Escolha pelo menos um gênero')
-  .max(MAX_GENRES, `Escolha até ${MAX_GENRES} gêneros`);
+  .min(1, 'Pick at least one genre')
+  .max(MAX_GENRES, `Pick up to ${MAX_GENRES} genres`);
 
 export const isoDateSchema = z
   .string()
-  .regex(ISO_DATE_PATTERN, 'Informe uma data válida');
+  .regex(ISO_DATE_PATTERN, 'Enter a valid date');
 
 export const watchedAtSchema = isoDateSchema.refine(
   (date) => date <= toIsoDate(new Date()),
-  'A data não pode estar no futuro',
+  "The date can't be in the future",
 );
 
 export const imageAssetSchema = z
@@ -90,12 +90,12 @@ export const imageAssetSchema = z
     (asset) =>
       asset.mimeType === undefined ||
       (IMAGE_MIME_TYPES as readonly string[]).includes(asset.mimeType),
-    'Use uma imagem JPEG, PNG ou WebP',
+    'Use a JPEG, PNG or WebP image',
   )
   .refine(
     (asset) =>
       asset.fileSize === undefined || asset.fileSize <= MAX_IMAGE_BYTES,
-    'A imagem pode ter até 5 MB',
+    'The image can be up to 5 MB',
   );
 
 export function toIsoDate(date: Date): string {

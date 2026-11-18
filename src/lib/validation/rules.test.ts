@@ -18,10 +18,10 @@ describe('When we validate form values like the API does', () => {
   it('should accept ratings from 1 to 10 in half steps', () => {
     expect(ratingSchema.safeParse(7.5).success).toBe(true);
     expect(firstIssue(ratingSchema.safeParse(7.3))).toBe(
-      'Use meio ponto: 7, 7.5, 8…',
+      'Use half points: 7, 7.5, 8…',
     );
     expect(firstIssue(ratingSchema.safeParse(10.5))).toBe(
-      'A nota vai de 1 a 10',
+      'The rating goes from 1 to 10',
     );
   });
 
@@ -30,20 +30,20 @@ describe('When we validate form values like the API does', () => {
 
     expect(releaseYearSchema.safeParse(nextYear).success).toBe(true);
     expect(firstIssue(releaseYearSchema.safeParse(1887))).toBe(
-      'O primeiro filme é de 1888',
+      'The first movie is from 1888',
     );
     expect(firstIssue(releaseYearSchema.safeParse(nextYear + 1))).toBe(
-      'Ano muito no futuro',
+      'Year too far in the future',
     );
   });
 
   it('should refuse a watch date in the future', () => {
     expect(watchedAtSchema.safeParse(toIsoDate(new Date())).success).toBe(true);
     expect(firstIssue(watchedAtSchema.safeParse('2999-01-01'))).toBe(
-      'A data não pode estar no futuro',
+      "The date can't be in the future",
     );
     expect(firstIssue(watchedAtSchema.safeParse('01/02/2026'))).toBe(
-      'Informe uma data válida',
+      'Enter a valid date',
     );
   });
 
@@ -58,10 +58,10 @@ describe('When we validate form values like the API does', () => {
   it('should ask for a password with a letter and a number', () => {
     expect(passwordSchema.safeParse('filmes2026').success).toBe(true);
     expect(firstIssue(passwordSchema.safeParse('abcdefgh'))).toBe(
-      'Use pelo menos um número',
+      'Use at least one number',
     );
     expect(firstIssue(passwordSchema.safeParse('a1'))).toBe(
-      'Use pelo menos 8 caracteres',
+      'Use at least 8 characters',
     );
   });
 
@@ -77,11 +77,11 @@ describe('When we validate form values like the API does', () => {
     expect(imageAssetSchema.safeParse({ uri: 'file:///a' }).success).toBe(true);
     expect(
       firstIssue(imageAssetSchema.safeParse({ ...png, mimeType: 'image/gif' })),
-    ).toBe('Use uma imagem JPEG, PNG ou WebP');
+    ).toBe('Use a JPEG, PNG or WebP image');
     expect(
       firstIssue(
         imageAssetSchema.safeParse({ ...png, fileSize: 5 * 1024 * 1024 + 1 }),
       ),
-    ).toBe('A imagem pode ter até 5 MB');
+    ).toBe('The image can be up to 5 MB');
   });
 });

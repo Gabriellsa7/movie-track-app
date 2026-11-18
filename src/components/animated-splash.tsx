@@ -75,7 +75,7 @@ export function AnimatedSplash({
   return (
     <Animated.View
       accessible
-      accessibilityLabel="Carregando o Movie Track"
+      accessibilityLabel="Loading Movie Track"
       onLayout={() => void SplashScreen.hideAsync()}
       style={[
         StyleSheet.absoluteFill,
