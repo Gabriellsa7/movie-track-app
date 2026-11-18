@@ -1,5 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
+import { toast } from 'sonner-native';
 import { startSession } from '@/lib/session/session';
 import { apiErrorReply, mockApi } from '@/test/mock-api';
 import { SignUpForm } from './sign-up-form';
@@ -63,6 +64,25 @@ describe('When we submit the sign-up form', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'Este e-mail já tem uma conta',
     );
+    expect(toast.error).toHaveBeenCalledWith('Este e-mail já tem uma conta');
+  });
+
+  it('should warn in a toast when the API rejects the name', async () => {
+    mockApi.onPost('/users').reply(400, {
+      message: 'Validation failed',
+      status: 400,
+      code: 'VALIDATION_ERROR',
+      errors: [
+        { field: 'name', message: 'must NOT have more than 80 characters' },
+      ],
+    });
+    await renderForm();
+
+    await fillAndSubmit('Gabriel', 'gabriel@email.com', 'filmes123');
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Nome inválido');
+    });
   });
 
   it('should show a generic message on any other failure', async () => {

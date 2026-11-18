@@ -14,6 +14,5 @@ export const LOGIN_DEFAULT_VALUES: TLoginForm = {
 };
 
 export const LOGIN_ERROR_MESSAGES = {
-  invalidCredentials: 'E-mail ou senha incorretos',
   unexpected: 'Não foi possível entrar. Tente de novo.',
 } as const;

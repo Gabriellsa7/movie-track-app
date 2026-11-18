@@ -2,11 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { Pressable, Text, View } from 'react-native';
-import { ApiError } from '@/api/api-error';
-import { EApiErrorCode } from '@/api/error-codes';
+import { toast } from 'sonner-native';
 import { login } from '@/api/services/auth.service';
 import { PasswordField } from '@/components/form/password-field';
 import { TextField } from '@/components/form/text-field';
+import { authErrorMessage } from '@/lib/forms/auth-error-message';
 import { startSession } from '@/lib/session/session';
 import { ROUTES } from '@/routes/routes.constants';
 import {
@@ -32,10 +32,9 @@ export function LoginForm() {
       const tokens = await login(values);
       await startSession(tokens);
     } catch (error) {
-      const message = ApiError.from(error).is(EApiErrorCode.INVALID_CREDENTIALS)
-        ? LOGIN_ERROR_MESSAGES.invalidCredentials
-        : LOGIN_ERROR_MESSAGES.unexpected;
+      const message = authErrorMessage(error, LOGIN_ERROR_MESSAGES.unexpected);
       setError('root', { message });
+      toast.error(message);
     }
   };
 
