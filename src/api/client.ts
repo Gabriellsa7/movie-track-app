@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { env } from '@/config/env';
+import { currentLanguage } from '@/i18n';
 import { ApiError } from './api-error';
 import { EApiErrorCode } from './error-codes';
 
@@ -34,6 +35,7 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
+  config.headers.set('Accept-Language', currentLanguage());
   const accessToken = sessionHandlers?.getAccessToken();
   if (accessToken && !config.headers.has('Authorization')) {
     config.headers.set('Authorization', `Bearer ${accessToken}`);

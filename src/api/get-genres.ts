@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useLanguage } from '@/i18n';
 import { apiClient } from './client';
 import { queryKeys } from './query-keys';
 import type { IGenre } from './types';
@@ -9,8 +10,9 @@ export async function listGenres(): Promise<IGenre[]> {
 }
 
 export function useGenresQuery() {
+  const language = useLanguage();
   return useQuery({
-    queryKey: queryKeys.genres,
+    queryKey: queryKeys.genres(language),
     queryFn: listGenres,
     staleTime: Infinity,
   });
