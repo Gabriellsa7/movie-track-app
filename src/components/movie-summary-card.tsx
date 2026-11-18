@@ -6,6 +6,8 @@ interface IMovieSummaryCardProps {
   title: string;
   releaseYear: string;
   genreIds: string[];
+  director?: string;
+  durationMinutes?: string;
   posterUrl: string | undefined;
   onEdit: () => void;
 }
@@ -14,10 +16,15 @@ export function MovieSummaryCard({
   title,
   releaseYear,
   genreIds,
+  director,
+  durationMinutes,
   posterUrl,
   onEdit,
 }: IMovieSummaryCardProps) {
   const genreNames = useGenreNames(genreIds).join(', ');
+  const credits = [director, durationMinutes && `${durationMinutes} min`]
+    .filter(Boolean)
+    .join(' · ');
 
   return (
     <View className="flex-row gap-3 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-3">
@@ -45,6 +52,14 @@ export function MovieSummaryCard({
             className="font-sans text-[13px] text-tertiary-text-color"
           >
             {genreNames}
+          </Text>
+        ) : null}
+        {credits ? (
+          <Text
+            numberOfLines={1}
+            className="font-sans text-[13px] text-tertiary-text-color"
+          >
+            {credits}
           </Text>
         ) : null}
         <Pressable

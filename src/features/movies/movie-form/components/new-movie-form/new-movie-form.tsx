@@ -4,6 +4,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { ScrollView, Switch, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
 import { useInvalidateMyMovies } from '@/api/get-movies';
+import { useFetchTmdbDetailsValues } from '@/api/get-tmdb-movie-details';
 import type { ITmdbMovie } from '@/api/types';
 import { DateField } from '@/components/form/date-field';
 import { GenrePicker } from '@/components/form/genre-picker';
@@ -16,6 +17,7 @@ import { uploadMoviePoster } from '@/features/movies/api/put-movie-poster';
 import { applyApiErrors } from '@/lib/forms/apply-api-errors';
 import { notifySaveError } from '@/lib/forms/notify-save-error';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
+import { MOVIE_DETAIL_FIELDS } from '@/lib/validation/movie-details';
 import { color } from '@/theme/palette';
 import {
   MOVIE_FORM_FIELDS,
@@ -29,26 +31,19 @@ import {
   closeMovieForm,
   MovieFormHeader,
 } from '../movie-form-header/movie-form-header';
-import { MovieSummaryCard } from '../movie-summary-card/movie-summary-card';
-import { PosterPicker } from '../poster-picker/poster-picker';
-
-const DETAIL_FIELDS = [
-  'title',
-  'releaseYear',
-  'genreIds',
-  'synopsis',
-  'director',
-  'durationMinutes',
-] as const;
+import { MovieSummaryCard } from '@/components/movie-summary-card';
+import { PosterPicker } from '@/components/poster-picker';
 
 export function NewMovieForm() {
   const scheme = useAppTheme();
   const createMovie = useCreateMovieMutation();
   const invalidateMyMovies = useInvalidateMyMovies();
+  const fetchTmdbDetails = useFetchTmdbDetailsValues();
   const [isEditingDetails, setIsEditingDetails] = useState(false);
   const {
     control,
     handleSubmit,
+    getValues,
     setError,
     setValue,
     clearErrors,
@@ -57,9 +52,27 @@ export function NewMovieForm() {
     resolver: zodResolver(MOVIE_FORM_SCHEMA),
     defaultValues: movieFormDefaultValues(),
   });
-  const [title, releaseYear, genreIds, tmdbId, poster, posterUrl] = useWatch({
+  const [
+    title,
+    releaseYear,
+    genreIds,
+    director,
+    durationMinutes,
+    tmdbId,
+    poster,
+    posterUrl,
+  ] = useWatch({
     control,
-    name: ['title', 'releaseYear', 'genreIds', 'tmdbId', 'poster', 'posterUrl'],
+    name: [
+      'title',
+      'releaseYear',
+      'genreIds',
+      'director',
+      'durationMinutes',
+      'tmdbId',
+      'poster',
+      'posterUrl',
+    ],
   });
   const showSummary = tmdbId !== undefined && !isEditingDetails;
 
@@ -75,8 +88,20 @@ export function NewMovieForm() {
     setValue('genreIds', movie.genreIds, options);
     setValue('tmdbId', movie.tmdbId, options);
     setValue('posterUrl', movie.posterUrl, options);
-    clearErrors(DETAIL_FIELDS);
+    setValue('director', '', options);
+    setValue('durationMinutes', '', options);
+    clearErrors(MOVIE_DETAIL_FIELDS);
     setIsEditingDetails(false);
+    void fillTmdbDetails(movie.tmdbId);
+  }
+
+  async function fillTmdbDetails(tmdbId: number) {
+    const details = await fetchTmdbDetails(tmdbId);
+    if (!details || getValues('tmdbId') !== tmdbId) {
+      return;
+    }
+    setValue('director', details.director, { shouldDirty: true });
+    setValue('durationMinutes', details.durationMinutes, { shouldDirty: true });
   }
 
   function removePoster() {
@@ -111,7 +136,7 @@ export function NewMovieForm() {
   };
 
   const save = handleSubmit(onSubmit, (errors) => {
-    if (DETAIL_FIELDS.some((field) => field in errors)) {
+    if (MOVIE_DETAIL_FIELDS.some((field) => field in errors)) {
       setIsEditingDetails(true);
     }
   });
@@ -139,6 +164,8 @@ export function NewMovieForm() {
             title={title}
             releaseYear={releaseYear}
             genreIds={genreIds}
+            director={director}
+            durationMinutes={durationMinutes}
             posterUrl={poster?.uri ?? posterUrl}
             onEdit={() => {
               setIsEditingDetails(true);

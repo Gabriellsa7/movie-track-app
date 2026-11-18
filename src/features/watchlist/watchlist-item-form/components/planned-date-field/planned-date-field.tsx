@@ -23,6 +23,7 @@ export function PlannedDateField({ control }: IPlannedDateFieldProps) {
             control={control}
             name="plannedFor"
             label="When I plan to watch it"
+            minimumDate={new Date()}
           />
         </View>
         {value ? (
