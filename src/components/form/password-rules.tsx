@@ -4,11 +4,13 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { PASSWORD_RULES } from '@/lib/validation/rules';
 import { color } from '@/theme/palette';
 import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 import { translateMessage } from '@/i18n/message';
 
 export function PasswordRules({ password }: { password: string }) {
   const scheme = useAppTheme();
   const { t } = useTranslation();
+  const language = useLanguage();
 
   return (
     <View
@@ -21,7 +23,7 @@ export function PasswordRules({ password }: { password: string }) {
           <View
             key={label}
             accessible
-            accessibilityLabel={translateMessage(label)}
+            accessibilityLabel={translateMessage(label, language)}
             accessibilityState={{ checked: met }}
             className="flex-row items-center gap-2"
           >
@@ -43,7 +45,7 @@ export function PasswordRules({ password }: { password: string }) {
                 met ? 'text-success-text-color' : 'text-tertiary-text-color'
               }`}
             >
-              {translateMessage(label)}
+              {translateMessage(label, language)}
             </Text>
           </View>
         );

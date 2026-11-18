@@ -1,31 +1,10 @@
 import type { IWatchlistItem } from '@/api/types';
-import { SHORT_MONTHS } from '@/lib/stats';
+import { tFor, type TLanguage } from '@/i18n';
+import { formatDate } from '@/i18n/format';
 
 type TPriority = IWatchlistItem['priority'];
 
-const PRIORITY_LABELS: Record<TPriority, string> = {
-  high: 'High priority',
-  medium: 'Medium priority',
-  low: 'Low priority',
-};
-
-export const PRIORITY_SHORT_LABELS: Record<TPriority, string> = {
-  high: 'High',
-  medium: 'Medium',
-  low: 'Low',
-};
-
 export const PRIORITIES: TPriority[] = ['high', 'medium', 'low'];
-
-const SHORT_WEEKDAYS = [
-  'Sun',
-  'Mon',
-  'Tue',
-  'Wed',
-  'Thu',
-  'Fri',
-  'Sat',
-] as const;
 
 const DAY_MILLISECONDS = 86_400_000;
 
@@ -50,22 +29,38 @@ export function isPlannedForToday(plannedFor: string, today: Date): boolean {
 export function plannedLabel(
   plannedFor: string,
   today: Date,
+  language: TLanguage,
   { withWeekday = false } = {},
 ): string {
   const planned = new Date(plannedFor);
   const days = daysUntil(planned, today);
   if (days === 0) {
-    return 'Today';
+    return tFor(language)('watchlist.today');
   }
   if (days === 1) {
-    return 'Tomorrow';
+    return tFor(language)('watchlist.tomorrow');
   }
-  const date = `${SHORT_MONTHS[planned.getUTCMonth()] ?? ''} ${String(planned.getUTCDate())}`;
-  return withWeekday
-    ? `${SHORT_WEEKDAYS[planned.getUTCDay()] ?? ''}, ${date}`
-    : date;
+  return formatDate(
+    planned,
+    {
+      month: 'short',
+      day: 'numeric',
+      ...(withWeekday && { weekday: 'short' }),
+    },
+    language,
+  );
 }
 
-export function priorityLabel(priority: TPriority): string {
-  return PRIORITY_LABELS[priority];
+export function priorityLabel(
+  priority: TPriority,
+  language: TLanguage,
+): string {
+  return tFor(language)(`watchlist.priority.${priority}`);
+}
+
+export function priorityShortLabel(
+  priority: TPriority,
+  language: TLanguage,
+): string {
+  return tFor(language)(`watchlist.priorityShort.${priority}`);
 }

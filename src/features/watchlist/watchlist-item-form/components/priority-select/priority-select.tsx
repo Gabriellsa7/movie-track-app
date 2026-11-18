@@ -1,16 +1,20 @@
 import { useController, type Control } from 'react-hook-form';
 import { Pressable, Text, View } from 'react-native';
-import { PRIORITIES, PRIORITY_SHORT_LABELS } from '@/lib/watchlist';
+import { PRIORITIES, priorityShortLabel } from '@/lib/watchlist';
 import type {
   IItemFormInput,
   IItemFormOutput,
 } from '../../constants/constants';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 interface IPrioritySelectProps {
   control: Control<IItemFormInput, unknown, IItemFormOutput>;
 }
 
 export function PrioritySelect({ control }: IPrioritySelectProps) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const {
     field: { value, onChange },
   } = useController({ control, name: 'priority' });
@@ -18,7 +22,7 @@ export function PrioritySelect({ control }: IPrioritySelectProps) {
   return (
     <View className="gap-2">
       <Text className="font-semibold text-sm text-primary-text-color">
-        Priority
+        {t('watchlist.form.priority')}
       </Text>
       <View
         accessibilityRole="radiogroup"
@@ -45,7 +49,7 @@ export function PrioritySelect({ control }: IPrioritySelectProps) {
                     : 'text-tertiary-text-color'
                 }`}
               >
-                {PRIORITY_SHORT_LABELS[priority]}
+                {priorityShortLabel(priority, language)}
               </Text>
             </Pressable>
           );

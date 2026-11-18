@@ -2,6 +2,7 @@ import { Bookmark } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 interface IReviewCtaProps {
   isAdding: boolean;
@@ -14,12 +15,13 @@ export function ReviewCta({
   onWantToWatch,
   onAlreadyWatched,
 }: IReviewCtaProps) {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
 
   return (
     <View className="gap-2.5 rounded-[14px] border border-primary-border-color bg-sidebar-bg-color p-3.5">
       <Text className="font-sans text-[13px] text-secondary-text-color">
-        Haven&apos;t seen it?
+        {t('users.review.notSeen')}
       </Text>
       <View className="flex-row gap-2">
         <Pressable
@@ -31,7 +33,9 @@ export function ReviewCta({
         >
           <Bookmark size={16} color={color(scheme, 'primary-text-color')} />
           <Text className="font-semibold text-sm text-primary-text-color">
-            {isAdding ? 'Adding…' : 'Want to watch'}
+            {isAdding
+              ? t('users.review.adding')
+              : t('users.review.wantToWatch')}
           </Text>
         </Pressable>
         <Pressable
@@ -40,7 +44,7 @@ export function ReviewCta({
           className="h-11 flex-1 items-center justify-center rounded-[10px] bg-accent-bg-color active:bg-accent-hover-bg-color"
         >
           <Text className="font-semibold text-sm text-on-accent-text-color">
-            Already watched
+            {t('users.review.alreadyWatched')}
           </Text>
         </Pressable>
       </View>

@@ -7,8 +7,10 @@ import { Poster } from '@/components/poster';
 import { formatRuntime } from '@/lib/movie-format';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 export function ReviewMovie({ movie }: { movie: IMovie }) {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
   const genreNames = useGenreNames(movie.genreIds);
   const meta = [
@@ -47,7 +49,7 @@ export function ReviewMovie({ movie }: { movie: IMovie }) {
               color={color(scheme, 'accent-text-color')}
             />
             <Text className="font-semibold text-[13px] text-accent-text-color">
-              One of their favorites
+              {t('users.review.favorite')}
             </Text>
           </View>
         )}

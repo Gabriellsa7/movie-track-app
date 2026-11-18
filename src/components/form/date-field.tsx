@@ -10,7 +10,7 @@ import { CalendarSheet } from '@/components/calendar-sheet';
 import { toIsoDate } from '@/lib/validation/rules';
 import { FieldFrame, inputClassName } from './field-frame';
 import { useTranslation } from 'react-i18next';
-import { currentLanguage } from '@/i18n';
+import { useLanguage, type TLanguage } from '@/i18n';
 
 interface IDateFieldProps<TFields extends FieldValues, TTransformed = TFields> {
   control: Control<TFields, unknown, TTransformed>;
@@ -29,9 +29,13 @@ function fromIsoDate(value: unknown): Date {
   return new Date(year, month - 1, day);
 }
 
-function formatDate(value: unknown, emptyLabel: string): string {
+function formatDate(
+  value: unknown,
+  emptyLabel: string,
+  language: TLanguage,
+): string {
   return typeof value === 'string' && value
-    ? fromIsoDate(value).toLocaleDateString(currentLanguage())
+    ? fromIsoDate(value).toLocaleDateString(language)
     : emptyLabel;
 }
 
@@ -49,7 +53,8 @@ export function DateField<TFields extends FieldValues, TTransformed = TFields>({
   } = useController({ control, name });
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const dateLabel = formatDate(value, t('common.calendar.pickDate'));
+  const language = useLanguage();
+  const dateLabel = formatDate(value, t('common.calendar.pickDate'), language);
   const error = fieldState.error?.message;
 
   return (

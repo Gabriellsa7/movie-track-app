@@ -5,12 +5,14 @@ import type {
   IItemFormInput,
   IItemFormOutput,
 } from '../../constants/constants';
+import { useTranslation } from 'react-i18next';
 
 interface IPlannedDateFieldProps {
   control: Control<IItemFormInput, unknown, IItemFormOutput>;
 }
 
 export function PlannedDateField({ control }: IPlannedDateFieldProps) {
+  const { t } = useTranslation();
   const {
     field: { value, onChange },
   } = useController({ control, name: 'plannedFor' });
@@ -22,7 +24,7 @@ export function PlannedDateField({ control }: IPlannedDateFieldProps) {
           <DateField
             control={control}
             name="plannedFor"
-            label="When I plan to watch it"
+            label={t('watchlist.form.plannedFor')}
             minimumDate={new Date()}
           />
         </View>
@@ -35,13 +37,13 @@ export function PlannedDateField({ control }: IPlannedDateFieldProps) {
             className="min-h-[52px] justify-center rounded-xl border border-primary-border-color px-3.5"
           >
             <Text className="font-semibold text-[13px] text-secondary-text-color">
-              No date
+              {t('watchlist.form.noDate')}
             </Text>
           </Pressable>
         ) : null}
       </View>
       <Text className="font-sans text-xs text-tertiary-text-color">
-        With a date, it shows in Upcoming. Without one, it stays in Someday.
+        {t('watchlist.form.plannedHint')}
       </Text>
     </View>
   );

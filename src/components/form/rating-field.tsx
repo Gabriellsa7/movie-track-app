@@ -9,6 +9,7 @@ import { RatingStars } from '@/components/rating-stars';
 import { formatRating } from '@/lib/rating';
 import { useTranslation } from 'react-i18next';
 import { translateMessage } from '@/i18n/message';
+import { useLanguage } from '@/i18n';
 
 interface IRatingFieldProps<
   TFields extends FieldValues,
@@ -29,6 +30,7 @@ export function RatingField<
   const rating = value as number | undefined;
   const error = fieldState.error?.message;
   const { t } = useTranslation();
+  const language = useLanguage();
 
   return (
     <View className="gap-1.5">
@@ -38,7 +40,7 @@ export function RatingField<
       <View className="flex-row items-center justify-between">
         <RatingStars rating={rating} size={28} onChange={onChange} />
         <Text className="font-display text-[34px] leading-[34px] text-accent-text-color">
-          {rating === undefined ? '–' : formatRating(rating)}
+          {rating === undefined ? '–' : formatRating(rating, language)}
         </Text>
       </View>
       {error ? (
@@ -46,7 +48,7 @@ export function RatingField<
           accessibilityRole="alert"
           className="font-medium text-xs text-danger-text-color"
         >
-          {translateMessage(error)}
+          {translateMessage(error, language)}
         </Text>
       ) : (
         <Text className="font-sans text-xs text-tertiary-text-color">

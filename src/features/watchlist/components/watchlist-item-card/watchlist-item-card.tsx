@@ -7,6 +7,8 @@ import { isPlannedForToday, plannedLabel } from '@/lib/watchlist';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import { PriorityBadge } from '../priority-badge/priority-badge';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 interface IWatchlistItemCardProps {
   item: IWatchlistItem;
@@ -17,6 +19,8 @@ export function WatchlistItemCard({
   item,
   onMoreOptions,
 }: IWatchlistItemCardProps) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const scheme = useAppTheme();
   const today = new Date();
   const isDue = item.plannedFor
@@ -29,7 +33,7 @@ export function WatchlistItemCard({
         {item.posterUrl ? (
           <Image
             source={{ uri: item.posterUrl }}
-            accessibilityLabel={`Poster of ${item.title}`}
+            accessibilityLabel={t('common.poster.of', { title: item.title })}
             contentFit="cover"
             transition={150}
             style={{ position: 'absolute', inset: 0 }}
@@ -59,7 +63,9 @@ export function WatchlistItemCard({
               isDue ? 'text-accent-text-color' : 'text-secondary-text-color'
             }`}
           >
-            {plannedLabel(item.plannedFor, today, { withWeekday: true })}
+            {plannedLabel(item.plannedFor, today, language, {
+              withWeekday: true,
+            })}
           </Text>
         ) : item.releaseYear ? (
           <Text className="font-sans text-[13px] text-tertiary-text-color">
@@ -84,7 +90,9 @@ export function WatchlistItemCard({
           >
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={`Mark ${item.title} as watched`}
+              accessibilityLabel={t('watchlist.card.markWatched', {
+                title: item.title,
+              })}
               className="h-9 flex-row items-center gap-1.5 rounded-lg bg-accent-bg-color px-3 active:bg-accent-hover-bg-color"
             >
               <Check
@@ -93,13 +101,15 @@ export function WatchlistItemCard({
                 color={color(scheme, 'on-accent-text-color')}
               />
               <Text className="font-semibold text-[13px] text-on-accent-text-color">
-                Watched it
+                {t('watchlist.card.watchedIt')}
               </Text>
             </Pressable>
           </Link>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`More options for ${item.title}`}
+            accessibilityLabel={t('watchlist.card.moreOptions', {
+              title: item.title,
+            })}
             onPress={() => {
               onMoreOptions(item);
             }}

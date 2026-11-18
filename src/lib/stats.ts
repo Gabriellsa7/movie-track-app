@@ -1,21 +1,8 @@
 import type { IUserStats } from '@/api/types';
+import { formatDecimal, formatShortMonth } from '@/i18n/format';
+import type { TLanguage } from '@/i18n';
 
 const MONTHS_IN_CHART = 12;
-
-export const SHORT_MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-] as const;
 
 export interface IMonthCount {
   month: string;
@@ -23,8 +10,13 @@ export interface IMonthCount {
   count: number;
 }
 
-export function formatAverage(averageRating: number | null): string {
-  return averageRating === null ? '–' : averageRating.toFixed(1);
+export function formatAverage(
+  averageRating: number | null,
+  language: TLanguage,
+): string {
+  return averageRating === null
+    ? '–'
+    : formatDecimal(averageRating, 1, language);
 }
 
 export function formatHours(totalMinutes: number): string {
@@ -38,6 +30,7 @@ function monthKey(year: number, monthIndex: number): string {
 export function lastTwelveMonths(
   moviesPerMonth: IUserStats['moviesPerMonth'],
   today: Date,
+  language: TLanguage,
 ): IMonthCount[] {
   const counts = new Map(
     moviesPerMonth.map((item) => [item.month, item.count]),
@@ -51,7 +44,10 @@ export function lastTwelveMonths(
     const month = monthKey(date.getFullYear(), date.getMonth());
     return {
       month,
-      label: SHORT_MONTHS[date.getMonth()] ?? '',
+      label: formatShortMonth(
+        new Date(Date.UTC(date.getFullYear(), date.getMonth(), 1)),
+        language,
+      ),
       count: counts.get(month) ?? 0,
     };
   });

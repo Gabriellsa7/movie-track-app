@@ -3,12 +3,14 @@ import { Text, View } from 'react-native';
 import type { IUserStats } from '@/api/types';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 interface IRatingDistributionProps {
   distribution: IUserStats['ratingDistribution'];
 }
 
 export function RatingDistribution({ distribution }: IRatingDistributionProps) {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
   const rows = distribution
     .filter((entry) => entry.count > 0)
@@ -21,9 +23,10 @@ export function RatingDistribution({ distribution }: IRatingDistributionProps) {
         <View
           key={entry.rating}
           accessible
-          accessibilityLabel={`Rating ${String(entry.rating)}: ${String(entry.count)} ${
-            entry.count === 1 ? 'movie' : 'movies'
-          }`}
+          accessibilityLabel={t('stats.ratings.rowLabel', {
+            rating: entry.rating,
+            movies: t('stats.movie', { count: entry.count }),
+          })}
           className="flex-row items-center gap-2.5"
         >
           <View className="w-11 flex-row items-center gap-1">

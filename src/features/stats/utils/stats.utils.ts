@@ -42,11 +42,3 @@ export function percentOf(part: number, total: number): number {
 export function rewatchCount(stats: IUserStats): number {
   return Math.max(0, stats.totalWatches - stats.totalMovies);
 }
-
-export function plural(
-  count: number,
-  singular: string,
-  pluralWord: string,
-): string {
-  return `${String(count)} ${count === 1 ? singular : pluralWord}`;
-}

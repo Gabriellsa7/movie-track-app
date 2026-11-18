@@ -6,6 +6,8 @@ import type { IMovie } from '@/api/types';
 import { formatRating } from '@/lib/rating';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 interface IMovieCardProps {
   movie: IMovie;
@@ -13,6 +15,8 @@ interface IMovieCardProps {
 }
 
 export function MovieCard({ movie, width }: IMovieCardProps) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const scheme = useAppTheme();
 
   return (
@@ -22,7 +26,11 @@ export function MovieCard({ movie, width }: IMovieCardProps) {
     >
       <Pressable
         accessibilityRole="link"
-        accessibilityLabel={`${movie.title}, ${String(movie.releaseYear)}, rating ${String(movie.rating)}`}
+        accessibilityLabel={t('movies.cardLabel', {
+          title: movie.title,
+          year: movie.releaseYear,
+          rating: formatRating(movie.rating, language),
+        })}
         className="gap-1.5 active:opacity-80"
         style={{ width }}
       >
@@ -45,7 +53,7 @@ export function MovieCard({ movie, width }: IMovieCardProps) {
               fill={color(scheme, 'star-filled-color')}
             />
             <Text className="font-semibold text-[11px] text-primary-text-color">
-              {formatRating(movie.rating)}
+              {formatRating(movie.rating, language)}
             </Text>
           </View>
           {!movie.posterUrl && (

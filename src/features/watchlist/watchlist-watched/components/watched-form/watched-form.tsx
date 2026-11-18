@@ -27,6 +27,7 @@ import {
 } from '../../constants/constants';
 import { MissingDetails } from '../missing-details/missing-details';
 import { WatchedHeader } from '../watched-header/watched-header';
+import { useTranslation } from 'react-i18next';
 
 const ALL_DETAILS: TMissingField[] = ['releaseYear', 'genreIds', 'synopsis'];
 
@@ -35,6 +36,7 @@ export function closeWatched() {
 }
 
 export function WatchedForm({ item }: { item: IWatchlistItem }) {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
   const markWatched = useMarkWatchedMutation(item.id);
   const [missing, setMissing] = useState(() => missingFields(item));
@@ -68,7 +70,7 @@ export function WatchedForm({ item }: { item: IWatchlistItem }) {
         ...(missing.includes('genreIds') && { genreIds }),
         ...(missing.includes('synopsis') && { synopsis }),
       });
-      toast.success('Movie logged and removed from your watchlist');
+      toast.success(t('watchlist.watched.logged'));
       closeWatched();
     } catch (error) {
       const apiError = ApiError.from(error);
@@ -80,7 +82,7 @@ export function WatchedForm({ item }: { item: IWatchlistItem }) {
       if (applyApiErrors(error, setError, WATCHED_FIELDS)) {
         return;
       }
-      notifySaveError(error, "Couldn't log the movie. Try again.");
+      notifySaveError(error, 'watchlist.watched.failed');
     }
   };
 
@@ -104,7 +106,7 @@ export function WatchedForm({ item }: { item: IWatchlistItem }) {
           <DateField
             control={control}
             name="watchedAt"
-            label="Watched on"
+            label={t('movies.form.watchedOn')}
             maximumDate={new Date()}
           />
         </View>
@@ -114,13 +116,13 @@ export function WatchedForm({ item }: { item: IWatchlistItem }) {
           render={({ field: { value, onChange } }) => (
             <View className="min-h-[52px] flex-row items-center gap-2 rounded-xl border border-primary-border-color px-3">
               <Switch
-                accessibilityLabel="Favorite"
+                accessibilityLabel={t('movies.form.favorite')}
                 value={value}
                 onValueChange={onChange}
                 trackColor={{ true: color(scheme, 'accent-bg-color') }}
               />
               <Text className="font-medium text-sm text-primary-text-color">
-                Favorite
+                {t('movies.form.favorite')}
               </Text>
             </View>
           )}
@@ -129,8 +131,8 @@ export function WatchedForm({ item }: { item: IWatchlistItem }) {
       <TextAreaField
         control={control}
         name="review"
-        label="Your review"
-        placeholder="What did you think?"
+        label={t('movies.form.review')}
+        placeholder={t('movies.form.reviewPlaceholder')}
       />
       <Pressable
         accessibilityRole="button"
@@ -140,7 +142,7 @@ export function WatchedForm({ item }: { item: IWatchlistItem }) {
         className="mt-auto h-[52px] items-center justify-center rounded-xl bg-accent-bg-color active:bg-accent-hover-bg-color disabled:opacity-60"
       >
         <Text className="font-semibold text-base text-on-accent-text-color">
-          {isSubmitting ? 'Saving…' : 'Log and remove from list'}
+          {isSubmitting ? t('common.saving') : t('watchlist.watched.submit')}
         </Text>
       </Pressable>
     </ScrollView>

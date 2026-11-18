@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native';
 import type { IUserStats } from '@/api/types';
 import { percentOf } from '../../utils/stats.utils';
+import { useTranslation } from 'react-i18next';
 
 interface ITopGenresProps {
   genres: IUserStats['topGenres'];
@@ -8,6 +9,7 @@ interface ITopGenresProps {
 }
 
 export function TopGenres({ genres, totalMovies }: ITopGenresProps) {
+  const { t } = useTranslation();
   return (
     <View className="gap-3">
       {genres.map((genre, index) => {
@@ -16,9 +18,12 @@ export function TopGenres({ genres, totalMovies }: ITopGenresProps) {
           <View
             key={genre.genreId}
             accessible
-            accessibilityLabel={`${String(index + 1)}. ${genre.name}: ${String(genre.count)} ${
-              genre.count === 1 ? 'movie' : 'movies'
-            }, ${String(share)}% of your movies`}
+            accessibilityLabel={t('stats.genres.rowLabel', {
+              position: index + 1,
+              genre: genre.name,
+              movies: t('stats.movie', { count: genre.count }),
+              percent: share,
+            })}
             className="gap-1.5"
           >
             <View className="flex-row items-baseline justify-between">

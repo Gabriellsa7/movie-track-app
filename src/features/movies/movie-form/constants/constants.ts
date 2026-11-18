@@ -1,3 +1,4 @@
+import { messageKey } from '@/i18n/message';
 import { z, type input as TInput, type output as TOutput } from 'zod';
 import type { IMovie, IUpdateMovieBody } from '@/api/types';
 import type { IUploadFile } from '@/api/upload-file';
@@ -25,10 +26,13 @@ export const MOVIE_FORM_SCHEMA = z.object({
     .transform((value) => (value ? Number(value) : 1))
     .pipe(
       z
-        .number('Enter how many times')
-        .int('Enter how many times')
-        .min(1, 'Enter how many times')
-        .max(MAX_WATCH_COUNT, `Use at most ${String(MAX_WATCH_COUNT)} times`),
+        .number('movies.form.timesRequired')
+        .int('movies.form.timesRequired')
+        .min(1, 'movies.form.timesRequired')
+        .max(
+          MAX_WATCH_COUNT,
+          messageKey('movies.form.maxTimes', { count: MAX_WATCH_COUNT }),
+        ),
     ),
   review: optionalText(REVIEW_MAX_LENGTH),
   isFavorite: z.boolean(),
@@ -109,10 +113,10 @@ export function toUpdateMovieBody({
 }
 
 export const MOVIE_FORM_MESSAGES = {
-  created: 'Movie logged',
-  updated: 'Movie updated',
-  saveFailed: "Couldn't save the movie. Try again.",
-  posterNotSaved: 'Movie saved, but the poster was not uploaded.',
-  unexpected: "Couldn't log the movie. Try again.",
-  posterNotSent: 'Movie logged, but the poster was not uploaded.',
+  created: 'movies.form.created',
+  updated: 'movies.form.updated',
+  saveFailed: 'movies.form.saveFailed',
+  posterNotSaved: 'movies.form.posterNotSaved',
+  unexpected: 'movies.form.unexpected',
+  posterNotSent: 'movies.form.posterNotSent',
 } as const;

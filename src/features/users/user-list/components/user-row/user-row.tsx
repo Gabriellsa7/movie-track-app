@@ -7,10 +7,17 @@ import { formatAverage } from '@/lib/stats';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { formatMoviesCount, formatSince } from '@/lib/users';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 export function UserRow({ user }: { user: IUserSummary }) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const scheme = useAppTheme();
-  const details = `${formatMoviesCount(user.moviesCount)} · since ${formatSince(user.memberSince)}`;
+  const details = t('users.since', {
+    movies: formatMoviesCount(user.moviesCount, language),
+    date: formatSince(user.memberSince, language),
+  });
 
   return (
     <Link
@@ -19,11 +26,15 @@ export function UserRow({ user }: { user: IUserSummary }) {
     >
       <Pressable
         accessibilityRole="link"
-        accessibilityLabel={`${user.name}, ${details}${
+        accessibilityLabel={
           user.averageRating === null
-            ? ''
-            : `, average rating ${formatAverage(user.averageRating)}`
-        }`}
+            ? t('users.rowLabel', { name: user.name, details })
+            : t('users.rowLabelWithRating', {
+                name: user.name,
+                details,
+                rating: formatAverage(user.averageRating, language),
+              })
+        }
         className="flex-row items-center gap-3 px-3.5 py-3 active:opacity-80"
       >
         <UserAvatar
@@ -51,7 +62,7 @@ export function UserRow({ user }: { user: IUserSummary }) {
               color={color(scheme, 'star-filled-color')}
             />
             <Text className="font-semibold text-sm text-primary-text-color">
-              {formatAverage(user.averageRating)}
+              {formatAverage(user.averageRating, language)}
             </Text>
           </View>
         )}

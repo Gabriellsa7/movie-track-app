@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native';
 import type { IWatchlistItem } from '@/api/types';
-import { PRIORITY_SHORT_LABELS } from '@/lib/watchlist';
+import { priorityLabel, priorityShortLabel } from '@/lib/watchlist';
+import { useLanguage } from '@/i18n';
 
 const STYLES: Record<
   IWatchlistItem['priority'],
@@ -19,15 +20,16 @@ export function PriorityBadge({
 }: {
   priority: IWatchlistItem['priority'];
 }) {
+  const language = useLanguage();
   const style = STYLES[priority];
 
   return (
     <View
-      accessibilityLabel={`${PRIORITY_SHORT_LABELS[priority]} priority`}
+      accessibilityLabel={priorityLabel(priority, language)}
       className={`h-[22px] justify-center rounded-full px-2 ${style.box}`}
     >
       <Text className={`font-semibold text-[11px] ${style.text}`}>
-        {PRIORITY_SHORT_LABELS[priority]}
+        {priorityShortLabel(priority, language)}
       </Text>
     </View>
   );

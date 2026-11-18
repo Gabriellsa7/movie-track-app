@@ -1,8 +1,15 @@
-import { SHORT_MONTHS } from '@/lib/stats';
+import type { TLanguage } from '@/i18n';
+import { formatDate } from '@/i18n/format';
 
-export function formatWatchedDate(isoDate: string): string {
-  const date = new Date(isoDate);
-  return `${SHORT_MONTHS[date.getUTCMonth()] ?? ''} ${String(date.getUTCDate())}, ${String(date.getUTCFullYear())}`;
+export function formatWatchedDate(
+  isoDate: string,
+  language: TLanguage,
+): string {
+  return formatDate(
+    new Date(isoDate),
+    { day: 'numeric', month: 'short', year: 'numeric' },
+    language,
+  );
 }
 
 export function formatRuntime(durationMinutes: number): string {

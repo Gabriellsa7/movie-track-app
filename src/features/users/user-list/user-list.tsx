@@ -12,11 +12,13 @@ import { useUserPagesQuery } from '../api/get-users';
 import { UserRow } from './components/user-row/user-row';
 import { UserRowSkeleton } from './components/user-row-skeleton/user-row-skeleton';
 import { UsersEmpty } from './components/users-empty/users-empty';
+import { useTranslation } from 'react-i18next';
 
 const SEARCH_DEBOUNCE_MILLISECONDS = 300;
 const SKELETON_ROWS = [0, 1, 2, 3, 4];
 
 export function UsersScreen() {
+  const { t } = useTranslation();
   const myUserId = useSessionStore((state) => state.userId);
   const [searchText, setSearchText] = useState('');
   const search = useDebouncedValue(
@@ -44,7 +46,7 @@ export function UsersScreen() {
     if (isError) {
       return (
         <SectionError
-          message="Couldn't load the users."
+          message={t('users.loadFailed')}
           onRetry={() => void refetch()}
         />
       );
@@ -77,14 +79,14 @@ export function UsersScreen() {
                 accessibilityRole="header"
                 className="font-display text-title-sm tracking-[1px] text-primary-text-color"
               >
-                Users
+                {t('users.title')}
               </Text>
               <Text className="font-sans text-caption text-tertiary-text-color">
-                See what other people are watching
+                {t('users.subtitle')}
               </Text>
             </View>
             <SearchField
-              label="Search by name"
+              label={t('users.search')}
               value={searchText}
               onChangeText={setSearchText}
             />

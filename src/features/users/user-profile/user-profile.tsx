@@ -10,7 +10,7 @@ import { FilterChip } from '@/components/filter-chip';
 import { OptionSheet } from '@/components/option-sheet';
 import { SectionError } from '@/components/section-error';
 import {
-  MOVIE_SORT_OPTIONS,
+  movieSortOptions,
   movieSortLabel,
   movieSortQuery,
   type TMovieSortKey,
@@ -27,8 +27,12 @@ import { ProfileMoviesSkeleton } from './components/profile-movies-skeleton/prof
 import { ProfileSkeleton } from './components/profile-skeleton/profile-skeleton';
 import { ProfileStats } from './components/profile-stats/profile-stats';
 import { ProfileTopBar } from '../components/profile-top-bar/profile-top-bar';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 export function UserProfileScreen() {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const { userId } = useLocalSearchParams<{ userId: string }>();
   const [sort, setSort] = useState<TMovieSortKey>('rating');
   const [isSortOpen, setIsSortOpen] = useState(false);
@@ -43,7 +47,7 @@ export function UserProfileScreen() {
   function share() {
     if (user) {
       void shareLink(
-        `${user.name}'s movies on Movie Track:`,
+        t('users.profile.shareMessage', { name: user.name }),
         Linking.createURL(`/users/${user.id}`),
       );
     }
@@ -57,10 +61,10 @@ export function UserProfileScreen() {
           <ProfileStats user={user} />
           <View className="flex-row items-center justify-between">
             <Text className="font-semibold text-base text-primary-text-color">
-              Movies
+              {t('users.profile.movies')}
             </Text>
             <FilterChip
-              label={movieSortLabel(sort)}
+              label={movieSortLabel(sort, language)}
               active={false}
               withMenu
               onPress={() => {
@@ -76,11 +80,11 @@ export function UserProfileScreen() {
     }
     return ApiError.from(profile.error).is(EApiErrorCode.USER_NOT_FOUND) ? (
       <Text className="font-sans text-base text-secondary-text-color">
-        This user no longer exists.
+        {t('users.profile.notFound')}
       </Text>
     ) : (
       <SectionError
-        message="Couldn't load this profile."
+        message={t('users.profile.loadFailed')}
         onRetry={() => void profile.refetch()}
       />
     );
@@ -96,14 +100,14 @@ export function UserProfileScreen() {
     if (movies.isError) {
       return (
         <SectionError
-          message="Couldn't load their movies."
+          message={t('users.profile.moviesLoadFailed')}
           onRetry={() => void movies.refetch()}
         />
       );
     }
     return (
       <Text className="font-sans text-sm text-tertiary-text-color">
-        No movies logged yet.
+        {t('users.profile.noMovies')}
       </Text>
     );
   }
@@ -118,9 +122,9 @@ export function UserProfileScreen() {
         ListHeaderComponent={
           <View className="gap-[18px] pb-[18px]">
             <ProfileTopBar
-              backLabel="Back"
+              backLabel={t('users.profile.back')}
               backTo={ROUTES.users}
-              shareLabel="Share profile"
+              shareLabel={t('users.profile.share')}
               onShare={user ? share : undefined}
             />
             {renderProfile()}
@@ -132,9 +136,9 @@ export function UserProfileScreen() {
         {...loadMore}
       />
       <OptionSheet<TMovieSortKey>
-        title="Sort movies"
+        title={t('users.profile.sortTitle')}
         visible={isSortOpen}
-        options={MOVIE_SORT_OPTIONS}
+        options={movieSortOptions(language)}
         selected={sort}
         onSelect={setSort}
         onClose={() => {

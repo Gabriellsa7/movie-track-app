@@ -1,3 +1,4 @@
+import { messageKey } from '@/i18n/message';
 import { z, type input as TInput, type output as TOutput } from 'zod';
 import type {
   INewWatchlistItemBody,
@@ -17,7 +18,10 @@ export const ITEM_FORM_SCHEMA = z.object({
   note: z
     .string()
     .trim()
-    .max(NOTE_MAX_LENGTH, `Use at most ${String(NOTE_MAX_LENGTH)} characters`),
+    .max(
+      NOTE_MAX_LENGTH,
+      messageKey('validation.maxLength', { count: NOTE_MAX_LENGTH }),
+    ),
   tmdbId: z.number().optional(),
   posterUrl: z.string().optional(),
   poster: z.custom<IUploadFile>().optional(),
@@ -39,10 +43,10 @@ export const ITEM_FORM_FIELDS = [
 ] as const;
 
 export const ITEM_FORM_MESSAGES = {
-  added: 'Added to your watchlist',
-  updated: 'Watchlist item updated',
-  posterNotSent: 'Saved, but the poster was not uploaded.',
-  unexpected: "Couldn't save it. Try again.",
+  added: 'watchlist.form.added',
+  updated: 'watchlist.form.updated',
+  posterNotSent: 'watchlist.form.posterNotSent',
+  unexpected: 'watchlist.form.unexpected',
 } as const;
 
 export function itemFormDefaultValues(

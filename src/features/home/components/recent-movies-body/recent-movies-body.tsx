@@ -3,6 +3,7 @@ import { useMoviesQuery } from '@/api/get-movies';
 import { SectionError } from '@/components/section-error';
 import { Skeleton } from '@/components/skeleton';
 import { RecentMovieCard } from '../recent-movie-card/recent-movie-card';
+import { useTranslation } from 'react-i18next';
 
 export const RECENT_MOVIES_QUERY = {
   sort: 'watchedAt',
@@ -11,6 +12,7 @@ export const RECENT_MOVIES_QUERY = {
 } as const;
 
 export function RecentMoviesBody() {
+  const { t } = useTranslation();
   const { data, isPending, isError, refetch } =
     useMoviesQuery(RECENT_MOVIES_QUERY);
 
@@ -29,7 +31,7 @@ export function RecentMoviesBody() {
   if (isError) {
     return (
       <SectionError
-        message="Couldn't load your movies."
+        message={t('home.recent.loadFailed')}
         onRetry={() => void refetch()}
       />
     );
@@ -38,10 +40,10 @@ export function RecentMoviesBody() {
     return (
       <View className="gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-4">
         <Text className="font-semibold text-sm text-primary-text-color">
-          No movies logged yet
+          {t('home.recent.empty')}
         </Text>
         <Text className="font-sans text-caption text-tertiary-text-color">
-          Tap + to log your first one.
+          {t('movies.empty.hint')}
         </Text>
       </View>
     );

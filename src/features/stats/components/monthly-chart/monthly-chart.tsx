@@ -2,6 +2,9 @@ import { Text, View } from 'react-native';
 import type { IMonthCount } from '@/lib/stats';
 import type { IMonthsInsights } from '../../utils/stats.utils';
 import { Insight } from '../monthly-insight/monthly-insight';
+import { useTranslation } from 'react-i18next';
+import { formatDecimal } from '@/i18n/format';
+import { useLanguage } from '@/i18n';
 
 const CHART_HEIGHT = 120;
 const EMPTY_BAR_HEIGHT = 3;
@@ -13,6 +16,8 @@ interface IMonthlyChartProps {
 }
 
 export function MonthlyChart({ months, insights }: IMonthlyChartProps) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const max = Math.max(...months.map((month) => month.count), 1);
   const summary = months
     .map((month) => `${month.label}: ${String(month.count)}`)
@@ -23,7 +28,7 @@ export function MonthlyChart({ months, insights }: IMonthlyChartProps) {
       <View
         accessible
         accessibilityRole="image"
-        accessibilityLabel={`Movies watched per month. ${summary}`}
+        accessibilityLabel={t('stats.perMonth.label', { summary })}
         className="gap-1.5"
       >
         <View className="flex-row items-end gap-1.5">
@@ -72,9 +77,12 @@ export function MonthlyChart({ months, insights }: IMonthlyChartProps) {
         </View>
       </View>
       <View className="flex-row gap-3 border-t border-primary-border-color pt-3.5">
-        <Insight label="This month" value={String(insights.thisMonth)} />
         <Insight
-          label="Best month"
+          label={t('stats.perMonth.thisMonth')}
+          value={String(insights.thisMonth)}
+        />
+        <Insight
+          label={t('stats.perMonth.bestMonth')}
           value={
             insights.bestMonth
               ? `${insights.bestMonth.label} (${String(insights.bestMonth.count)})`
@@ -82,8 +90,8 @@ export function MonthlyChart({ months, insights }: IMonthlyChartProps) {
           }
         />
         <Insight
-          label="Monthly average"
-          value={String(insights.monthlyAverage)}
+          label={t('stats.perMonth.monthlyAverage')}
+          value={formatDecimal(insights.monthlyAverage, 1, language)}
         />
       </View>
     </View>

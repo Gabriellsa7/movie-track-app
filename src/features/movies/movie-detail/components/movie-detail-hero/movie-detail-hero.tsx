@@ -10,6 +10,7 @@ import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
 import { formatRuntime } from '@/lib/movie-format';
 import { HeroButton } from '../hero-button/hero-button';
+import { useTranslation } from 'react-i18next';
 
 const HERO_HEIGHT = 270;
 const BLUR_RADIUS = 40;
@@ -23,6 +24,7 @@ export function MovieDetailHero({
   movie,
   onMoreOptions,
 }: IMovieDetailHeroProps) {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
   const insets = useSafeAreaInsets();
   const iconColor = color(scheme, 'primary-text-color');
@@ -56,7 +58,7 @@ export function MovieDetailHero({
         style={{ top: insets.top + 8 }}
       >
         <HeroButton
-          label="Back"
+          label={t('movies.detail.back')}
           onPress={() => {
             goBackOr(ROUTES.movies);
           }}
@@ -64,7 +66,10 @@ export function MovieDetailHero({
           <ChevronLeft size={22} strokeWidth={2.4} color={iconColor} />
         </HeroButton>
         {onMoreOptions && (
-          <HeroButton label="More options" onPress={onMoreOptions}>
+          <HeroButton
+            label={t('movies.detail.moreOptions')}
+            onPress={onMoreOptions}
+          >
             <Ellipsis size={20} color={iconColor} />
           </HeroButton>
         )}

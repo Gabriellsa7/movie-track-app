@@ -1,25 +1,32 @@
 import { Text, View } from 'react-native';
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 interface IMoviesEmptyProps {
   search: string;
   filtered: boolean;
 }
 
-function messages(search: string, filtered: boolean): [string, string] {
+function messages(
+  t: TFunction,
+  search: string,
+  filtered: boolean,
+): [string, string] {
   if (search) {
     return [
-      `No movies found for “${search}”`,
-      'Check the title or try another search.',
+      t('movies.empty.searchTitle', { search }),
+      t('movies.empty.searchHint'),
     ];
   }
   if (filtered) {
-    return ['No movies match these filters', 'Try other filters.'];
+    return [t('movies.empty.filteredTitle'), t('movies.empty.filteredHint')];
   }
-  return ['No movies logged yet', 'Tap + to log your first one.'];
+  return [t('movies.empty.title'), t('movies.empty.hint')];
 }
 
 export function MoviesEmpty({ search, filtered }: IMoviesEmptyProps) {
-  const [title, hint] = messages(search, filtered);
+  const { t } = useTranslation();
+  const [title, hint] = messages(t, search, filtered);
 
   return (
     <View className="gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-4">

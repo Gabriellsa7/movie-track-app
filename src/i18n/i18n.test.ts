@@ -39,3 +39,17 @@ describe('When we show a validation message', () => {
     );
   });
 });
+
+describe('When we count things in words', () => {
+  it('should pick the singular or the plural in each language', async () => {
+    expect(i18n.t('stats.movie', { count: 1 })).toBe('1 movie');
+    expect(i18n.t('stats.rewatch', { count: 3 })).toBe('3 rewatches');
+
+    await act(() => {
+      useLanguageStore.setState({ preference: 'pt-BR' });
+    });
+
+    expect(i18n.t('stats.movie', { count: 1 })).toBe('1 filme');
+    expect(i18n.t('stats.rewatch', { count: 3 })).toBe('3 revisões');
+  });
+});

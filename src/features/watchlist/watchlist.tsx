@@ -20,6 +20,7 @@ import {
   type TWatchlistTab,
 } from './components/watchlist-tabs/watchlist-tabs';
 import { useWatchlistItemActions } from './hooks/use-watchlist-item-actions';
+import { useTranslation } from 'react-i18next';
 
 export const UPCOMING_QUERY: IListWatchlistQuery = {
   planned: true,
@@ -32,6 +33,7 @@ export const SOMEDAY_QUERY: IListWatchlistQuery = {
 const SKELETON_ROWS = [0, 1, 2];
 
 export function WatchlistScreen() {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<TWatchlistTab>('upcoming');
   const upcoming = useWatchlistPagesQuery(UPCOMING_QUERY);
   const someday = useWatchlistPagesQuery(SOMEDAY_QUERY);
@@ -56,7 +58,7 @@ export function WatchlistScreen() {
     if (active.isError) {
       return (
         <SectionError
-          message="Couldn't load your watchlist."
+          message={t('watchlist.loadFailed')}
           onRetry={() => void active.refetch()}
         />
       );
@@ -99,14 +101,14 @@ export function WatchlistScreen() {
           menuItem
             ? [
                 {
-                  label: 'Edit',
+                  label: t('watchlist.edit'),
                   icon: Pencil,
                   onPress: () => {
                     edit(menuItem);
                   },
                 },
                 {
-                  label: 'Remove from watchlist',
+                  label: t('watchlist.remove'),
                   icon: Trash2,
                   destructive: true,
                   onPress: () => {
@@ -119,7 +121,7 @@ export function WatchlistScreen() {
       />
       <FloatingAddButton
         href={ROUTES.newWatchlistItem}
-        label="Add to watchlist"
+        label={t('watchlist.add')}
       />
     </SafeAreaView>
   );

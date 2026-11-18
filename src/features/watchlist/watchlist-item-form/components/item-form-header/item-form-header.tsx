@@ -1,12 +1,14 @@
 import { Pressable, Text, View } from 'react-native';
 import { goBackOr } from '@/lib/navigation';
 import { ROUTES } from '@/routes/routes.constants';
+import { useTranslation } from 'react-i18next';
 
 export function closeItemForm() {
   goBackOr(ROUTES.watchlist);
 }
 
 export function ItemFormHeader({ title }: { title: string }) {
+  const { t } = useTranslation();
   return (
     <View className="h-14 flex-row items-center justify-center border-b border-primary-border-color px-3">
       <Pressable
@@ -15,7 +17,7 @@ export function ItemFormHeader({ title }: { title: string }) {
         className="absolute bottom-0 left-3 top-0 justify-center px-2"
       >
         <Text className="font-semibold text-[15px] text-secondary-text-color">
-          Cancel
+          {t('common.cancel')}
         </Text>
       </Pressable>
       <Text

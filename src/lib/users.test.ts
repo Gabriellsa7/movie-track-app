@@ -25,14 +25,14 @@ describe('When we show a user', () => {
   });
 
   it('should say since when they are a member', () => {
-    expect(formatSince('2025-01-15T10:00:00.000Z')).toBe('Jan 2025');
-    expect(formatMemberSince('2025-03-02T10:00:00.000Z')).toBe(
+    expect(formatSince('2025-01-15T10:00:00.000Z', 'en')).toBe('Jan 2025');
+    expect(formatMemberSince('2025-03-02T10:00:00.000Z', 'en')).toBe(
       'Member since March 2025',
     );
   });
 
   it('should count their movies', () => {
-    expect(formatMoviesCount(1)).toBe('1 movie');
-    expect(formatMoviesCount(214)).toBe('214 movies');
+    expect(formatMoviesCount(1, 'en')).toBe('1 movie');
+    expect(formatMoviesCount(214, 'en')).toBe('214 movies');
   });
 });
