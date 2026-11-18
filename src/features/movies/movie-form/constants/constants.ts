@@ -5,6 +5,7 @@ import {
   MOVIE_DETAILS_SHAPE,
   optionalText,
 } from '@/lib/validation/movie-details';
+import { sharedPosterUrl } from '@/lib/shared-poster';
 import {
   ratingSchema,
   toIsoDate,
@@ -73,6 +74,24 @@ export function movieFormDefaultValues(
     isFavorite: movie?.isFavorite ?? false,
     tmdbId: movie?.tmdbId,
     posterUrl: movie?.posterUrl,
+  };
+}
+
+export function movieTemplateValues(
+  template: IMovie,
+): Partial<IMovieFormInput> {
+  return {
+    ...movieFormDefaultValues(),
+    title: template.title,
+    synopsis: template.synopsis,
+    releaseYear: String(template.releaseYear),
+    genreIds: template.genreIds,
+    director: template.director ?? '',
+    durationMinutes: template.durationMinutes
+      ? String(template.durationMinutes)
+      : '',
+    tmdbId: template.tmdbId,
+    posterUrl: sharedPosterUrl(template.posterUrl),
   };
 }
 

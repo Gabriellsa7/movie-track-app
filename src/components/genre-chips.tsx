@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 
-export function MovieGenreChips({ names }: { names: string[] }) {
+export function GenreChips({ names }: { names: string[] }) {
   if (names.length === 0) {
     return null;
   }

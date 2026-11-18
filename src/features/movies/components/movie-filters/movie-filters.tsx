@@ -4,10 +4,11 @@ import { useGenresQuery } from '@/api/get-genres';
 import { OptionSheet, type IOption } from '@/components/option-sheet';
 import {
   MOVIE_SORT_OPTIONS,
-  type IMovieFilters,
+  movieSortLabel,
   type TMovieSortKey,
-} from '../../constants/constants';
-import { FilterChip } from '../filter-chip/filter-chip';
+} from '@/lib/movie-sort';
+import type { IMovieFilters } from '../../constants/constants';
+import { FilterChip } from '@/components/filter-chip';
 
 interface IMovieFiltersProps {
   filters: IMovieFilters;
@@ -29,9 +30,7 @@ export function MovieFilters({ filters, onChange }: IMovieFiltersProps) {
   const genreName = genres.data?.find(
     (genre) => genre.id === filters.genreId,
   )?.name;
-  const sortLabel =
-    MOVIE_SORT_OPTIONS.find((option) => option.value === filters.sort)?.label ??
-    '';
+  const sortLabel = movieSortLabel(filters.sort);
 
   function close() {
     setSheet(null);

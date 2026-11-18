@@ -3,13 +3,13 @@ import { FlatList, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMoviesQuery } from '@/api/get-movies';
 import { NewMovieButton } from '@/components/new-movie-button';
+import { SearchField } from '@/components/search-field';
 import { SectionError } from '@/components/section-error';
 import { useDebouncedValue } from '@/lib/use-debounced-value';
 import { useRefreshControl } from '@/lib/use-refresh-control';
 import { MovieCard } from './components/movie-card/movie-card';
 import { MovieCardSkeleton } from './components/movie-card-skeleton/movie-card-skeleton';
 import { MovieFilters } from './components/movie-filters/movie-filters';
-import { MovieSearch } from './components/movie-search/movie-search';
 import { MoviesEmpty } from './components/movies-empty/movies-empty';
 import { MoviesHeader } from './components/movies-header/movies-header';
 import {
@@ -75,7 +75,11 @@ export function MoviesScreen() {
         ListHeaderComponent={
           <View className="gap-4 pb-4">
             <MoviesHeader total={page?.total} />
-            <MovieSearch value={searchText} onChangeText={setSearchText} />
+            <SearchField
+              label="Search movies"
+              value={searchText}
+              onChangeText={setSearchText}
+            />
             <MovieFilters filters={filters} onChange={setFilters} />
           </View>
         }

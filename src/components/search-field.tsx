@@ -3,12 +3,13 @@ import { TextInput, View } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 
-interface IMovieSearchProps {
+interface ISearchFieldProps {
+  label: string;
   value: string;
   onChangeText: (value: string) => void;
 }
 
-export function MovieSearch({ value, onChangeText }: IMovieSearchProps) {
+export function SearchField({ label, value, onChangeText }: ISearchFieldProps) {
   const scheme = useAppTheme();
 
   return (
@@ -19,8 +20,8 @@ export function MovieSearch({ value, onChangeText }: IMovieSearchProps) {
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        accessibilityLabel="Search movies"
-        placeholder="Search movies"
+        accessibilityLabel={label}
+        placeholder={label}
         placeholderTextColor={color(scheme, 'tertiary-text-color')}
         autoCapitalize="none"
         autoCorrect={false}
