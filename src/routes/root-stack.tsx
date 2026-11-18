@@ -13,6 +13,7 @@ export function RootStack() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={isAuthenticated} redirectTo={ROUTES.login}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="stats" />
         <Stack.Screen name="movies/new" options={MODAL} />
         <Stack.Screen name="movies/[movieId]/index" />
         <Stack.Screen name="movies/[movieId]/edit" options={MODAL} />

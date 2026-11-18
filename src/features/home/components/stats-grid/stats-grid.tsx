@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import type { IUserStats } from '@/api/types';
 import { Skeleton } from '@/components/skeleton';
-import { formatAverage, formatHours } from '../../utils/home.utils';
+import { formatAverage, formatHours } from '@/lib/stats';
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
@@ -35,7 +35,7 @@ export function StatsGrid({ stats }: { stats: IUserStats | undefined }) {
   }
 
   return (
-    <View accessibilityLabel="Resumo" className="flex-row flex-wrap gap-2.5">
+    <View accessibilityLabel="Summary" className="flex-row flex-wrap gap-2.5">
       <StatCard label="Movies" value={String(stats.totalMovies)} />
       <StatCard
         label="Average rating"
