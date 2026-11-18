@@ -1,5 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
+import { toast } from 'sonner-native';
 import { startSession } from '@/lib/session/session';
 import { apiErrorReply, mockApi } from '@/test/mock-api';
 import { LoginForm } from './login-form';
@@ -57,6 +58,20 @@ describe('When we submit the login form', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'E-mail ou senha incorretos',
     );
+    expect(toast.error).toHaveBeenCalledWith('E-mail ou senha incorretos');
+  });
+
+  it('should warn in a toast when the server cannot be reached', async () => {
+    mockApi.onPost('/auth/login').networkError();
+    await renderForm();
+
+    await fillAndSubmit('gabriel@email.com', 'senha1234');
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Sem conexão com o servidor. Verifique sua internet e tente de novo.',
+      );
+    });
   });
 
   it('should show a generic message on any other failure', async () => {

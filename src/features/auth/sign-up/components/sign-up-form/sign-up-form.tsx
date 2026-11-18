@@ -2,12 +2,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { useForm, useWatch } from 'react-hook-form';
 import { Pressable, Text, View } from 'react-native';
+import { toast } from 'sonner-native';
 import { login } from '@/api/services/auth.service';
 import { signUp } from '@/api/services/user.service';
 import { PasswordField } from '@/components/form/password-field';
 import { PasswordRules } from '@/components/form/password-rules';
 import { TextField } from '@/components/form/text-field';
 import { applyApiErrors } from '@/lib/forms/apply-api-errors';
+import { authErrorMessage } from '@/lib/forms/auth-error-message';
 import { startSession } from '@/lib/session/session';
 import { ROUTES } from '@/routes/routes.constants';
 import {
@@ -40,9 +42,14 @@ export function SignUpForm() {
       });
       await startSession(tokens);
     } catch (error) {
+      const message = authErrorMessage(
+        error,
+        SIGN_UP_ERROR_MESSAGES.unexpected,
+      );
       if (!applyApiErrors(error, setError, SIGN_UP_FIELDS)) {
-        setError('root', { message: SIGN_UP_ERROR_MESSAGES.unexpected });
+        setError('root', { message });
       }
+      toast.error(message);
     }
   };
 
