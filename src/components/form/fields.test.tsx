@@ -2,10 +2,19 @@ import { fireEvent, render, screen } from '@testing-library/react-native';
 import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Text } from 'react-native';
+import {
+  initialWindowMetrics,
+  SafeAreaProvider,
+} from 'react-native-safe-area-context';
 import { DateField } from './date-field';
 import { PasswordField } from './password-field';
 import { TextAreaField } from './text-area-field';
 import { TextField } from './text-field';
+
+const TEST_METRICS = initialWindowMetrics ?? {
+  frame: { x: 0, y: 0, width: 390, height: 844 },
+  insets: { top: 0, left: 0, right: 0, bottom: 0 },
+};
 
 interface IForm {
   email: string;
@@ -50,7 +59,11 @@ function Harness({ error }: { error?: string }) {
 
 describe('When we fill the form fields', () => {
   it('should keep the typed value in the form and show the hint', async () => {
-    await render(<Harness />);
+    await render(
+      <SafeAreaProvider initialMetrics={TEST_METRICS}>
+        <Harness />
+      </SafeAreaProvider>,
+    );
 
     await fireEvent.changeText(
       screen.getByLabelText('E-mail'),
@@ -62,14 +75,22 @@ describe('When we fill the form fields', () => {
   });
 
   it('should show the error in place of the hint', async () => {
-    await render(<Harness error="Enter a valid e-mail" />);
+    await render(
+      <SafeAreaProvider initialMetrics={TEST_METRICS}>
+        <Harness error="Enter a valid e-mail" />
+      </SafeAreaProvider>,
+    );
 
     expect(screen.getByRole('alert')).toHaveTextContent('Enter a valid e-mail');
     expect(screen.queryByText('Usado no login')).toBeNull();
   });
 
   it('should toggle the password visibility', async () => {
-    await render(<Harness />);
+    await render(
+      <SafeAreaProvider initialMetrics={TEST_METRICS}>
+        <Harness />
+      </SafeAreaProvider>,
+    );
 
     expect(screen.getByLabelText('Password')).toHaveProp(
       'secureTextEntry',
@@ -84,14 +105,23 @@ describe('When we fill the form fields', () => {
     );
   });
 
-  it('should show the date in English and open the picker', async () => {
-    await render(<Harness />);
+  it('should show the date in English and pick another day in the calendar', async () => {
+    await render(
+      <SafeAreaProvider initialMetrics={TEST_METRICS}>
+        <Harness />
+      </SafeAreaProvider>,
+    );
 
-    const dateButton = screen.getByRole('button', {
-      name: 'Watched on: 10/12/2026',
-    });
-    await fireEvent.press(dateButton);
+    await fireEvent.press(
+      screen.getByRole('button', { name: 'Watched on: 10/12/2026' }),
+    );
+    expect(await screen.findByText('October 2026')).toBeOnTheScreen();
+    await fireEvent.press(
+      screen.getByRole('button', { name: 'Thursday, October 15' }),
+    );
 
-    expect(dateButton).toBeOnTheScreen();
+    expect(
+      await screen.findByRole('button', { name: 'Watched on: 10/15/2026' }),
+    ).toBeOnTheScreen();
   });
 });

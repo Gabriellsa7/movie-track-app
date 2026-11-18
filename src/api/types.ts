@@ -42,6 +42,7 @@ export interface IListWatchlistQuery extends TQuery<'getWatchlist'> {}
 export interface ITmdbMovie extends TSchema<'MovieSearchResult'> {}
 export interface ITmdbMoviePage extends TSchema<'MovieSearchPage'> {}
 export interface ITmdbSearchQuery extends TQuery<'searchTmdbMovies'> {}
+export interface ITmdbMovieDetails extends TSchema<'MovieSearchDetails'> {}
 
 export interface IApiErrorBody extends TSchema<'Error'> {}
 export interface IFieldError extends TSchema<'FieldError'> {}

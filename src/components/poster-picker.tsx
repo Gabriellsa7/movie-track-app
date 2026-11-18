@@ -13,6 +13,7 @@ interface IPosterPickerProps {
   title: string;
   photo: IUploadFile | undefined;
   posterUrl: string | undefined;
+  posterUrlLabel?: string;
   onPick: (photo: IUploadFile) => void;
   onRemove: () => void;
 }
@@ -21,6 +22,7 @@ export function PosterPicker({
   title,
   photo,
   posterUrl,
+  posterUrlLabel = 'Poster from TMDB',
   onPick,
   onRemove,
 }: IPosterPickerProps) {
@@ -74,7 +76,7 @@ export function PosterPicker({
             {photo
               ? 'Photo from your phone'
               : posterUrl
-                ? 'Poster from TMDB'
+                ? posterUrlLabel
                 : 'Optional · JPEG, PNG or WebP up to 5 MB'}
           </Text>
         </View>

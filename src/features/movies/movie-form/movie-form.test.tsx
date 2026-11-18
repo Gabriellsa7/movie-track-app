@@ -207,9 +207,17 @@ describe('When we fill the form from TMDB', () => {
 
   it('should fill the movie and send the TMDB poster as a link', async () => {
     mockApi.onPost('/movies').reply(201, A_MOVIE);
+    mockApi.onGet('/tmdb/movies/693134').reply(200, {
+      tmdbId: 693134,
+      director: 'Denis Villeneuve',
+      durationMinutes: 166,
+    });
     await renderForm();
 
     await pickFromTmdb();
+    expect(
+      await screen.findByText('Denis Villeneuve · 166 min'),
+    ).toBeOnTheScreen();
     expect(screen.getByText('Duna: Parte Dois')).toBeOnTheScreen();
     expect(screen.getByText('Science Fiction')).toBeOnTheScreen();
     expect(screen.queryByLabelText('Title')).toBeNull();
@@ -224,6 +232,8 @@ describe('When we fill the form from TMDB', () => {
       releaseYear: 2024,
       synopsis: TMDB_DUNE.synopsis,
       genreIds: ['genre-2'],
+      director: 'Denis Villeneuve',
+      durationMinutes: 166,
       tmdbId: 693134,
       posterUrl: TMDB_DUNE.posterUrl,
     });

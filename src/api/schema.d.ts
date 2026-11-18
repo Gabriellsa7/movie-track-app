@@ -536,6 +536,53 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tmdb/movies/{tmdbId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the director and runtime of a TMDB movie
+         * @description What a search result lacks, to prefill a movie or watchlist item after picking it: director (several joined by commas) and durationMinutes. Each is left out when TMDB does not have it.
+         */
+        get: operations["getTmdbMovieDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/watchlist/{id}/poster": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The ID of the watchlist item */
+                id: components["parameters"]["WatchlistItemId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Upload the poster of a movie in my watchlist
+         * @description Stores the image in Cloudinary and sets it as the poster, replacing (and deleting) any previous uploaded poster. JPEG, PNG or WebP, up to 5 MB. When the item is marked as watched, the movie keeps this poster.
+         */
+        put: operations["uploadWatchlistItemPoster"];
+        post?: never;
+        /**
+         * Remove the poster of a movie in my watchlist
+         * @description Clears the poster and deletes the uploaded file. A no-op when there is no poster.
+         */
+        delete: operations["removeWatchlistItemPoster"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/watchlist/{id}/watched": {
         parameters: {
             query?: never;
@@ -823,6 +870,13 @@ export interface components {
             posterUrl?: string;
             /** @description Ids from GET /genres; TMDB genres outside that list are left out */
             genreIds: string[];
+        };
+        MovieSearchDetails: {
+            tmdbId: number;
+            /** @example Fernando Meirelles, Kátia Lund */
+            director?: string;
+            /** @example 130 */
+            durationMinutes?: number;
         };
         MovieSearchPage: {
             items: components["schemas"]["MovieSearchResult"][];
@@ -2649,6 +2703,126 @@ export interface operations {
                     "application/json": components["schemas"]["Error"];
                 };
             };
+            default: components["responses"]["UnexpectedError"];
+        };
+    };
+    getTmdbMovieDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example 598 */
+                tmdbId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The movie details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MovieSearchDetails"];
+                };
+            };
+            400: components["responses"]["ValidationFailed"];
+            401: components["responses"]["Unauthorized"];
+            /** @description TMDB has no movie with this id (TMDB_MOVIE_NOT_FOUND) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "message": "Movie not found in TMDB",
+                     *       "status": 404,
+                     *       "code": "TMDB_MOVIE_NOT_FOUND"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            500: components["responses"]["ServerError"];
+            /** @description TMDB did not answer or rejected the request (MOVIE_CATALOG_UNAVAILABLE) */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "message": "Movie catalog unavailable",
+                     *       "status": 503,
+                     *       "code": "MOVIE_CATALOG_UNAVAILABLE"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            default: components["responses"]["UnexpectedError"];
+        };
+    };
+    uploadWatchlistItemPoster: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The ID of the watchlist item */
+                id: components["parameters"]["WatchlistItemId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["PosterUpload"];
+            };
+        };
+        responses: {
+            /** @description Poster uploaded */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchlistItem"];
+                };
+            };
+            400: components["responses"]["ValidationFailed"];
+            401: components["responses"]["Unauthorized"];
+            404: components["responses"]["WatchlistItemNotFound"];
+            422: components["responses"]["InvalidPoster"];
+            500: components["responses"]["ServerError"];
+            default: components["responses"]["UnexpectedError"];
+        };
+    };
+    removeWatchlistItemPoster: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The ID of the watchlist item */
+                id: components["parameters"]["WatchlistItemId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Poster removed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchlistItem"];
+                };
+            };
+            400: components["responses"]["ValidationFailed"];
+            401: components["responses"]["Unauthorized"];
+            404: components["responses"]["WatchlistItemNotFound"];
+            500: components["responses"]["ServerError"];
             default: components["responses"]["UnexpectedError"];
         };
     };

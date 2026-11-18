@@ -1,4 +1,3 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import {
   useController,
@@ -6,7 +5,8 @@ import {
   type FieldPath,
   type FieldValues,
 } from 'react-hook-form';
-import { Platform, Pressable, Text } from 'react-native';
+import { Pressable, Text } from 'react-native';
+import { CalendarSheet } from '@/components/calendar-sheet';
 import { toIsoDate } from '@/lib/validation/rules';
 import { FieldFrame, inputClassName } from './field-frame';
 
@@ -15,6 +15,7 @@ interface IDateFieldProps<TFields extends FieldValues, TTransformed = TFields> {
   name: FieldPath<TFields>;
   label: string;
   hint?: string;
+  minimumDate?: Date;
   maximumDate?: Date;
 }
 
@@ -37,6 +38,7 @@ export function DateField<TFields extends FieldValues, TTransformed = TFields>({
   name,
   label,
   hint,
+  minimumDate,
   maximumDate,
 }: IDateFieldProps<TFields, TTransformed>) {
   const {
@@ -45,11 +47,6 @@ export function DateField<TFields extends FieldValues, TTransformed = TFields>({
   } = useController({ control, name });
   const [open, setOpen] = useState(false);
   const error = fieldState.error?.message;
-
-  const onValueChange = (_event: unknown, date: Date) => {
-    setOpen(Platform.OS === 'ios');
-    onChange(toIsoDate(date));
-  };
 
   return (
     <FieldFrame label={label} error={error} hint={hint}>
@@ -65,17 +62,21 @@ export function DateField<TFields extends FieldValues, TTransformed = TFields>({
           {formatDate(value)}
         </Text>
       </Pressable>
-      {open && (
-        <DateTimePicker
-          value={fromIsoDate(value)}
-          mode="date"
-          maximumDate={maximumDate}
-          onValueChange={onValueChange}
-          onDismiss={() => {
-            setOpen(false);
-          }}
-        />
-      )}
+      <CalendarSheet
+        title={label}
+        visible={open}
+        selected={
+          typeof value === 'string' && value ? fromIsoDate(value) : undefined
+        }
+        minimumDate={minimumDate}
+        maximumDate={maximumDate}
+        onSelect={(date) => {
+          onChange(toIsoDate(date));
+        }}
+        onClose={() => {
+          setOpen(false);
+        }}
+      />
     </FieldFrame>
   );
 }

@@ -30,5 +30,6 @@ export const queryKeys = {
   },
   tmdb: {
     search: (query: ITmdbSearchQuery) => ['tmdb', 'search', query] as const,
+    details: (tmdbId: number) => ['tmdb', 'details', tmdbId] as const,
   },
 };
