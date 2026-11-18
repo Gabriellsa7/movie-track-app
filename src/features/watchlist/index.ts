@@ -1,3 +1,3 @@
 export { WatchlistItemFormScreen } from './watchlist-item-form/watchlist-item-form';
-export { WatchlistScreen } from './watchlist-item-list/watchlist-item-list';
+export { WatchlistScreen } from './watchlist';
 export { WatchlistWatchedScreen } from './watchlist-watched/watchlist-watched';

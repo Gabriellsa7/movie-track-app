@@ -35,12 +35,14 @@ export function useUpdateWatchlistItemMutation(itemId: string) {
         client.setQueriesData<IWatchlistPage>(
           { queryKey: queryKeys.watchlist.all },
           (page) =>
-            page && {
-              ...page,
-              items: page.items.map((item) =>
-                item.id === itemId ? { ...item, priority } : item,
-              ),
-            },
+            Array.isArray(page?.items)
+              ? {
+                  ...page,
+                  items: page.items.map((item) =>
+                    item.id === itemId ? { ...item, priority } : item,
+                  ),
+                }
+              : page,
         );
       }
       return { previous };

@@ -16,6 +16,7 @@ export const queryKeys = {
   watchlist: {
     all: ['watchlist'] as const,
     list: (query: IListWatchlistQuery) => ['watchlist', 'list', query] as const,
+    item: (itemId: string) => ['watchlist', 'item', itemId] as const,
   },
   users: {
     all: ['users'] as const,
