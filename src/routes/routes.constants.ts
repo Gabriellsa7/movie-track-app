@@ -12,5 +12,7 @@ export const ROUTES = {
   newWatchlistItem: '/watchlist/new',
   users: '/users',
   account: '/account',
+  accountDetails: '/account/details',
+  accountPassword: '/account/password',
   stats: '/stats',
 } as const;
