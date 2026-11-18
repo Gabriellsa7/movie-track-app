@@ -121,6 +121,44 @@ describe('When the access token expired', () => {
     expect(handlers.onSessionExpired).not.toHaveBeenCalled();
   });
 
+  it('should refresh and retry a request that went out without a token', async () => {
+    const handlers = handlersWith({ getAccessToken: jest.fn(() => null) });
+    mockApi
+      .onGet('/protected')
+      .reply((config) =>
+        authorizationOf(config) === 'Bearer new-token'
+          ? [200, { ok: true }]
+          : apiErrorReply(401, 'INVALID_TOKEN'),
+      );
+
+    const result = await apiClient.get<unknown>('/protected');
+
+    expect(result.data).toEqual({ ok: true });
+    expect(handlers.refreshAccessToken).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not refresh when a token was sent and refused', async () => {
+    const handlers = handlersWith();
+    mockApi.onGet('/protected').reply(...apiErrorReply(401, 'INVALID_TOKEN'));
+
+    await expect(apiClient.get('/protected')).rejects.toMatchObject({
+      code: 'INVALID_TOKEN',
+    });
+    expect(handlers.refreshAccessToken).not.toHaveBeenCalled();
+  });
+
+  it('should not refresh after wrong credentials', async () => {
+    const handlers = handlersWith({ getAccessToken: jest.fn(() => null) });
+    mockApi
+      .onPost('/auth/login')
+      .reply(...apiErrorReply(401, 'INVALID_CREDENTIALS'));
+
+    await expect(apiClient.post('/auth/login', {})).rejects.toMatchObject({
+      code: 'INVALID_CREDENTIALS',
+    });
+    expect(handlers.refreshAccessToken).not.toHaveBeenCalled();
+  });
+
   it('should not refresh a request that opted out', async () => {
     const handlers = handlersWith();
     mockApi

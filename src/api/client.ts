@@ -48,8 +48,12 @@ apiClient.interceptors.response.use(undefined, async (error: unknown) => {
   const config = axios.isAxiosError(error) ? error.config : undefined;
   const handlers = sessionHandlers;
 
+  const sentWithoutToken =
+    apiError.is(EApiErrorCode.INVALID_TOKEN) &&
+    config !== undefined &&
+    !config.headers.has('Authorization');
   const canRefresh =
-    apiError.is(EApiErrorCode.TOKEN_EXPIRED) &&
+    (apiError.is(EApiErrorCode.TOKEN_EXPIRED) || sentWithoutToken) &&
     config !== undefined &&
     !config.skipAuthRefresh &&
     !config.retriedAfterRefresh &&
