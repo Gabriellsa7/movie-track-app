@@ -7,10 +7,8 @@ import { SectionError } from '@/components/section-error';
 import { useDebouncedValue } from '@/lib/use-debounced-value';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
-import {
-  MovieCard,
-  MovieCardSkeleton,
-} from './components/movie-card/movie-card';
+import { MovieCard } from './components/movie-card/movie-card';
+import { MovieCardSkeleton } from './components/movie-card-skeleton/movie-card-skeleton';
 import { MovieSearch } from './components/movie-search/movie-search';
 import { MoviesEmpty } from './components/movies-empty/movies-empty';
 import { MoviesHeader } from './components/movies-header/movies-header';
