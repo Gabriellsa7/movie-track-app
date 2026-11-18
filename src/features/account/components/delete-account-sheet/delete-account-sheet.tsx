@@ -16,9 +16,10 @@ import { EApiErrorCode } from '@/api/error-codes';
 import { PasswordField } from '@/components/form/password-field';
 import { notifySaveError } from '@/lib/forms/notify-save-error';
 import { useDeleteAccountMutation } from '../../api/delete-account';
+import { useTranslation } from 'react-i18next';
 
 const DELETE_ACCOUNT_SCHEMA = z.object({
-  password: z.string().min(1, 'Enter your password'),
+  password: z.string().min(1, 'validation.passwordRequired'),
 });
 
 interface IDeleteAccountForm extends TInfer<typeof DELETE_ACCOUNT_SCHEMA> {}
@@ -33,6 +34,7 @@ export function DeleteAccountSheet({
   onClose,
 }: IDeleteAccountSheetProps) {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const deleteAccount = useDeleteAccountMutation();
   const {
     control,
@@ -53,13 +55,13 @@ export function DeleteAccountSheet({
   const onSubmit = async ({ password }: IDeleteAccountForm) => {
     try {
       await deleteAccount.mutateAsync(password);
-      toast.success('Your account was deleted');
+      toast.success(t('account.delete.deleted'));
     } catch (error) {
       if (ApiError.from(error).is(EApiErrorCode.INVALID_CREDENTIALS)) {
-        setError('password', { message: 'Wrong password' });
+        setError('password', { message: 'errors.wrongPassword' });
         return;
       }
-      notifySaveError(error, "Couldn't delete your account. Try again.");
+      notifySaveError(error, 'account.delete.failed');
     }
   };
 
@@ -75,7 +77,7 @@ export function DeleteAccountSheet({
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <Pressable
-          accessibilityLabel="Close"
+          accessibilityLabel={t('common.close')}
           onPress={close}
           className="flex-1 bg-overlay-bg-color/60"
         />
@@ -88,16 +90,15 @@ export function DeleteAccountSheet({
             accessibilityRole="header"
             className="font-semibold text-base text-primary-text-color"
           >
-            Delete account?
+            {t('account.delete.title')}
           </Text>
           <Text className="font-sans text-sm leading-5 text-tertiary-text-color">
-            Your movies, watchlist, posters and photo are deleted for good.
-            Enter your password to confirm.
+            {t('account.delete.body')}
           </Text>
           <PasswordField
             control={control}
             name="password"
-            label="Password"
+            label={t('auth.password')}
             autoComplete="current-password"
           />
           <Pressable
@@ -108,7 +109,9 @@ export function DeleteAccountSheet({
             className="mt-1 h-[52px] items-center justify-center rounded-xl border border-danger-border-color bg-danger-soft-bg-color disabled:opacity-60"
           >
             <Text className="font-semibold text-[15px] text-danger-text-color">
-              {isSubmitting ? 'Deleting…' : 'Delete my account'}
+              {isSubmitting
+                ? t('account.delete.deleting')
+                : t('account.delete.confirm')}
             </Text>
           </Pressable>
           <Pressable
@@ -117,7 +120,7 @@ export function DeleteAccountSheet({
             className="h-[52px] items-center justify-center"
           >
             <Text className="font-semibold text-[15px] text-secondary-text-color">
-              Cancel
+              {t('common.cancel')}
             </Text>
           </Pressable>
         </View>

@@ -14,13 +14,14 @@ import { startSession } from '@/lib/session/session';
 import { ROUTES } from '@/routes/routes.constants';
 import {
   SIGN_UP_DEFAULT_VALUES,
-  SIGN_UP_ERROR_MESSAGES,
   SIGN_UP_FIELDS,
   SIGN_UP_SCHEMA,
   type ISignUpForm,
 } from '../../constants/constants';
+import { useTranslation } from 'react-i18next';
 
 export function SignUpForm() {
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -41,10 +42,7 @@ export function SignUpForm() {
       });
       await startSession(tokens);
     } catch (error) {
-      const message = authErrorMessage(
-        error,
-        SIGN_UP_ERROR_MESSAGES.unexpected,
-      );
+      const message = authErrorMessage(error, 'auth.signUpScreen.unexpected');
       if (!applyApiErrors(error, setError, SIGN_UP_FIELDS)) {
         setError('root', { message });
       }
@@ -57,14 +55,14 @@ export function SignUpForm() {
       <TextField
         control={control}
         name="name"
-        label="Name or nickname"
+        label={t('auth.signUpScreen.name')}
         autoComplete="nickname"
         autoCapitalize="words"
       />
       <TextField
         control={control}
         name="email"
-        label="E-mail"
+        label={t('auth.email')}
         keyboardType="email-address"
         autoCapitalize="none"
         autoComplete="email"
@@ -72,7 +70,7 @@ export function SignUpForm() {
       <PasswordField
         control={control}
         name="password"
-        label="Password"
+        label={t('auth.password')}
         autoComplete="new-password"
       />
       <PasswordRules password={password} />
@@ -95,14 +93,16 @@ export function SignUpForm() {
           className="h-[52px] items-center justify-center rounded-xl bg-accent-bg-color active:bg-accent-hover-bg-color disabled:opacity-60"
         >
           <Text className="font-semibold text-base text-on-accent-text-color">
-            {isSubmitting ? 'Signing up…' : 'Sign up'}
+            {isSubmitting ? t('auth.signUpScreen.signingUp') : t('auth.signUp')}
           </Text>
         </Pressable>
 
         <Text className="text-center font-sans text-sm text-tertiary-text-color">
-          Already have an account?{' '}
+          {t('auth.signUpScreen.haveAccount')}{' '}
           <Link href={ROUTES.login} asChild>
-            <Text className="font-semibold text-accent-text-color">Log in</Text>
+            <Text className="font-semibold text-accent-text-color">
+              {t('auth.logIn')}
+            </Text>
           </Link>
         </Text>
       </View>

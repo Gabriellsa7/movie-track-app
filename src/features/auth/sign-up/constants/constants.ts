@@ -20,7 +20,3 @@ export const SIGN_UP_DEFAULT_VALUES: ISignUpForm = {
   email: '',
   password: '',
 };
-
-export const SIGN_UP_ERROR_MESSAGES = {
-  unexpected: "Couldn't create the account. Try again.",
-} as const;

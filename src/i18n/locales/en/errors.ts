@@ -1,0 +1,17 @@
+export const errors = {
+  noConnection: "Can't reach the server. Check your connection and try again.",
+  serviceUnavailable: 'Service unavailable right now. Try again in a moment.',
+  wrongCredentials: 'Wrong e-mail or password',
+  emailHasAccount: 'This e-mail already has an account',
+  tooManyAttempts: 'Too many attempts. Wait a few minutes and try again.',
+  invalidName: 'Invalid name',
+  invalidEmail: 'Invalid e-mail',
+  invalidPassword: 'Invalid password',
+  wrongPassword: 'Wrong password',
+  confirmPasswordToChangeEmail: 'Confirm your password to change the e-mail',
+  movieAlreadyLogged: "You've already logged this movie",
+  invalidRating: 'Invalid rating',
+  invalidYear: 'Invalid year',
+  dateInFuture: "The date can't be in the future",
+  invalidGenre: 'Invalid genre',
+};

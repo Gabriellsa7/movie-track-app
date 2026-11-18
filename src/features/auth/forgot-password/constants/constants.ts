@@ -8,7 +8,3 @@ export interface IForgotPasswordForm extends TInfer<
 > {}
 
 export const RESEND_WAIT_SECONDS = 60;
-
-export const FORGOT_PASSWORD_MESSAGES = {
-  unexpected: "Couldn't send the link. Try again.",
-} as const;

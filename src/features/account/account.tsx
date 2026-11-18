@@ -28,11 +28,14 @@ import { SettingsRow } from './components/settings-row/settings-row';
 import { ThemeSelect } from './components/theme-select/theme-select';
 import { VerifyEmailBanner } from './components/verify-email-banner/verify-email-banner';
 import { useAvatarActions } from './hooks/use-avatar-actions';
+import { useTranslation } from 'react-i18next';
+import { LanguageSelect } from './components/language-select/language-select';
 
 type TSheet = 'photo' | 'delete' | null;
 
 export function AccountScreen() {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
   const user = useSessionStore((state) => state.user);
   const account = useAccountQuery();
   const refreshControl = useRefreshControl(() => account.refetch());
@@ -47,14 +50,16 @@ export function AccountScreen() {
 
   const photoActions: IAction[] = [
     {
-      label: user.avatarUrl ? 'Choose another photo' : 'Choose photo',
+      label: user.avatarUrl
+        ? t('account.photo.chooseAnother')
+        : t('account.photo.choose'),
       icon: ImagePlus,
       onPress: () => void avatar.choose(),
     },
     ...(user.avatarUrl
       ? [
           {
-            label: 'Remove photo',
+            label: t('account.photo.remove'),
             icon: Trash2,
             destructive: true,
             onPress: avatar.remove,
@@ -66,10 +71,12 @@ export function AccountScreen() {
   function resend() {
     resendVerification.mutate(undefined, {
       onSuccess: () => {
-        toast.success(`We sent a new link to ${user?.email ?? 'your e-mail'}`);
+        toast.success(
+          t('account.verifyBanner.sent', { email: user?.email ?? '' }),
+        );
       },
       onError: (error) => {
-        notifySaveError(error, "Couldn't send the link. Try again.");
+        notifySaveError(error, 'account.verifyBanner.failed');
       },
     });
   }
@@ -88,7 +95,7 @@ export function AccountScreen() {
           accessibilityRole="header"
           className="font-display text-title-sm tracking-[1px] text-primary-text-color"
         >
-          Account
+          {t('account.title')}
         </Text>
 
         <AccountHeader
@@ -108,28 +115,28 @@ export function AccountScreen() {
 
         <View className="overflow-hidden rounded-[14px] border border-primary-border-color bg-secondary-bg-color">
           <SettingsRow
-            label="Name and e-mail"
+            label={t('account.rows.details')}
             icon={UserRound}
             onPress={() => {
               router.push(ROUTES.accountDetails);
             }}
           />
           <SettingsRow
-            label="Change password"
+            label={t('account.rows.password')}
             icon={Lock}
             onPress={() => {
               router.push(ROUTES.accountPassword);
             }}
           />
           <SettingsRow
-            label="My stats"
+            label={t('account.rows.stats')}
             icon={BarChart3}
             onPress={() => {
               router.push(ROUTES.stats);
             }}
           />
           <SettingsRow
-            label="View my public profile"
+            label={t('account.rows.profile')}
             icon={Eye}
             last
             onPress={() => {
@@ -142,6 +149,7 @@ export function AccountScreen() {
         </View>
 
         <ThemeSelect />
+        <LanguageSelect />
 
         <View className="mt-auto gap-1">
           <Pressable
@@ -155,7 +163,7 @@ export function AccountScreen() {
           >
             <LogOut size={20} color={color(scheme, 'primary-text-color')} />
             <Text className="font-semibold text-[15px] text-primary-text-color">
-              Log out
+              {t('account.logOut')}
             </Text>
           </Pressable>
           <Pressable
@@ -167,14 +175,14 @@ export function AccountScreen() {
           >
             <Trash2 size={20} color={color(scheme, 'danger-text-color')} />
             <Text className="font-semibold text-[15px] text-danger-text-color">
-              Delete account
+              {t('account.deleteAccount')}
             </Text>
           </Pressable>
         </View>
       </ScrollView>
 
       <ActionSheet
-        title="Profile photo"
+        title={t('account.photo.title')}
         visible={sheet === 'photo'}
         actions={photoActions}
         onClose={closeSheet}

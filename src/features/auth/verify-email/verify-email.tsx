@@ -13,9 +13,11 @@ import { useSessionStore } from '@/stores/session.store';
 import { color } from '@/theme/palette';
 import { useVerifyEmailMutation } from '../api/post-verify-email';
 import { ExpiredLink } from './components/expired-link/expired-link';
+import { useTranslation, Trans } from 'react-i18next';
 
 export function VerifyEmailScreen() {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
   const { token } = useLocalSearchParams<{ token?: string }>();
   const client = useQueryClient();
   const isLoggedIn = useSessionStore(
@@ -53,8 +55,7 @@ export function VerifyEmailScreen() {
         <ExpiredLink isLoggedIn={isLoggedIn} />
       ) : (
         <Text className="text-center font-sans text-[15px] text-secondary-text-color">
-          Couldn&apos;t confirm your e-mail. Check your connection and open the
-          link again.
+          {t('auth.verify.failed')}
         </Text>
       );
     }
@@ -72,19 +73,21 @@ export function VerifyEmailScreen() {
             accessibilityRole="header"
             className="text-center font-display text-[48px] leading-[48px] tracking-[1px] text-primary-text-color"
           >
-            E-mail confirmed
+            {t('auth.verify.confirmed')}
           </Text>
           <Text className="text-center font-sans text-[15px] leading-[22px] text-secondary-text-color">
             {user ? (
-              <>
-                All set,{' '}
-                <Text className="font-semibold text-primary-text-color">
-                  {user.email}
-                </Text>{' '}
-                is now confirmed.
-              </>
+              <Trans
+                i18nKey="auth.verify.confirmedEmail"
+                values={{ email: user.email }}
+                components={{
+                  bold: (
+                    <Text className="font-semibold text-primary-text-color" />
+                  ),
+                }}
+              />
             ) : (
-              'All set, your e-mail is now confirmed.'
+              t('auth.verify.confirmedNoEmail')
             )}
           </Text>
         </View>
@@ -94,7 +97,7 @@ export function VerifyEmailScreen() {
       <View className="items-center gap-4">
         <ActivityIndicator color={color(scheme, 'accent-text-color')} />
         <Text className="font-sans text-[15px] text-secondary-text-color">
-          Confirming your e-mail…
+          {t('auth.verify.confirming')}
         </Text>
       </View>
     );
@@ -112,7 +115,7 @@ export function VerifyEmailScreen() {
           className="mt-auto h-[52px] items-center justify-center rounded-xl bg-accent-bg-color active:bg-accent-hover-bg-color"
         >
           <Text className="font-semibold text-base text-on-accent-text-color">
-            {isLoggedIn ? 'Go to home' : 'Log in'}
+            {isLoggedIn ? t('auth.verify.goHome') : t('auth.logIn')}
           </Text>
         </Pressable>
       </View>

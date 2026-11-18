@@ -27,7 +27,7 @@ export async function pickImage(
   if (!checked.success) {
     return {
       status: 'invalid',
-      message: checked.error.issues[0]?.message ?? 'Invalid image',
+      message: checked.error.issues[0]?.message ?? 'validation.imageInvalid',
     };
   }
 

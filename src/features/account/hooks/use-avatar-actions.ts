@@ -5,6 +5,8 @@ import { notifySaveError } from '@/lib/forms/notify-save-error';
 import { pickImage } from '@/lib/pick-image';
 import { useRemoveAvatarMutation } from '../api/delete-avatar';
 import { useUploadAvatarMutation } from '../api/put-avatar';
+import { translateMessage } from '@/i18n/message';
+import { i18n } from '@/i18n';
 
 const AVATAR_ASPECT: [number, number] = [1, 1];
 
@@ -15,7 +17,7 @@ export function useAvatarActions() {
   async function choose() {
     const result = await pickImage(AVATAR_ASPECT);
     if (result.status === 'invalid') {
-      toast.error(result.message);
+      toast.error(translateMessage(result.message));
       return;
     }
     if (result.status !== 'picked') {
@@ -23,14 +25,14 @@ export function useAvatarActions() {
     }
     uploadAvatar.mutate(result.file, {
       onSuccess: () => {
-        toast.success('Photo updated');
+        toast.success(i18n.t('account.photo.updated'));
       },
       onError: (error) => {
         if (ApiError.from(error).is(EApiErrorCode.INVALID_AVATAR_TYPE)) {
-          toast.error('Use a JPEG, PNG or WebP image.');
+          toast.error(i18n.t('account.photo.invalidType'));
           return;
         }
-        notifySaveError(error, "Couldn't update your photo. Try again.");
+        notifySaveError(error, 'account.photo.updateFailed');
       },
     });
   }
@@ -38,10 +40,10 @@ export function useAvatarActions() {
   function remove() {
     removeAvatar.mutate(undefined, {
       onSuccess: () => {
-        toast.success('Photo removed');
+        toast.success(i18n.t('account.photo.removed'));
       },
       onError: (error) => {
-        notifySaveError(error, "Couldn't remove your photo. Try again.");
+        notifySaveError(error, 'account.photo.removeFailed');
       },
     });
   }

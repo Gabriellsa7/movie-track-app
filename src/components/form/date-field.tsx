@@ -9,6 +9,8 @@ import { Pressable, Text } from 'react-native';
 import { CalendarSheet } from '@/components/calendar-sheet';
 import { toIsoDate } from '@/lib/validation/rules';
 import { FieldFrame, inputClassName } from './field-frame';
+import { useTranslation } from 'react-i18next';
+import { currentLanguage } from '@/i18n';
 
 interface IDateFieldProps<TFields extends FieldValues, TTransformed = TFields> {
   control: Control<TFields, unknown, TTransformed>;
@@ -27,10 +29,10 @@ function fromIsoDate(value: unknown): Date {
   return new Date(year, month - 1, day);
 }
 
-function formatDate(value: unknown): string {
+function formatDate(value: unknown, emptyLabel: string): string {
   return typeof value === 'string' && value
-    ? fromIsoDate(value).toLocaleDateString('en-US')
-    : 'Pick a date';
+    ? fromIsoDate(value).toLocaleDateString(currentLanguage())
+    : emptyLabel;
 }
 
 export function DateField<TFields extends FieldValues, TTransformed = TFields>({
@@ -45,21 +47,23 @@ export function DateField<TFields extends FieldValues, TTransformed = TFields>({
     field: { value, onChange },
     fieldState,
   } = useController({ control, name });
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const dateLabel = formatDate(value, t('common.calendar.pickDate'));
   const error = fieldState.error?.message;
 
   return (
     <FieldFrame label={label} error={error} hint={hint}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={`${label}: ${formatDate(value)}`}
+        accessibilityLabel={`${label}: ${dateLabel}`}
         onPress={() => {
           setOpen(true);
         }}
         className={`justify-center ${inputClassName(Boolean(error))}`}
       >
         <Text className="font-sans text-base text-primary-text-color">
-          {formatDate(value)}
+          {dateLabel}
         </Text>
       </Pressable>
       <CalendarSheet

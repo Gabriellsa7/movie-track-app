@@ -19,13 +19,12 @@ export const ACCOUNT_DETAILS_FIELDS = [
 ] as const;
 
 export const ACCOUNT_DETAILS_MESSAGES = {
-  updated: 'Account updated',
-  verifyNewEmail:
-    'Account updated. Confirm the new e-mail with the link we sent.',
-  emailTaken: 'This e-mail is already in use',
-  wrongPassword: 'Wrong password',
-  passwordRequired: 'Enter your password to change the e-mail',
-  unexpected: "Couldn't save your account. Try again.",
+  updated: 'account.details.updated',
+  verifyNewEmail: 'account.details.verifyNewEmail',
+  emailTaken: 'account.details.emailTaken',
+  wrongPassword: 'errors.wrongPassword',
+  passwordRequired: 'account.details.passwordRequired',
+  unexpected: 'account.details.unexpected',
 } as const;
 
 export function accountDetailsDefaultValues(

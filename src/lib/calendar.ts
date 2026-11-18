@@ -1,6 +1,16 @@
 const DAYS_IN_WEEK = 7;
 
-export const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const;
+const SUNDAY = new Date(2023, 0, 1);
+
+export function weekdayLabels(locale: string): string[] {
+  return Array.from({ length: DAYS_IN_WEEK }, (_, index) =>
+    new Date(
+      SUNDAY.getFullYear(),
+      SUNDAY.getMonth(),
+      SUNDAY.getDate() + index,
+    ).toLocaleDateString(locale, { weekday: 'narrow' }),
+  );
+}
 
 export interface IMonth {
   year: number;
@@ -15,8 +25,8 @@ export function shiftMonth({ year, month }: IMonth, offset: number): IMonth {
   return monthOf(new Date(year, month + offset, 1));
 }
 
-export function monthTitle({ year, month }: IMonth): string {
-  return new Date(year, month, 1).toLocaleDateString('en-US', {
+export function monthTitle({ year, month }: IMonth, locale: string): string {
+  return new Date(year, month, 1).toLocaleDateString(locale, {
     month: 'long',
     year: 'numeric',
   });

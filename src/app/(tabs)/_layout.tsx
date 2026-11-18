@@ -7,6 +7,7 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import type { ColorValue } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
@@ -31,6 +32,7 @@ function tabIcon(Icon: LucideIcon) {
 
 export default function TabsLayout() {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
 
   return (
     <Tabs
@@ -47,23 +49,29 @@ export default function TabsLayout() {
     >
       <Tabs.Screen
         name="index"
-        options={{ title: 'Home', tabBarIcon: tabIcon(House) }}
+        options={{ title: t('navigation.home'), tabBarIcon: tabIcon(House) }}
       />
       <Tabs.Screen
         name="movies"
-        options={{ title: 'My movies', tabBarIcon: tabIcon(Film) }}
+        options={{ title: t('navigation.movies'), tabBarIcon: tabIcon(Film) }}
       />
       <Tabs.Screen
         name="watchlist"
-        options={{ title: 'Watchlist', tabBarIcon: tabIcon(Bookmark) }}
+        options={{
+          title: t('navigation.watchlist'),
+          tabBarIcon: tabIcon(Bookmark),
+        }}
       />
       <Tabs.Screen
         name="users"
-        options={{ title: 'Users', tabBarIcon: tabIcon(Users) }}
+        options={{ title: t('navigation.users'), tabBarIcon: tabIcon(Users) }}
       />
       <Tabs.Screen
         name="account"
-        options={{ title: 'Account', tabBarIcon: tabIcon(CircleUser) }}
+        options={{
+          title: t('navigation.account'),
+          tabBarIcon: tabIcon(CircleUser),
+        }}
       />
     </Tabs>
   );

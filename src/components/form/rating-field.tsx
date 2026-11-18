@@ -7,6 +7,8 @@ import {
 import { Text, View } from 'react-native';
 import { RatingStars } from '@/components/rating-stars';
 import { formatRating } from '@/lib/rating';
+import { useTranslation } from 'react-i18next';
+import { translateMessage } from '@/i18n/message';
 
 interface IRatingFieldProps<
   TFields extends FieldValues,
@@ -26,11 +28,12 @@ export function RatingField<
   } = useController({ control, name });
   const rating = value as number | undefined;
   const error = fieldState.error?.message;
+  const { t } = useTranslation();
 
   return (
     <View className="gap-1.5">
       <Text className="font-semibold text-[13px] text-primary-text-color">
-        Your rating *
+        {t('common.rating.yours')} *
       </Text>
       <View className="flex-row items-center justify-between">
         <RatingStars rating={rating} size={28} onChange={onChange} />
@@ -43,11 +46,11 @@ export function RatingField<
           accessibilityRole="alert"
           className="font-medium text-xs text-danger-text-color"
         >
-          {error}
+          {translateMessage(error)}
         </Text>
       ) : (
         <Text className="font-sans text-xs text-tertiary-text-color">
-          Tap the left half of a star for a half point
+          {t('common.rating.halfHint')}
         </Text>
       )}
     </View>

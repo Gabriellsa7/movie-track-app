@@ -20,12 +20,14 @@ import {
   ACCOUNT_PASSWORD_SCHEMA,
   type IAccountPasswordForm,
 } from './constants/constants';
+import { useTranslation } from 'react-i18next';
 
 function close() {
   goBackOr(ROUTES.account);
 }
 
 export function AccountPasswordScreen() {
+  const { t } = useTranslation();
   const changePassword = useChangePasswordMutation();
   const {
     control,
@@ -47,7 +49,7 @@ export function AccountPasswordScreen() {
         currentPassword,
         newPassword: password,
       });
-      toast.success(ACCOUNT_PASSWORD_MESSAGES.changed);
+      toast.success(t(ACCOUNT_PASSWORD_MESSAGES.changed));
       close();
     } catch (error) {
       if (ApiError.from(error).is(EApiErrorCode.INVALID_CREDENTIALS)) {
@@ -70,7 +72,7 @@ export function AccountPasswordScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <FormHeader
-          title="Change password"
+          title={t('account.password.title')}
           isSaving={isSubmitting}
           onCancel={close}
           onSave={() => void handleSubmit(onSubmit)()}
@@ -82,20 +84,20 @@ export function AccountPasswordScreen() {
           <PasswordField
             control={control}
             name="currentPassword"
-            label="Current password"
+            label={t('account.password.current')}
             autoComplete="current-password"
           />
           <PasswordField
             control={control}
             name="newPassword"
-            label="New password"
+            label={t('account.password.new')}
             autoComplete="new-password"
           />
           <PasswordRules password={newPassword} />
           <PasswordField
             control={control}
             name="confirmPassword"
-            label="Confirm the new password"
+            label={t('account.password.confirm')}
             autoComplete="new-password"
           />
         </ScrollView>

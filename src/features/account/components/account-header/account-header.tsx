@@ -4,6 +4,7 @@ import type { IUser } from '@/api/types';
 import { UserAvatar } from '@/components/user-avatar';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 interface IAccountHeaderProps {
   user: IUser;
@@ -17,6 +18,7 @@ export function AccountHeader({
   onEditPhoto,
 }: IAccountHeaderProps) {
   const scheme = useAppTheme();
+  const { t } = useTranslation();
 
   return (
     <View className="flex-row items-center gap-3.5">
@@ -29,7 +31,7 @@ export function AccountHeader({
         />
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Change photo"
+          accessibilityLabel={t('account.changePhoto')}
           accessibilityState={{ disabled: isSavingPhoto }}
           disabled={isSavingPhoto}
           onPress={onEditPhoto}

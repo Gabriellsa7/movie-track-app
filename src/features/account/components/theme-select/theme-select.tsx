@@ -1,53 +1,23 @@
-import { Pressable, Text, View } from 'react-native';
-import { useThemeStore, type TThemePreference } from '@/stores/theme.store';
-
-const THEMES: { value: TThemePreference; label: string }[] = [
-  { value: 'dark', label: 'Dark' },
-  { value: 'light', label: 'Light' },
-  { value: 'system', label: 'System' },
-];
+import { useTranslation } from 'react-i18next';
+import { useThemeStore } from '@/stores/theme.store';
+import { PreferenceSelect } from '../preference-select/preference-select';
 
 export function ThemeSelect() {
+  const { t } = useTranslation();
   const preference = useThemeStore((state) => state.preference);
   const setPreference = useThemeStore((state) => state.setPreference);
 
   return (
-    <View className="gap-2">
-      <Text className="font-semibold text-[13px] text-primary-text-color">
-        Appearance
-      </Text>
-      <View
-        accessibilityRole="radiogroup"
-        accessibilityLabel="Theme"
-        className="flex-row rounded-xl border border-primary-border-color bg-secondary-bg-color p-1"
-      >
-        {THEMES.map(({ value, label }) => {
-          const isSelected = preference === value;
-          return (
-            <Pressable
-              key={value}
-              accessibilityRole="radio"
-              accessibilityState={{ selected: isSelected }}
-              onPress={() => {
-                setPreference(value);
-              }}
-              className={`h-10 flex-1 items-center justify-center rounded-[9px] ${
-                isSelected ? 'bg-tertiary-bg-color' : ''
-              }`}
-            >
-              <Text
-                className={`font-semibold text-sm ${
-                  isSelected
-                    ? 'text-primary-text-color'
-                    : 'text-tertiary-text-color'
-                }`}
-              >
-                {label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
-    </View>
+    <PreferenceSelect
+      title={t('account.appearance.title')}
+      label={t('account.appearance.label')}
+      options={[
+        { value: 'dark', label: t('account.appearance.dark') },
+        { value: 'light', label: t('account.appearance.light') },
+        { value: 'system', label: t('account.appearance.system') },
+      ]}
+      value={preference}
+      onChange={setPreference}
+    />
   );
 }

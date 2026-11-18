@@ -1,3 +1,4 @@
+import { messageKey } from '@/i18n/message';
 import { z } from 'zod';
 
 export const FIRST_FILM_YEAR = 1888;
@@ -19,28 +20,37 @@ export const emailSchema = z
   .string()
   .trim()
   .toLowerCase()
-  .pipe(z.email('Enter a valid e-mail'));
+  .pipe(z.email('validation.email'));
 
 export const passwordSchema = z
   .string()
-  .min(PASSWORD_MIN_LENGTH, `Use at least ${PASSWORD_MIN_LENGTH} characters`)
-  .max(PASSWORD_MAX_LENGTH, `Use at most ${PASSWORD_MAX_LENGTH} characters`)
-  .regex(/[A-Za-z]/, 'Use at least one letter')
-  .regex(/\d/, 'Use at least one number');
+  .min(
+    PASSWORD_MIN_LENGTH,
+    messageKey('validation.minLength', { count: PASSWORD_MIN_LENGTH }),
+  )
+  .max(
+    PASSWORD_MAX_LENGTH,
+    messageKey('validation.maxLength', { count: PASSWORD_MAX_LENGTH }),
+  )
+  .regex(/[A-Za-z]/, 'validation.oneLetter')
+  .regex(/\d/, 'validation.oneNumber');
 
 export const PASSWORD_RULES = [
   {
-    label: `Between ${PASSWORD_MIN_LENGTH} and ${PASSWORD_MAX_LENGTH} characters`,
+    label: messageKey('validation.passwordRules.length', {
+      min: PASSWORD_MIN_LENGTH,
+      max: PASSWORD_MAX_LENGTH,
+    }),
     test: (password: string) =>
       password.length >= PASSWORD_MIN_LENGTH &&
       password.length <= PASSWORD_MAX_LENGTH,
   },
   {
-    label: 'At least one letter',
+    label: 'validation.passwordRules.letter',
     test: (password: string) => /[A-Za-z]/.test(password),
   },
   {
-    label: 'At least one number',
+    label: 'validation.passwordRules.number',
     test: (password: string) => /\d/.test(password),
   },
 ] as const;
@@ -48,36 +58,45 @@ export const PASSWORD_RULES = [
 export const nameSchema = z
   .string()
   .trim()
-  .min(NAME_MIN_LENGTH, `Use at least ${NAME_MIN_LENGTH} characters`)
-  .max(NAME_MAX_LENGTH, `Use at most ${NAME_MAX_LENGTH} characters`);
+  .min(
+    NAME_MIN_LENGTH,
+    messageKey('validation.minLength', { count: NAME_MIN_LENGTH }),
+  )
+  .max(
+    NAME_MAX_LENGTH,
+    messageKey('validation.maxLength', { count: NAME_MAX_LENGTH }),
+  );
 
 export const ratingSchema = z
-  .number('Give it a rating')
-  .min(1, 'The rating goes from 1 to 10')
-  .max(10, 'The rating goes from 1 to 10')
-  .multipleOf(RATING_STEP, 'Use half points: 7, 7.5, 8…');
+  .number('validation.ratingRequired')
+  .min(1, 'validation.ratingRange')
+  .max(10, 'validation.ratingRange')
+  .multipleOf(RATING_STEP, 'validation.ratingHalf');
 
 export const releaseYearSchema = z
-  .number('Enter the year')
-  .int('Enter a valid year')
-  .min(FIRST_FILM_YEAR, `The first movie is from ${FIRST_FILM_YEAR}`)
+  .number('validation.yearRequired')
+  .int('validation.yearValid')
+  .min(
+    FIRST_FILM_YEAR,
+    messageKey('validation.yearFirst', { year: FIRST_FILM_YEAR }),
+  )
   .refine(
     (year) => year <= new Date().getFullYear() + 1,
-    'Year too far in the future',
+    'validation.yearFuture',
   );
 
 export const genreIdsSchema = z
   .array(z.string())
-  .min(1, 'Pick at least one genre')
-  .max(MAX_GENRES, `Pick up to ${MAX_GENRES} genres`);
+  .min(1, 'validation.genreMin')
+  .max(MAX_GENRES, messageKey('validation.genreMax', { count: MAX_GENRES }));
 
 export const isoDateSchema = z
   .string()
-  .regex(ISO_DATE_PATTERN, 'Enter a valid date');
+  .regex(ISO_DATE_PATTERN, 'validation.dateValid');
 
 export const watchedAtSchema = isoDateSchema.refine(
   (date) => date <= toIsoDate(new Date()),
-  "The date can't be in the future",
+  'validation.dateFuture',
 );
 
 export const imageAssetSchema = z
@@ -90,12 +109,12 @@ export const imageAssetSchema = z
     (asset) =>
       asset.mimeType === undefined ||
       (IMAGE_MIME_TYPES as readonly string[]).includes(asset.mimeType),
-    'Use a JPEG, PNG or WebP image',
+    'validation.imageType',
   )
   .refine(
     (asset) =>
       asset.fileSize === undefined || asset.fileSize <= MAX_IMAGE_BYTES,
-    'The image can be up to 5 MB',
+    'validation.imageSize',
   );
 
 export function toIsoDate(date: Date): string {

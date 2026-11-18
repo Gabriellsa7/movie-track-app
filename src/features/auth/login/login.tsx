@@ -10,8 +10,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ROUTES } from '@/routes/routes.constants';
 import { LoginForm } from './components/login-form/login-form';
 import { LoginHeader } from './components/login-header/login-header';
+import { useTranslation } from 'react-i18next';
 
 export function LoginScreen() {
+  const { t } = useTranslation();
   return (
     <SafeAreaView className="flex-1 bg-primary-bg-color">
       <KeyboardAvoidingView
@@ -27,16 +29,16 @@ export function LoginScreen() {
 
           <View className="mt-auto items-center gap-4">
             <Text className="font-sans text-sm text-tertiary-text-color">
-              Don&apos;t have an account?{' '}
+              {t('auth.login.noAccount')}{' '}
               <Link href={ROUTES.signUp} asChild>
                 <Text className="font-semibold text-accent-text-color">
-                  Sign up
+                  {t('auth.signUp')}
                 </Text>
               </Link>
             </Text>
             <Link href={ROUTES.explore} asChild>
               <Text className="font-semibold text-sm text-secondary-text-color">
-                Explore profiles without logging in
+                {t('auth.login.explore')}
               </Text>
             </Link>
           </View>

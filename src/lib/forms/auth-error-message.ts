@@ -1,35 +1,43 @@
 import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
-import { NO_CONNECTION_MESSAGE } from './notify-save-error';
+import { i18n } from '@/i18n';
+import { translateMessage } from '@/i18n/message';
 
-const MESSAGES_BY_CODE: Partial<Record<EApiErrorCode, string>> = {
-  [EApiErrorCode.INVALID_CREDENTIALS]: 'Wrong e-mail or password',
-  [EApiErrorCode.EMAIL_TAKEN]: 'This e-mail already has an account',
-  [EApiErrorCode.TOO_MANY_ATTEMPTS]:
-    'Too many attempts. Wait a few minutes and try again.',
-  [EApiErrorCode.TOO_MANY_REQUESTS]:
-    'Too many attempts. Wait a few minutes and try again.',
-  [EApiErrorCode.NETWORK_ERROR]: NO_CONNECTION_MESSAGE,
-  [EApiErrorCode.SERVICE_UNAVAILABLE]:
-    'Service unavailable right now. Try again in a moment.',
-};
+const MESSAGE_KEYS = {
+  [EApiErrorCode.INVALID_CREDENTIALS]: 'errors.wrongCredentials',
+  [EApiErrorCode.EMAIL_TAKEN]: 'errors.emailHasAccount',
+  [EApiErrorCode.TOO_MANY_ATTEMPTS]: 'errors.tooManyAttempts',
+  [EApiErrorCode.TOO_MANY_REQUESTS]: 'errors.tooManyAttempts',
+  [EApiErrorCode.NETWORK_ERROR]: 'errors.noConnection',
+  [EApiErrorCode.SERVICE_UNAVAILABLE]: 'errors.serviceUnavailable',
+} as const;
 
-const FIELD_LABELS: Record<string, string> = {
-  name: 'Invalid name',
-  email: 'Invalid e-mail',
-  password: 'Invalid password',
-};
+const FIELD_KEYS = {
+  name: 'errors.invalidName',
+  email: 'errors.invalidEmail',
+  password: 'errors.invalidPassword',
+} as const;
+
+function isKnownCode(code: string): code is keyof typeof MESSAGE_KEYS {
+  return code in MESSAGE_KEYS;
+}
+
+function isKnownField(field: string): field is keyof typeof FIELD_KEYS {
+  return field in FIELD_KEYS;
+}
 
 export function authErrorMessage(error: unknown, fallback: string): string {
   const apiError = ApiError.from(error);
 
   if (apiError.is(EApiErrorCode.VALIDATION_ERROR)) {
-    const label = apiError.fieldErrors
-      .map(({ field }) => FIELD_LABELS[field.split(/[./]/)[0] ?? field])
-      .find(Boolean);
-    if (label) {
-      return label;
+    const field = apiError.fieldErrors
+      .map(({ field: path }) => path.split(/[./]/)[0] ?? path)
+      .find(isKnownField);
+    if (field) {
+      return i18n.t(FIELD_KEYS[field]);
     }
   }
-  return MESSAGES_BY_CODE[apiError.code as EApiErrorCode] ?? fallback;
+  return isKnownCode(apiError.code)
+    ? i18n.t(MESSAGE_KEYS[apiError.code])
+    : translateMessage(fallback);
 }

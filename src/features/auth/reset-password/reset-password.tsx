@@ -23,15 +23,13 @@ import { useSessionStore } from '@/stores/session.store';
 import { useResetPasswordMutation } from '../api/post-reset-password';
 import { LinkProblem } from '../components/link-problem/link-problem';
 import {
-  RESET_PASSWORD_MESSAGES,
   RESET_PASSWORD_SCHEMA,
   type IResetPasswordForm,
 } from './constants/constants';
-
-const EXPIRED_LINK_MESSAGE =
-  'This link is invalid, was already used or expired. Links are valid for 1 hour.';
+import { useTranslation } from 'react-i18next';
 
 export function ResetPasswordScreen() {
+  const { t } = useTranslation();
   const { token } = useLocalSearchParams<{ token?: string }>();
   const resetPassword = useResetPasswordMutation();
   const [linkExpired, setLinkExpired] = useState(!token);
@@ -57,14 +55,14 @@ export function ResetPasswordScreen() {
       if (useSessionStore.getState().status === 'authenticated') {
         await logout();
       }
-      toast.success(RESET_PASSWORD_MESSAGES.changed);
+      toast.success(t('auth.reset.changed'));
       router.replace(ROUTES.login);
     } catch (error) {
       if (ApiError.from(error).is(EApiErrorCode.INVALID_RESET_TOKEN)) {
         setLinkExpired(true);
         return;
       }
-      toast.error(authErrorMessage(error, RESET_PASSWORD_MESSAGES.unexpected));
+      toast.error(authErrorMessage(error, 'auth.reset.unexpected'));
     }
   };
 
@@ -83,17 +81,17 @@ export function ResetPasswordScreen() {
               accessibilityRole="header"
               className="font-display text-[48px] leading-[48px] tracking-[1px] text-primary-text-color"
             >
-              New password
+              {t('auth.reset.title')}
             </Text>
             <Text className="font-sans text-[15px] leading-[22px] text-tertiary-text-color">
-              Choose a new password. You will be logged out of every device.
+              {t('auth.reset.subtitle')}
             </Text>
           </View>
 
           {linkExpired ? (
             <LinkProblem
-              message={EXPIRED_LINK_MESSAGE}
-              actionLabel="Request another link"
+              message={t('auth.reset.expired')}
+              actionLabel={t('auth.reset.requestAnotherLink')}
               actionHref={ROUTES.forgotPassword}
             />
           ) : (
@@ -101,14 +99,14 @@ export function ResetPasswordScreen() {
               <PasswordField
                 control={control}
                 name="newPassword"
-                label="New password"
+                label={t('auth.reset.newPassword')}
                 autoComplete="new-password"
               />
               <PasswordRules password={newPassword} />
               <PasswordField
                 control={control}
                 name="confirmPassword"
-                label="Confirm the new password"
+                label={t('auth.reset.confirmPassword')}
                 autoComplete="new-password"
               />
             </View>
@@ -124,14 +122,14 @@ export function ResetPasswordScreen() {
                 className="h-[52px] items-center justify-center rounded-xl bg-accent-bg-color active:bg-accent-hover-bg-color disabled:opacity-60"
               >
                 <Text className="font-semibold text-base text-on-accent-text-color">
-                  {isSubmitting ? 'Saving…' : 'Save new password'}
+                  {isSubmitting ? t('common.saving') : t('auth.reset.save')}
                 </Text>
               </Pressable>
               <Text className="text-center font-sans text-[13px] text-tertiary-text-color">
-                Link expired?{' '}
+                {t('auth.reset.expiredQuestion')}{' '}
                 <Link href={ROUTES.forgotPassword} replace asChild>
                   <Text className="font-semibold text-accent-text-color">
-                    Request another
+                    {t('auth.reset.requestAnother')}
                   </Text>
                 </Link>
               </Text>
