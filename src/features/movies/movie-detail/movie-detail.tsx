@@ -2,6 +2,8 @@ import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
 import { useGenreNames } from '@/api/get-genres';
 import { ActionSheet } from '@/components/action-sheet';
+import { GenreChips } from '@/components/genre-chips';
+import { MovieRatingCard } from '@/components/movie-rating-card';
 import { SectionError } from '@/components/section-error';
 import { useLocalSearchParams } from 'expo-router';
 import { Pencil, Trash2 } from 'lucide-react-native';
@@ -11,14 +13,10 @@ import { useMovieQuery } from '../api/get-movie';
 import { MovieActions } from './components/movie-actions/movie-actions';
 import { MovieDetailHero } from './components/movie-detail-hero/movie-detail-hero';
 import { MovieDetailSkeleton } from './components/movie-detail-skeleton/movie-detail-skeleton';
-import { MovieGenreChips } from './components/movie-genre-chips/movie-genre-chips';
 import { MovieInfoSection } from './components/movie-info-section/movie-info-section';
-import { MovieRatingCard } from './components/movie-rating-card/movie-rating-card';
 import { useMovieDetailActions } from './hooks/use-movie-detail-actions';
-import {
-  formatWatchCount,
-  formatWatchedDate,
-} from './utils/movie-detail.utils';
+import { formatWatchedDate } from '@/lib/movie-format';
+import { formatWatchCount } from './utils/movie-detail.utils';
 
 type TSheet = 'options' | 'confirmDelete' | null;
 
@@ -54,7 +52,7 @@ export function MovieDetailScreen() {
     const { data } = movie;
     return (
       <View className="gap-4">
-        <MovieGenreChips names={genreNames} />
+        <GenreChips names={genreNames} />
 
         <View className="gap-2.5">
           <MovieRatingCard rating={data.rating} />

@@ -1,9 +1,5 @@
-import {
-  formatRuntime,
-  formatWatchCount,
-  formatWatchedDate,
-  reviewShare,
-} from './movie-detail.utils';
+import { formatRuntime, formatWatchedDate } from '@/lib/movie-format';
+import { formatWatchCount, reviewShare } from './movie-detail.utils';
 
 describe('When we format the movie details', () => {
   it('should show the watched date as the day the user picked', () => {

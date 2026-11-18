@@ -8,7 +8,7 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { goBackOr } from '@/lib/navigation';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
-import { formatRuntime } from '../../utils/movie-detail.utils';
+import { formatRuntime } from '@/lib/movie-format';
 import { HeroButton } from '../hero-button/hero-button';
 
 const HERO_HEIGHT = 270;

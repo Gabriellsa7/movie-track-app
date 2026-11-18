@@ -25,6 +25,7 @@ import {
   MOVIE_FORM_MESSAGES,
   MOVIE_FORM_SCHEMA,
   movieFormDefaultValues,
+  movieTemplateValues,
   toUpdateMovieBody,
   type IMovieFormInput,
   type IMovieFormOutput,
@@ -36,7 +37,12 @@ import {
 import { MovieSummaryCard } from '@/components/movie-summary-card';
 import { PosterPicker } from '@/components/poster-picker';
 
-export function MovieEditor({ movie }: { movie?: IMovie }) {
+interface IMovieEditorProps {
+  movie?: IMovie;
+  template?: IMovie;
+}
+
+export function MovieEditor({ movie, template }: IMovieEditorProps) {
   const scheme = useAppTheme();
   const isEditing = movie !== undefined;
   const createMovie = useCreateMovieMutation();
@@ -54,7 +60,9 @@ export function MovieEditor({ movie }: { movie?: IMovie }) {
     formState: { isSubmitting },
   } = useForm<IMovieFormInput, unknown, IMovieFormOutput>({
     resolver: zodResolver(MOVIE_FORM_SCHEMA),
-    defaultValues: movieFormDefaultValues(movie),
+    defaultValues: template
+      ? movieTemplateValues(template)
+      : movieFormDefaultValues(movie),
   });
   const [
     title,

@@ -927,6 +927,11 @@ export interface components {
             /** @description Average rating of the user's movies, rounded to one decimal; null without movies */
             averageRating: number | null;
             favoritesCount: number;
+            /**
+             * Format: date-time
+             * @description When the user signed up
+             */
+            memberSince: string;
         };
         UserProfile: {
             /** @description The unique identifier of the user */

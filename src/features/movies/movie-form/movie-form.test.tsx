@@ -353,3 +353,56 @@ describe('When we rate a movie and say how many times', () => {
     });
   });
 });
+
+describe('When we log a movie we saw on someone else profile', () => {
+  it('should start from their movie without their rating, review or upload', async () => {
+    const otherUserId = '64b7f0c2a1b2c3d4e5f607aa';
+    mockApi.onGet('/genres').reply(200, GENRES);
+    mockApi.onGet(`/users/${otherUserId}/movies/movie-2`).reply(200, {
+      ...A_MOVIE,
+      id: 'movie-2',
+      userId: otherUserId,
+      title: 'Aftersun',
+      review: 'Their review',
+      rating: 9.5,
+      director: 'Charlotte Wells',
+      posterUrl: 'https://res.cloudinary.com/x/posters/aftersun.png',
+    });
+    mockApi.onPost('/movies').reply(201, A_MOVIE);
+    const client = createTestQueryClient();
+    await renderRouter(
+      {
+        index: () => null,
+        'movies/new': () => (
+          <QueryClientProvider client={client}>
+            <MovieFormScreen />
+          </QueryClientProvider>
+        ),
+      },
+      {
+        initialUrl: `/movies/new?fromUserId=${otherUserId}&fromMovieId=movie-2`,
+      },
+    );
+
+    expect((await screen.findByLabelText('Title')).props.value).toBe(
+      'Aftersun',
+    );
+    expect(screen.getByLabelText('Director').props.value).toBe(
+      'Charlotte Wells',
+    );
+    expect(screen.getByLabelText('Your review').props.value).toBe('');
+    await rate(8);
+    await submit();
+
+    await waitFor(() => {
+      expect(mockApi.history.post).toHaveLength(1);
+    });
+    const body = JSON.parse(mockApi.history.post[0]?.data as string) as Record<
+      string,
+      unknown
+    >;
+    expect(body).toMatchObject({ title: 'Aftersun', rating: 8 });
+    expect(body).not.toHaveProperty('posterUrl');
+    expect(body).not.toHaveProperty('review');
+  });
+});
