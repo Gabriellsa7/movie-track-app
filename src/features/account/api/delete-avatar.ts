@@ -1,9 +1,9 @@
 import { apiClient } from '@/api/client';
-import type { TUser } from '@/api/types';
+import type { IUser } from '@/api/types';
 import { useAccountMutation } from './account-mutation';
 
-export async function removeAvatar(userId: string): Promise<TUser> {
-  const { data } = await apiClient.delete<TUser>(`/users/${userId}/avatar`);
+export async function removeAvatar(userId: string): Promise<IUser> {
+  const { data } = await apiClient.delete<IUser>(`/users/${userId}/avatar`);
   return data;
 }
 

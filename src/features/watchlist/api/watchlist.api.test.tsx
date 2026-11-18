@@ -1,7 +1,7 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 import { useWatchlistQuery } from '@/api/get-watchlist';
 import { queryKeys } from '@/api/query-keys';
-import type { TWatchlistPage } from '@/api/types';
+import type { IWatchlistPage } from '@/api/types';
 import { ITEM_ID } from '@/test/constants';
 import { A_MOVIE, A_WATCHLIST_ITEM, A_WATCHLIST_PAGE } from '@/test/fixtures';
 import { apiErrorReply, mockApi } from '@/test/mock-api';
@@ -68,7 +68,7 @@ describe('When we change an item priority', () => {
     });
 
     expect(
-      client.getQueryData<TWatchlistPage>(LIST_KEY)?.items[0]?.priority,
+      client.getQueryData<IWatchlistPage>(LIST_KEY)?.items[0]?.priority,
     ).toBe('high');
   });
 
@@ -91,7 +91,7 @@ describe('When we change an item priority', () => {
     });
 
     expect(
-      client.getQueryData<TWatchlistPage>(LIST_KEY)?.items[0]?.priority,
+      client.getQueryData<IWatchlistPage>(LIST_KEY)?.items[0]?.priority,
     ).toBe('medium');
   });
 
@@ -112,7 +112,7 @@ describe('When we change an item priority', () => {
     });
 
     expect(
-      client.getQueryData<TWatchlistPage>(LIST_KEY)?.items[0]?.priority,
+      client.getQueryData<IWatchlistPage>(LIST_KEY)?.items[0]?.priority,
     ).toBe('medium');
   });
 });

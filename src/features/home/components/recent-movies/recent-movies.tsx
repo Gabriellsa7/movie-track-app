@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import { Star } from 'lucide-react-native';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import type { TMovie } from '@/api/types';
+import type { IMovie } from '@/api/types';
 import { Poster } from '@/components/poster';
 import { Skeleton } from '@/components/skeleton';
 import { useMoviesQuery } from '@/api/get-movies';
@@ -17,7 +17,7 @@ export const RECENT_MOVIES_QUERY = {
   limit: 6,
 } as const;
 
-function RecentMovieCard({ movie }: { movie: TMovie }) {
+function RecentMovieCard({ movie }: { movie: IMovie }) {
   const scheme = useAppTheme();
 
   return (

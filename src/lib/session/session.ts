@@ -6,7 +6,7 @@ import { EApiErrorCode } from '@/api/error-codes';
 import { getAccount } from '@/api/get-account';
 import { logout as postLogout } from '@/api/post-logout';
 import { refreshTokens } from '@/api/post-refresh-token';
-import type { TAuthTokens } from '@/api/types';
+import type { IAuthTokens } from '@/api/types';
 import { queryPersister } from '@/lib/react-query/persister';
 import { queryClient } from '@/lib/react-query/query-client';
 import { useSessionStore } from '@/stores/session.store';
@@ -45,7 +45,7 @@ export async function bootstrapSession() {
   }
 }
 
-export async function startSession(tokens: TAuthTokens) {
+export async function startSession(tokens: IAuthTokens) {
   await saveTokens(tokens);
   await loadAccount();
 }
@@ -86,7 +86,7 @@ async function resumeOffline() {
   });
 }
 
-async function saveTokens({ accessToken, refreshToken }: TAuthTokens) {
+async function saveTokens({ accessToken, refreshToken }: IAuthTokens) {
   useSessionStore.getState().setAccessToken(accessToken);
   await writeRefreshToken(refreshToken);
 }

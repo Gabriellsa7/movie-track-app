@@ -1,43 +1,48 @@
 import type { components, operations } from './schema';
 
-type TSchemas = components['schemas'];
-type TQuery<TOperation extends keyof operations> = NonNullable<
-  operations[TOperation]['parameters']['query']
+// openapi-typescript generates aliases; Pick turns each one into something an interface can extend.
+type TSchema<TName extends keyof components['schemas']> = Pick<
+  components['schemas'][TName],
+  keyof components['schemas'][TName]
+>;
+type TQuery<TOperation extends keyof operations> = Pick<
+  NonNullable<operations[TOperation]['parameters']['query']>,
+  keyof NonNullable<operations[TOperation]['parameters']['query']>
 >;
 
-export type TAuthTokens = TSchemas['AuthTokens'];
-export type TLoginBody = TSchemas['Login'];
-export type TResetPasswordBody = TSchemas['ResetPassword'];
+export interface IAuthTokens extends TSchema<'AuthTokens'> {}
+export interface ILoginBody extends TSchema<'Login'> {}
+export interface IResetPasswordBody extends TSchema<'ResetPassword'> {}
 
-export type TUser = TSchemas['User'];
-export type TUserProfile = TSchemas['UserProfile'];
-export type TUserSummary = TSchemas['UserSummary'];
-export type TUserPage = TSchemas['UserPage'];
-export type TUserStats = TSchemas['UserStats'];
-export type TNewUserBody = TSchemas['NewUser'];
-export type TUpdateUserBody = TSchemas['UpdateUser'];
-export type TChangePasswordBody = TSchemas['ChangePassword'];
-export type TListUsersQuery = TQuery<'getUsers'>;
+export interface IUser extends TSchema<'User'> {}
+export interface IUserProfile extends TSchema<'UserProfile'> {}
+export interface IUserSummary extends TSchema<'UserSummary'> {}
+export interface IUserPage extends TSchema<'UserPage'> {}
+export interface IUserStats extends TSchema<'UserStats'> {}
+export interface INewUserBody extends TSchema<'NewUser'> {}
+export interface IUpdateUserBody extends TSchema<'UpdateUser'> {}
+export interface IChangePasswordBody extends TSchema<'ChangePassword'> {}
+export interface IListUsersQuery extends TQuery<'getUsers'> {}
 
-export type TGenre = TSchemas['Genre'];
+export interface IGenre extends TSchema<'Genre'> {}
 
-export type TMovie = TSchemas['Movie'];
-export type TMoviePage = TSchemas['MoviePage'];
-export type TNewMovieBody = TSchemas['NewMovie'];
-export type TUpdateMovieBody = TSchemas['UpdateMovie'];
-export type TRewatchMovieBody = TSchemas['MovieRewatch'];
-export type TListMoviesQuery = TQuery<'getMovies'>;
+export interface IMovie extends TSchema<'Movie'> {}
+export interface IMoviePage extends TSchema<'MoviePage'> {}
+export interface INewMovieBody extends TSchema<'NewMovie'> {}
+export interface IUpdateMovieBody extends TSchema<'UpdateMovie'> {}
+export interface IRewatchMovieBody extends TSchema<'MovieRewatch'> {}
+export interface IListMoviesQuery extends TQuery<'getMovies'> {}
 
-export type TWatchlistItem = TSchemas['WatchlistItem'];
-export type TWatchlistPage = TSchemas['WatchlistPage'];
-export type TNewWatchlistItemBody = TSchemas['NewWatchlistItem'];
-export type TUpdateWatchlistItemBody = TSchemas['UpdateWatchlistItem'];
-export type TWatchlistItemWatchedBody = TSchemas['WatchlistItemWatched'];
-export type TListWatchlistQuery = TQuery<'getWatchlist'>;
+export interface IWatchlistItem extends TSchema<'WatchlistItem'> {}
+export interface IWatchlistPage extends TSchema<'WatchlistPage'> {}
+export interface INewWatchlistItemBody extends TSchema<'NewWatchlistItem'> {}
+export interface IUpdateWatchlistItemBody extends TSchema<'UpdateWatchlistItem'> {}
+export interface IWatchlistItemWatchedBody extends TSchema<'WatchlistItemWatched'> {}
+export interface IListWatchlistQuery extends TQuery<'getWatchlist'> {}
 
-export type TTmdbMovie = TSchemas['MovieSearchResult'];
-export type TTmdbMoviePage = TSchemas['MovieSearchPage'];
-export type TTmdbSearchQuery = TQuery<'searchTmdbMovies'>;
+export interface ITmdbMovie extends TSchema<'MovieSearchResult'> {}
+export interface ITmdbMoviePage extends TSchema<'MovieSearchPage'> {}
+export interface ITmdbSearchQuery extends TQuery<'searchTmdbMovies'> {}
 
-export type TApiErrorBody = TSchemas['Error'];
-export type TFieldError = TSchemas['FieldError'];
+export interface IApiErrorBody extends TSchema<'Error'> {}
+export interface IFieldError extends TSchema<'FieldError'> {}

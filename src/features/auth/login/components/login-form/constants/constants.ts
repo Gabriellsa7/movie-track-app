@@ -1,14 +1,14 @@
 import { emailSchema } from '@/lib/validation/rules';
-import { z } from 'zod';
+import { z, type infer as TInfer } from 'zod';
 
 export const LOGIN_SCHEMA = z.object({
   email: emailSchema,
   password: z.string().min(1, 'Informe sua senha'),
 });
 
-export type TLoginForm = z.infer<typeof LOGIN_SCHEMA>;
+export interface ILoginForm extends TInfer<typeof LOGIN_SCHEMA> {}
 
-export const LOGIN_DEFAULT_VALUES: TLoginForm = {
+export const LOGIN_DEFAULT_VALUES: ILoginForm = {
   email: '',
   password: '',
 };

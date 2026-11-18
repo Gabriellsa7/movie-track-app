@@ -1,7 +1,7 @@
 import { apiClient } from './client';
-import type { TUser } from './types';
+import type { IUser } from './types';
 
-export async function getAccount(userId: string): Promise<TUser> {
-  const { data } = await apiClient.get<TUser>(`/users/${userId}/account`);
+export async function getAccount(userId: string): Promise<IUser> {
+  const { data } = await apiClient.get<IUser>(`/users/${userId}/account`);
   return data;
 }

@@ -1,13 +1,13 @@
 import { apiClient } from '@/api/client';
-import type { TUser } from '@/api/types';
+import type { IUser } from '@/api/types';
 import { toFormData, type IUploadFile } from '@/api/upload-file';
 import { useAccountMutation } from './account-mutation';
 
 export async function uploadAvatar(
   userId: string,
   avatar: IUploadFile,
-): Promise<TUser> {
-  const { data } = await apiClient.put<TUser>(
+): Promise<IUser> {
+  const { data } = await apiClient.put<IUser>(
     `/users/${userId}/avatar`,
     toFormData('avatar', avatar),
   );

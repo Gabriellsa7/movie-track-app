@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/api/query-keys';
-import type { TUser } from '@/api/types';
+import type { IUser } from '@/api/types';
 import { writeStoredUser } from '@/lib/session/session.storage';
 import { requireUserId, useSessionStore } from '@/stores/session.store';
 
 // Account changes return the private user: keep the session copy in sync.
 export function useAccountMutation<TVariables>(
-  mutationFn: (userId: string, variables: TVariables) => Promise<TUser>,
+  mutationFn: (userId: string, variables: TVariables) => Promise<IUser>,
 ) {
   const client = useQueryClient();
   return useMutation({

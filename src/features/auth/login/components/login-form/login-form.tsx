@@ -13,7 +13,7 @@ import {
   LOGIN_DEFAULT_VALUES,
   LOGIN_ERROR_MESSAGES,
   LOGIN_SCHEMA,
-  type TLoginForm,
+  type ILoginForm,
 } from './constants/constants';
 
 export function LoginForm() {
@@ -22,12 +22,12 @@ export function LoginForm() {
     handleSubmit,
     setError,
     formState: { isSubmitting, errors },
-  } = useForm<TLoginForm>({
+  } = useForm<ILoginForm>({
     resolver: zodResolver(LOGIN_SCHEMA),
     defaultValues: LOGIN_DEFAULT_VALUES,
   });
 
-  const onSubmit = async (values: TLoginForm) => {
+  const onSubmit = async (values: ILoginForm) => {
     try {
       const tokens = await login(values);
       await startSession(tokens);

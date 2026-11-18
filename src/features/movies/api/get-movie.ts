@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/api/client';
 import { queryKeys } from '@/api/query-keys';
-import type { TMovie } from '@/api/types';
+import type { IMovie } from '@/api/types';
 
-export async function getMovie(movieId: string): Promise<TMovie> {
-  const { data } = await apiClient.get<TMovie>(`/movies/${movieId}`);
+export async function getMovie(movieId: string): Promise<IMovie> {
+  const { data } = await apiClient.get<IMovie>(`/movies/${movieId}`);
   return data;
 }
 

@@ -5,18 +5,18 @@ import {
 } from '@tanstack/react-query';
 import { apiClient } from './client';
 import { queryKeys } from './query-keys';
-import type { TListWatchlistQuery, TWatchlistPage } from './types';
+import type { IListWatchlistQuery, IWatchlistPage } from './types';
 
 export async function listWatchlist(
-  query: TListWatchlistQuery = {},
-): Promise<TWatchlistPage> {
-  const { data } = await apiClient.get<TWatchlistPage>('/watchlist', {
+  query: IListWatchlistQuery = {},
+): Promise<IWatchlistPage> {
+  const { data } = await apiClient.get<IWatchlistPage>('/watchlist', {
     params: query,
   });
   return data;
 }
 
-export function useWatchlistQuery(query: TListWatchlistQuery) {
+export function useWatchlistQuery(query: IListWatchlistQuery) {
   return useQuery({
     queryKey: queryKeys.watchlist.list(query),
     queryFn: () => listWatchlist(query),

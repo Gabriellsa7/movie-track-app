@@ -2,13 +2,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/api/client';
 import { useInvalidateMyMovies } from '@/api/get-movies';
 import { queryKeys } from '@/api/query-keys';
-import type { TMovie } from '@/api/types';
+import type { IMovie } from '@/api/types';
 
 export async function setMovieFavorite(
   movieId: string,
   isFavorite: boolean,
-): Promise<TMovie> {
-  const { data } = await apiClient.patch<TMovie>(
+): Promise<IMovie> {
+  const { data } = await apiClient.patch<IMovie>(
     `/movies/${movieId}/favorite`,
     { isFavorite },
   );
@@ -24,9 +24,9 @@ export function useSetFavoriteMutation(movieId: string) {
     mutationFn: (isFavorite: boolean) => setMovieFavorite(movieId, isFavorite),
     onMutate: async (isFavorite) => {
       await client.cancelQueries({ queryKey: detailKey });
-      const previous = client.getQueryData<TMovie>(detailKey);
+      const previous = client.getQueryData<IMovie>(detailKey);
       if (previous) {
-        client.setQueryData<TMovie>(detailKey, { ...previous, isFavorite });
+        client.setQueryData<IMovie>(detailKey, { ...previous, isFavorite });
       }
       return { previous };
     },

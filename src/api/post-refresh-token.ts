@@ -1,10 +1,10 @@
 import { apiClient } from './client';
-import type { TAuthTokens } from './types';
+import type { IAuthTokens } from './types';
 
 export async function refreshTokens(
   refreshToken: string,
-): Promise<TAuthTokens> {
-  const { data } = await apiClient.post<TAuthTokens>(
+): Promise<IAuthTokens> {
+  const { data } = await apiClient.post<IAuthTokens>(
     '/auth/refresh',
     { refreshToken },
     { skipAuthRefresh: true },

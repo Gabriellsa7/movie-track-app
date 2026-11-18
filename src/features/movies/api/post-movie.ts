@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { apiClient } from '@/api/client';
 import { useInvalidateMyMovies } from '@/api/get-movies';
-import type { TMovie, TNewMovieBody } from '@/api/types';
+import type { IMovie, INewMovieBody } from '@/api/types';
 
-export async function createMovie(body: TNewMovieBody): Promise<TMovie> {
-  const { data } = await apiClient.post<TMovie>('/movies', body);
+export async function createMovie(body: INewMovieBody): Promise<IMovie> {
+  const { data } = await apiClient.post<IMovie>('/movies', body);
   return data;
 }
 

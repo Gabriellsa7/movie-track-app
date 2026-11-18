@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { apiClient } from '@/api/client';
-import type { TResetPasswordBody } from '@/api/types';
+import type { IResetPasswordBody } from '@/api/types';
 
-export async function resetPassword(body: TResetPasswordBody): Promise<void> {
+export async function resetPassword(body: IResetPasswordBody): Promise<void> {
   await apiClient.post('/auth/reset-password', body);
 }
 

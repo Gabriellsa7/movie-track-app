@@ -115,7 +115,9 @@ sit next to the code, named `describe('When we …')` / `it('should …')`.
   `src/api/query-keys.ts`.
 - Files in kebab-case (`movie-card.tsx`, `home.screen.tsx`); components in
   PascalCase (`MovieCard`).
-- Interfaces `I*`, type aliases `T*`, enums `E*`, constants `UPPER_SNAKE_CASE`.
+- Object shapes are interfaces `I*` (also the API types: `IMovie extends
+TSchema<'Movie'>`); `type` aliases `T*` only for what an interface cannot
+  express (unions, `keyof`). Enums `E*`, constants `UPPER_SNAKE_CASE`.
 - Code, comments and commits in English; UI texts in pt-BR.
 - Conventional Commits, checked by commitlint on every commit.
 - Imports from `src` use the `@/` alias.

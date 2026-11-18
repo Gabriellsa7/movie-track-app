@@ -10,17 +10,17 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import { FieldFrame, inputClassName } from './field-frame';
 
-export type TTextFieldProps<TFields extends FieldValues> = Omit<
+export interface ITextFieldProps<TFields extends FieldValues> extends Omit<
   TextInputProps,
   'value' | 'onChangeText' | 'onBlur'
-> & {
+> {
   control: Control<TFields>;
   name: FieldPath<TFields>;
   label: string;
   hint?: string;
   // Shown inside the input, on the right (e.g. the password visibility toggle).
   trailing?: ReactNode;
-};
+}
 
 export function TextField<TFields extends FieldValues>({
   control,
@@ -29,7 +29,7 @@ export function TextField<TFields extends FieldValues>({
   hint,
   trailing,
   ...inputProps
-}: TTextFieldProps<TFields>) {
+}: ITextFieldProps<TFields>) {
   const scheme = useAppTheme();
   const {
     field: { ref, value, onChange, onBlur },

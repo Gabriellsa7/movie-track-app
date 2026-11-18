@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from './client';
 import { queryKeys } from './query-keys';
-import type { TUserStats } from './types';
+import type { IUserStats } from './types';
 
-export async function getUserStats(userId: string): Promise<TUserStats> {
-  const { data } = await apiClient.get<TUserStats>(`/users/${userId}/stats`);
+export async function getUserStats(userId: string): Promise<IUserStats> {
+  const { data } = await apiClient.get<IUserStats>(`/users/${userId}/stats`);
   return data;
 }
 

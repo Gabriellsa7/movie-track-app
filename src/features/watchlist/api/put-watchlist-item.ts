@@ -3,16 +3,16 @@ import { apiClient } from '@/api/client';
 import { useInvalidateWatchlist } from '@/api/get-watchlist';
 import { queryKeys } from '@/api/query-keys';
 import type {
-  TUpdateWatchlistItemBody,
-  TWatchlistItem,
-  TWatchlistPage,
+  IUpdateWatchlistItemBody,
+  IWatchlistItem,
+  IWatchlistPage,
 } from '@/api/types';
 
 export async function updateWatchlistItem(
   itemId: string,
-  body: TUpdateWatchlistItemBody,
-): Promise<TWatchlistItem> {
-  const { data } = await apiClient.put<TWatchlistItem>(
+  body: IUpdateWatchlistItemBody,
+): Promise<IWatchlistItem> {
+  const { data } = await apiClient.put<IWatchlistItem>(
     `/watchlist/${itemId}`,
     body,
   );
@@ -24,16 +24,16 @@ export function useUpdateWatchlistItemMutation(itemId: string) {
   const client = useQueryClient();
   const invalidate = useInvalidateWatchlist();
   return useMutation({
-    mutationFn: (body: TUpdateWatchlistItemBody) =>
+    mutationFn: (body: IUpdateWatchlistItemBody) =>
       updateWatchlistItem(itemId, body),
     onMutate: async (body) => {
       await client.cancelQueries({ queryKey: queryKeys.watchlist.all });
-      const previous = client.getQueriesData<TWatchlistPage>({
+      const previous = client.getQueriesData<IWatchlistPage>({
         queryKey: queryKeys.watchlist.all,
       });
       if (body.priority) {
         const { priority } = body;
-        client.setQueriesData<TWatchlistPage>(
+        client.setQueriesData<IWatchlistPage>(
           { queryKey: queryKeys.watchlist.all },
           (page) =>
             page && {

@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { apiClient } from '@/api/client';
 import { useInvalidateMyMovies } from '@/api/get-movies';
-import type { TMovie } from '@/api/types';
+import type { IMovie } from '@/api/types';
 
-export async function removeMoviePoster(movieId: string): Promise<TMovie> {
-  const { data } = await apiClient.delete<TMovie>(`/movies/${movieId}/poster`);
+export async function removeMoviePoster(movieId: string): Promise<IMovie> {
+  const { data } = await apiClient.delete<IMovie>(`/movies/${movieId}/poster`);
   return data;
 }
 

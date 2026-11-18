@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { apiClient } from '@/api/client';
 import { useInvalidateWatchlist } from '@/api/get-watchlist';
-import type { TNewWatchlistItemBody, TWatchlistItem } from '@/api/types';
+import type { INewWatchlistItemBody, IWatchlistItem } from '@/api/types';
 
 export async function addWatchlistItem(
-  body: TNewWatchlistItemBody,
-): Promise<TWatchlistItem> {
-  const { data } = await apiClient.post<TWatchlistItem>('/watchlist', body);
+  body: INewWatchlistItemBody,
+): Promise<IWatchlistItem> {
+  const { data } = await apiClient.post<IWatchlistItem>('/watchlist', body);
   return data;
 }
 

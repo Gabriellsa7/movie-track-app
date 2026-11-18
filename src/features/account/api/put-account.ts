@@ -1,12 +1,12 @@
 import { apiClient } from '@/api/client';
-import type { TUpdateUserBody, TUser } from '@/api/types';
+import type { IUpdateUserBody, IUser } from '@/api/types';
 import { useAccountMutation } from './account-mutation';
 
 export async function updateAccount(
   userId: string,
-  body: TUpdateUserBody,
-): Promise<TUser> {
-  const { data } = await apiClient.put<TUser>(`/users/${userId}`, body);
+  body: IUpdateUserBody,
+): Promise<IUser> {
+  const { data } = await apiClient.put<IUser>(`/users/${userId}`, body);
   return data;
 }
 

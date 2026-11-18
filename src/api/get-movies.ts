@@ -5,18 +5,18 @@ import {
 } from '@tanstack/react-query';
 import { apiClient } from './client';
 import { queryKeys } from './query-keys';
-import type { TListMoviesQuery, TMoviePage } from './types';
+import type { IListMoviesQuery, IMoviePage } from './types';
 
 export async function listMovies(
-  query: TListMoviesQuery = {},
-): Promise<TMoviePage> {
-  const { data } = await apiClient.get<TMoviePage>('/movies', {
+  query: IListMoviesQuery = {},
+): Promise<IMoviePage> {
+  const { data } = await apiClient.get<IMoviePage>('/movies', {
     params: query,
   });
   return data;
 }
 
-export function useMoviesQuery(query: TListMoviesQuery) {
+export function useMoviesQuery(query: IListMoviesQuery) {
   return useQuery({
     queryKey: queryKeys.movies.list(query),
     queryFn: () => listMovies(query),

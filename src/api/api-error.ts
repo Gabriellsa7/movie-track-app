@@ -1,15 +1,15 @@
 import { isAxiosError } from 'axios';
 import { EApiErrorCode } from './error-codes';
-import type { TApiErrorBody, TFieldError } from './types';
+import type { IApiErrorBody, IFieldError } from './types';
 
 const UNKNOWN_ERROR_MESSAGE = 'Unexpected error';
 
 export class ApiError extends Error {
   readonly status: number;
   readonly code: EApiErrorCode | (string & {});
-  readonly fieldErrors: TFieldError[];
+  readonly fieldErrors: IFieldError[];
 
-  constructor(body: TApiErrorBody) {
+  constructor(body: IApiErrorBody) {
     super(body.message);
     this.name = 'ApiError';
     this.status = body.status;
@@ -50,11 +50,11 @@ export class ApiError extends Error {
   }
 }
 
-function isApiErrorBody(data: unknown): data is TApiErrorBody {
+function isApiErrorBody(data: unknown): data is IApiErrorBody {
   return (
     typeof data === 'object' &&
     data !== null &&
-    typeof (data as TApiErrorBody).code === 'string' &&
-    typeof (data as TApiErrorBody).status === 'number'
+    typeof (data as IApiErrorBody).code === 'string' &&
+    typeof (data as IApiErrorBody).status === 'number'
   );
 }

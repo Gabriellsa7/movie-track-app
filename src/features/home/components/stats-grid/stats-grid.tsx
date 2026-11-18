@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import type { TUserStats } from '@/api/types';
+import type { IUserStats } from '@/api/types';
 import { Skeleton } from '@/components/skeleton';
 import { formatAverage, formatHours } from '../../utils/home.utils';
 
@@ -20,7 +20,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function StatsGrid({ stats }: { stats: TUserStats | undefined }) {
+export function StatsGrid({ stats }: { stats: IUserStats | undefined }) {
   if (!stats) {
     return (
       <View className="flex-row flex-wrap gap-2.5">

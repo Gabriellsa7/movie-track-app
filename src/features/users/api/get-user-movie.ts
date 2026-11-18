@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/api/client';
 import { queryKeys } from '@/api/query-keys';
-import type { TMovie } from '@/api/types';
+import type { IMovie } from '@/api/types';
 
 export async function getUserMovie(
   userId: string,
   movieId: string,
-): Promise<TMovie> {
-  const { data } = await apiClient.get<TMovie>(
+): Promise<IMovie> {
+  const { data } = await apiClient.get<IMovie>(
     `/users/${userId}/movies/${movieId}`,
   );
   return data;

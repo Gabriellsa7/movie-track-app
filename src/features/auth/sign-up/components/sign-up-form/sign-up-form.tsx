@@ -17,7 +17,7 @@ import {
   SIGN_UP_ERROR_MESSAGES,
   SIGN_UP_FIELDS,
   SIGN_UP_SCHEMA,
-  type TSignUpForm,
+  type ISignUpForm,
 } from '../../constants/constants';
 
 export function SignUpForm() {
@@ -26,14 +26,14 @@ export function SignUpForm() {
     handleSubmit,
     setError,
     formState: { isSubmitting, errors },
-  } = useForm<TSignUpForm>({
+  } = useForm<ISignUpForm>({
     resolver: zodResolver(SIGN_UP_SCHEMA),
     defaultValues: SIGN_UP_DEFAULT_VALUES,
   });
   const password = useWatch({ control, name: 'password' });
 
   // After the account is created, logs in with the same credentials and opens Início.
-  const onSubmit = async (values: TSignUpForm) => {
+  const onSubmit = async (values: ISignUpForm) => {
     try {
       await signUp(values);
       const tokens = await login({
