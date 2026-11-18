@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { queryKeys } from '@/api/query-keys';
 import { useUserStatsQuery } from '@/api/get-user-stats';
 import { NewMovieButton } from '@/components/new-movie-button';
-import { SectionError } from '@/components/section-error';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { useSessionStore } from '@/stores/session.store';
 import { color } from '@/theme/palette';
@@ -13,7 +12,7 @@ import { HomeHeader } from './components/home-header/home-header';
 import { MoviesPerMonth } from './components/movies-per-month/movies-per-month';
 import { NextMovie } from './components/next-movie/next-movie';
 import { RecentMovies } from './components/recent-movies/recent-movies';
-import { StatsGrid } from './components/stats-grid/stats-grid';
+import { StatsOverview } from './components/stats-overview/stats-overview';
 
 export function HomeScreen() {
   const scheme = useAppTheme();
@@ -47,14 +46,11 @@ export function HomeScreen() {
         }
       >
         <HomeHeader />
-        {stats.isError ? (
-          <SectionError
-            message="Couldn't load your stats."
-            onRetry={() => void stats.refetch()}
-          />
-        ) : (
-          <StatsGrid stats={stats.data} />
-        )}
+        <StatsOverview
+          stats={stats.data}
+          isError={stats.isError}
+          onRetry={() => void stats.refetch()}
+        />
         <NextMovie />
         <RecentMovies />
         {stats.isError ? null : <MoviesPerMonth stats={stats.data} />}

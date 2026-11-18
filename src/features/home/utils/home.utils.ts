@@ -1,32 +1,11 @@
-import type { IUserStats, IWatchlistItem } from '@/api/types';
-
-const MONTHS_IN_CHART = 12;
-const SHORT_MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-] as const;
+import type { IWatchlistItem } from '@/api/types';
+import { SHORT_MONTHS } from '@/lib/stats';
 
 const PRIORITY_LABELS: Record<IWatchlistItem['priority'], string> = {
   high: 'High priority',
   medium: 'Medium priority',
   low: 'Low priority',
 };
-
-export interface IMonthCount {
-  month: string;
-  label: string;
-  count: number;
-}
 
 export function greetingFor(date: Date, name?: string): string {
   const hour = date.getHours();
@@ -38,40 +17,6 @@ export function greetingFor(date: Date, name?: string): string {
         : 'Good evening';
   const firstName = name?.trim().split(/\s+/)[0];
   return firstName ? `${greeting}, ${firstName}` : greeting;
-}
-
-export function formatAverage(averageRating: number | null): string {
-  return averageRating === null ? '–' : averageRating.toFixed(1);
-}
-
-export function formatHours(totalMinutes: number): string {
-  return `${Math.round(totalMinutes / 60)}h`;
-}
-
-function monthKey(year: number, monthIndex: number): string {
-  return `${year}-${String(monthIndex + 1).padStart(2, '0')}`;
-}
-
-export function lastTwelveMonths(
-  moviesPerMonth: IUserStats['moviesPerMonth'],
-  today: Date,
-): IMonthCount[] {
-  const counts = new Map(
-    moviesPerMonth.map((item) => [item.month, item.count]),
-  );
-  return Array.from({ length: MONTHS_IN_CHART }, (_, index) => {
-    const date = new Date(
-      today.getFullYear(),
-      today.getMonth() - (MONTHS_IN_CHART - 1 - index),
-      1,
-    );
-    const month = monthKey(date.getFullYear(), date.getMonth());
-    return {
-      month,
-      label: SHORT_MONTHS[date.getMonth()] ?? '',
-      count: counts.get(month) ?? 0,
-    };
-  });
 }
 
 export function plannedLabel(plannedFor: string, today: Date): string {

@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import type { IUserStats } from '@/api/types';
 import { Skeleton } from '@/components/skeleton';
-import { lastTwelveMonths } from '../../utils/home.utils';
+import { lastTwelveMonths } from '@/lib/stats';
 
 const CHART_HEIGHT = 70;
 const EMPTY_BAR_HEIGHT = 3;
