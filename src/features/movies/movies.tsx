@@ -20,6 +20,7 @@ import {
   toMoviesQuery,
   type IMovieFilters,
 } from './constants/constants';
+import { useTranslation } from 'react-i18next';
 
 const SEARCH_DEBOUNCE_MILLISECONDS = 300;
 const COLUMNS = 3;
@@ -28,6 +29,7 @@ const COLUMN_GAP = 10;
 const SKELETON_TILES = [0, 1, 2, 3, 4, 5];
 
 export function MoviesScreen() {
+  const { t } = useTranslation();
   const { width: screenWidth } = useWindowDimensions();
   const tileWidth =
     (screenWidth - SCREEN_PADDING * 2 - COLUMN_GAP * (COLUMNS - 1)) / COLUMNS;
@@ -55,7 +57,7 @@ export function MoviesScreen() {
     if (isError) {
       return (
         <SectionError
-          message="Couldn't load your movies."
+          message={t('movies.loadFailed')}
           onRetry={() => void refetch()}
         />
       );
@@ -75,7 +77,7 @@ export function MoviesScreen() {
           <View className="gap-4 pb-4">
             <MoviesHeader total={movies.data?.pages[0]?.total} />
             <SearchField
-              label="Search movies"
+              label={t('movies.search')}
               value={searchText}
               onChangeText={setSearchText}
             />

@@ -15,8 +15,10 @@ import { ReviewAuthor } from './components/review-author/review-author';
 import { ReviewCta } from './components/review-cta/review-cta';
 import { ReviewMovie } from './components/review-movie/review-movie';
 import { useReviewActions } from './hooks/use-review-actions';
+import { useTranslation } from 'react-i18next';
 
 export function UserReviewScreen() {
+  const { t } = useTranslation();
   const { userId, movieId } = useLocalSearchParams<{
     userId: string;
     movieId: string;
@@ -40,11 +42,11 @@ export function UserReviewScreen() {
     if (movie.isError) {
       return ApiError.from(movie.error).is(EApiErrorCode.MOVIE_NOT_FOUND) ? (
         <Text className="font-sans text-base text-secondary-text-color">
-          This review no longer exists.
+          {t('users.review.notFound')}
         </Text>
       ) : (
         <SectionError
-          message="Couldn't load this review."
+          message={t('users.review.loadFailed')}
           onRetry={() => void movie.refetch()}
         />
       );
@@ -62,8 +64,10 @@ export function UserReviewScreen() {
           <View className="gap-2">
             <Text className="font-semibold text-xs uppercase tracking-[1px] text-tertiary-text-color">
               {author.data
-                ? `${firstNameOf(author.data.name)}'s review`
-                : 'Review'}
+                ? t('users.review.authorReview', {
+                    name: firstNameOf(author.data.name),
+                  })
+                : t('users.review.review')}
             </Text>
             <Text className="font-sans text-base leading-[26px] text-primary-text-color">
               {data.review}
@@ -87,9 +91,9 @@ export function UserReviewScreen() {
     <SafeAreaView className="flex-1 bg-primary-bg-color" edges={['top']}>
       <ScrollView contentContainerClassName="flex-grow gap-[18px] px-5 pb-6 pt-1">
         <ProfileTopBar
-          backLabel="Back to profile"
+          backLabel={t('users.review.back')}
           backTo={{ pathname: '/users/[userId]', params: { userId } }}
-          shareLabel="Share review"
+          shareLabel={t('users.review.share')}
           onShare={movie.data ? actions.share : undefined}
         />
         {renderBody()}

@@ -2,6 +2,7 @@ import { Pressable, View, type GestureResponderEvent } from 'react-native';
 import { formatRating } from '@/lib/rating';
 import { StarIcon } from './star-icon';
 import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 const STAR_COUNT = 10;
 const MIN_RATING = 1;
@@ -19,6 +20,7 @@ export function RatingStars({
   onChange,
 }: IRatingStarsProps) {
   const { t } = useTranslation();
+  const language = useLanguage();
   const value = rating ?? 0;
   const stars = Array.from({ length: STAR_COUNT }, (_, index) =>
     Math.max(0, Math.min(1, value - index)),
@@ -30,7 +32,7 @@ export function RatingStars({
         accessible
         accessibilityRole="image"
         accessibilityLabel={t('common.rating.label', {
-          rating: formatRating(value),
+          rating: formatRating(value, language),
         })}
         className="flex-row"
       >
@@ -55,7 +57,9 @@ export function RatingStars({
         text:
           rating === undefined
             ? t('common.rating.none')
-            : t('common.rating.value', { rating: formatRating(value) }),
+            : t('common.rating.value', {
+                rating: formatRating(value, language),
+              }),
       }}
       accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
       onAccessibilityAction={(event) => {

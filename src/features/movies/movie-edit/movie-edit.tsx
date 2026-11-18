@@ -7,8 +7,10 @@ import { SectionError } from '@/components/section-error';
 import { Skeleton } from '@/components/skeleton';
 import { useMovieQuery } from '../api/get-movie';
 import { MovieEditor } from '../movie-form/components/movie-editor/movie-editor';
+import { useTranslation } from 'react-i18next';
 
 export function MovieEditScreen() {
+  const { t } = useTranslation();
   const { movieId } = useLocalSearchParams<{ movieId: string }>();
   const movie = useMovieQuery(movieId);
 
@@ -18,11 +20,11 @@ export function MovieEditScreen() {
     }
     return ApiError.from(movie.error).is(EApiErrorCode.MOVIE_NOT_FOUND) ? (
       <Text className="font-sans text-base text-secondary-text-color">
-        This movie no longer exists.
+        {t('movies.detail.notFound')}
       </Text>
     ) : (
       <SectionError
-        message="Couldn't load this movie."
+        message={t('movies.detail.loadFailed')}
         onRetry={() => void movie.refetch()}
       />
     );

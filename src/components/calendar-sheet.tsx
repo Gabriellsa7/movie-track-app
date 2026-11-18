@@ -15,7 +15,7 @@ import {
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
 import { useTranslation } from 'react-i18next';
-import { currentLanguage } from '@/i18n';
+import { useLanguage } from '@/i18n';
 
 interface ICalendarSheetProps {
   title: string;
@@ -39,7 +39,7 @@ export function CalendarSheet({
   const scheme = useAppTheme();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const locale = currentLanguage();
+  const locale = useLanguage();
   const today = new Date();
   const [shown, setShown] = useState(() => monthOf(selected ?? today));
   const previous = shiftMonth(shown, -1);

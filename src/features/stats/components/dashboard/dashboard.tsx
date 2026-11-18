@@ -5,7 +5,6 @@ import {
   monthsInsights,
   mostGivenRating,
   percentOf,
-  plural,
   rewatchCount,
 } from '../../utils/stats.utils';
 import { MetricCard } from '../metric-card/metric-card';
@@ -13,9 +12,13 @@ import { MonthlyChart } from '../monthly-chart/monthly-chart';
 import { RatingDistribution } from '../rating-distribution/rating-distribution';
 import { StatsSection } from '../stats-section/stats-section';
 import { TopGenres } from '../top-genres/top-genres';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 export function Dashboard({ stats }: { stats: IUserStats }) {
-  const months = lastTwelveMonths(stats.moviesPerMonth, new Date());
+  const { t } = useTranslation();
+  const language = useLanguage();
+  const months = lastTwelveMonths(stats.moviesPerMonth, new Date(), language);
   const insights = monthsInsights(months);
   const topRating = mostGivenRating(stats.ratingDistribution);
   const favoriteShare = percentOf(stats.favoritesCount, stats.totalMovies);
@@ -25,64 +28,70 @@ export function Dashboard({ stats }: { stats: IUserStats }) {
       <View className="gap-2.5">
         <View className="flex-row gap-2.5">
           <MetricCard
-            label="Movies logged"
+            label={t('stats.metrics.moviesLogged')}
             value={String(stats.totalMovies)}
-            description="Different movies in your log."
+            description={t('stats.metrics.moviesLoggedHelp')}
           />
           <MetricCard
-            label="Times watched"
+            label={t('stats.metrics.timesWatched')}
             value={String(stats.totalWatches)}
-            description={`Counting ${plural(rewatchCount(stats), 'rewatch', 'rewatches')}.`}
+            description={t('stats.metrics.timesWatchedHelp', {
+              rewatches: t('stats.rewatch', { count: rewatchCount(stats) }),
+            })}
           />
         </View>
         <View className="flex-row gap-2.5">
           <MetricCard
-            label="Hours watched"
+            label={t('stats.metrics.hoursWatched')}
             value={formatHours(stats.totalMinutes)}
-            description="Runtime times watches. Movies without a runtime count as 0."
+            description={t('stats.metrics.hoursWatchedHelp')}
           />
           <MetricCard
-            label="Average rating"
-            value={formatAverage(stats.averageRating)}
-            description="The mean of your ratings, from 1 to 10."
+            label={t('stats.metrics.averageRating')}
+            value={formatAverage(stats.averageRating, language)}
+            description={t('stats.metrics.averageRatingHelp')}
           />
         </View>
         <View className="flex-row gap-2.5">
           <MetricCard
-            label="Favorites"
+            label={t('stats.metrics.favorites')}
             value={String(stats.favoritesCount)}
-            description={`${String(favoriteShare)}% of your movies.`}
+            description={t('stats.metrics.favoritesHelp', {
+              percent: favoriteShare,
+            })}
           />
           <MetricCard
-            label="Most given rating"
+            label={t('stats.metrics.mostGivenRating')}
             value={topRating ? String(topRating.rating) : '–'}
             description={
               topRating
-                ? `Given to ${plural(topRating.count, 'movie', 'movies')}.`
-                : 'Rate movies to see it.'
+                ? t('stats.metrics.mostGivenRatingHelp', {
+                    movies: t('stats.movie', { count: topRating.count }),
+                  })
+                : t('stats.metrics.mostGivenRatingEmpty')
             }
           />
         </View>
       </View>
 
       <StatsSection
-        title="Movies per month"
-        description="Movies you watched in each of the last 12 months, by watched date."
+        title={t('stats.perMonth.title')}
+        description={t('stats.perMonth.help')}
       >
         <MonthlyChart months={months} insights={insights} />
       </StatsSection>
 
       <StatsSection
-        title="Your ratings"
-        description="How many movies got each rating. Shows if you are a tough or a generous critic."
+        title={t('stats.ratings.title')}
+        description={t('stats.ratings.help')}
       >
         <RatingDistribution distribution={stats.ratingDistribution} />
       </StatsSection>
 
       {stats.topGenres.length > 0 && (
         <StatsSection
-          title="Top genres"
-          description="Your 5 most watched genres. A movie with several genres counts for each one."
+          title={t('stats.genres.title')}
+          description={t('stats.genres.help')}
         >
           <TopGenres genres={stats.topGenres} totalMovies={stats.totalMovies} />
         </StatsSection>

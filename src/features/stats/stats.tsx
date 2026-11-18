@@ -8,8 +8,10 @@ import { useRefreshControl } from '@/lib/use-refresh-control';
 import { Dashboard } from './components/dashboard/dashboard';
 import { StatsHeader } from './components/stats-header/stats-header';
 import { StatsSkeleton } from './components/stats-skeleton/stats-skeleton';
+import { useTranslation } from 'react-i18next';
 
 export function StatsScreen() {
+  const { t } = useTranslation();
   const userId = useSessionStore((state) => state.userId) ?? '';
   const stats = useUserStatsQuery(userId);
   const refreshControl = useRefreshControl(() => stats.refetch());
@@ -21,7 +23,7 @@ export function StatsScreen() {
     if (stats.isError) {
       return (
         <SectionError
-          message="Couldn't load your stats."
+          message={t('stats.loadFailed')}
           onRetry={() => void stats.refetch()}
         />
       );
@@ -30,11 +32,10 @@ export function StatsScreen() {
       return (
         <View className="gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-4">
           <Text className="font-semibold text-sm text-primary-text-color">
-            Nothing to measure yet
+            {t('stats.emptyTitle')}
           </Text>
           <Text className="font-sans text-caption text-tertiary-text-color">
-            Log your first movie with the + button and your dashboard starts
-            filling up.
+            {t('stats.emptyBody')}
           </Text>
         </View>
       );

@@ -38,14 +38,16 @@ import {
 import { ItemFormFooter } from '../item-form-footer/item-form-footer';
 import { PlannedDateField } from '../planned-date-field/planned-date-field';
 import { PrioritySelect } from '../priority-select/priority-select';
+import { useTranslation } from 'react-i18next';
+import { translateMessage } from '@/i18n/message';
 
 const DUPLICATE_MESSAGES: Partial<Record<string, string>> = {
-  [EApiErrorCode.ALREADY_IN_WATCHLIST]:
-    'This movie is already on your watchlist.',
-  [EApiErrorCode.MOVIE_ALREADY_LOGGED]: "You've already watched this movie.",
+  [EApiErrorCode.ALREADY_IN_WATCHLIST]: 'watchlist.form.alreadyInWatchlist',
+  [EApiErrorCode.MOVIE_ALREADY_LOGGED]: 'watchlist.form.alreadyWatched',
 };
 
 export function ItemForm({ item }: { item?: IWatchlistItem }) {
+  const { t } = useTranslation();
   const isEditing = item !== undefined;
   const addItem = useAddWatchlistItemMutation();
   const updateItem = useUpdateWatchlistItemMutation(item?.id ?? '');
@@ -133,7 +135,7 @@ export function ItemForm({ item }: { item?: IWatchlistItem }) {
       await invalidateWatchlist();
       return true;
     } catch {
-      toast.error(ITEM_FORM_MESSAGES.posterNotSent);
+      toast.error(t(ITEM_FORM_MESSAGES.posterNotSent));
       return false;
     }
   }
@@ -145,7 +147,7 @@ export function ItemForm({ item }: { item?: IWatchlistItem }) {
         : await addItem.mutateAsync(toNewItemBody(values));
       if (await sendPoster(saved.id, values.poster)) {
         toast.success(
-          isEditing ? ITEM_FORM_MESSAGES.updated : ITEM_FORM_MESSAGES.added,
+          t(isEditing ? ITEM_FORM_MESSAGES.updated : ITEM_FORM_MESSAGES.added),
         );
       }
       closeItemForm();
@@ -156,7 +158,7 @@ export function ItemForm({ item }: { item?: IWatchlistItem }) {
       }
       const duplicate = DUPLICATE_MESSAGES[ApiError.from(error).code];
       if (duplicate) {
-        toast.error(duplicate);
+        toast.error(translateMessage(duplicate));
         return;
       }
       notifySaveError(error, ITEM_FORM_MESSAGES.unexpected);
@@ -171,14 +173,22 @@ export function ItemForm({ item }: { item?: IWatchlistItem }) {
 
   return (
     <View className="flex-1">
-      <ItemFormHeader title={isEditing ? 'Edit item' : 'Add to watchlist'} />
+      <ItemFormHeader
+        title={
+          isEditing
+            ? t('watchlist.form.editTitle')
+            : t('watchlist.form.addTitle')
+        }
+      />
       <ScrollView
         contentContainerClassName="gap-[18px] px-5 pb-10 pt-[18px]"
         keyboardShouldPersistTaps="handled"
       >
         <TmdbSearch
           placeholder={
-            tmdbId === undefined ? 'Search TMDB' : 'Search another movie'
+            tmdbId === undefined
+              ? t('movies.form.searchTmdb')
+              : t('movies.form.searchAnother')
           }
           onSelect={fillFromTmdb}
         />
@@ -202,34 +212,48 @@ export function ItemForm({ item }: { item?: IWatchlistItem }) {
               photo={poster}
               posterUrl={posterUrl}
               posterUrlLabel={
-                posterUrl === item?.posterUrl ? 'Current poster' : undefined
+                posterUrl === item?.posterUrl
+                  ? t('movies.form.currentPoster')
+                  : undefined
               }
               onPick={(photo) => {
                 setValue('poster', photo);
               }}
               onRemove={removePoster}
             />
-            <TextField control={control} name="title" label="Title" />
+            <TextField
+              control={control}
+              name="title"
+              label={t('movies.form.title')}
+            />
             <TextField
               control={control}
               name="releaseYear"
-              label="Release year"
+              label={t('movies.form.releaseYear')}
               keyboardType="number-pad"
               maxLength={4}
             />
-            <GenrePicker control={control} name="genreIds" label="Genres" />
-            <TextAreaField control={control} name="synopsis" label="Synopsis" />
+            <GenrePicker
+              control={control}
+              name="genreIds"
+              label={t('movies.form.genres')}
+            />
+            <TextAreaField
+              control={control}
+              name="synopsis"
+              label={t('movies.form.synopsis')}
+            />
             <TextField
               control={control}
               name="director"
-              label="Director"
-              hint="Optional"
+              label={t('movies.form.director')}
+              hint={t('movies.form.optional')}
             />
             <TextField
               control={control}
               name="durationMinutes"
-              label="Runtime (minutes)"
-              hint="Optional"
+              label={t('movies.form.runtime')}
+              hint={t('movies.form.optional')}
               keyboardType="number-pad"
               maxLength={4}
             />
@@ -241,12 +265,12 @@ export function ItemForm({ item }: { item?: IWatchlistItem }) {
         <TextAreaField
           control={control}
           name="note"
-          label="Personal note"
-          placeholder="Who recommended it, when to watch…"
+          label={t('watchlist.form.personalNote')}
+          placeholder={t('watchlist.form.notePlaceholder')}
         />
       </ScrollView>
       <ItemFormFooter
-        label={isEditing ? 'Save' : 'Add'}
+        label={isEditing ? t('watchlist.form.save') : t('watchlist.form.add')}
         isSaving={isSubmitting}
         onSave={() => void save()}
       />

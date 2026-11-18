@@ -3,12 +3,14 @@ import { ScrollView } from 'react-native';
 import { useGenresQuery } from '@/api/get-genres';
 import { OptionSheet, type IOption } from '@/components/option-sheet';
 import {
-  MOVIE_SORT_OPTIONS,
+  movieSortOptions,
   movieSortLabel,
   type TMovieSortKey,
 } from '@/lib/movie-sort';
 import type { IMovieFilters } from '../../constants/constants';
 import { FilterChip } from '@/components/filter-chip';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 interface IMovieFiltersProps {
   filters: IMovieFilters;
@@ -18,10 +20,12 @@ interface IMovieFiltersProps {
 const ALL_GENRES = '';
 
 export function MovieFilters({ filters, onChange }: IMovieFiltersProps) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const genres = useGenresQuery();
   const [sheet, setSheet] = useState<'genre' | 'sort' | null>(null);
   const genreOptions: IOption<string>[] = [
-    { label: 'All genres', value: ALL_GENRES },
+    { label: t('movies.filters.allGenres'), value: ALL_GENRES },
     ...(genres.data ?? []).map((genre) => ({
       label: genre.name,
       value: genre.id,
@@ -30,7 +34,7 @@ export function MovieFilters({ filters, onChange }: IMovieFiltersProps) {
   const genreName = genres.data?.find(
     (genre) => genre.id === filters.genreId,
   )?.name;
-  const sortLabel = movieSortLabel(filters.sort);
+  const sortLabel = movieSortLabel(filters.sort, language);
 
   function close() {
     setSheet(null);
@@ -45,14 +49,14 @@ export function MovieFilters({ filters, onChange }: IMovieFiltersProps) {
         contentContainerClassName="gap-2 px-5"
       >
         <FilterChip
-          label="Favorites"
+          label={t('movies.filters.favorites')}
           active={filters.favorite}
           onPress={() => {
             onChange({ ...filters, favorite: !filters.favorite });
           }}
         />
         <FilterChip
-          label={genreName ?? 'Genre'}
+          label={genreName ?? t('movies.filters.genre')}
           active={Boolean(genreName)}
           withMenu
           onPress={() => {
@@ -70,7 +74,7 @@ export function MovieFilters({ filters, onChange }: IMovieFiltersProps) {
       </ScrollView>
 
       <OptionSheet
-        title="Genre"
+        title={t('movies.filters.genre')}
         visible={sheet === 'genre'}
         options={genreOptions}
         selected={filters.genreId ?? ALL_GENRES}
@@ -80,9 +84,9 @@ export function MovieFilters({ filters, onChange }: IMovieFiltersProps) {
         onClose={close}
       />
       <OptionSheet<TMovieSortKey>
-        title="Sort by"
+        title={t('movies.sort.title')}
         visible={sheet === 'sort'}
-        options={MOVIE_SORT_OPTIONS}
+        options={movieSortOptions(language)}
         selected={filters.sort}
         onSelect={(sort) => {
           onChange({ ...filters, sort });

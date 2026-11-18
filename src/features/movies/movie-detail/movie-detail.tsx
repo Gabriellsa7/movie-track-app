@@ -17,10 +17,14 @@ import { MovieInfoSection } from './components/movie-info-section/movie-info-sec
 import { useMovieDetailActions } from './hooks/use-movie-detail-actions';
 import { formatWatchedDate } from '@/lib/movie-format';
 import { formatWatchCount } from './utils/movie-detail.utils';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 type TSheet = 'options' | 'confirmDelete' | null;
 
 export function MovieDetailScreen() {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const { movieId } = useLocalSearchParams<{ movieId: string }>();
   const movie = useMovieQuery(movieId);
   const genreNames = useGenreNames(movie.data?.genreIds);
@@ -39,11 +43,11 @@ export function MovieDetailScreen() {
     if (movie.isError) {
       return ApiError.from(movie.error).is(EApiErrorCode.MOVIE_NOT_FOUND) ? (
         <Text className="font-sans text-base text-secondary-text-color">
-          This movie no longer exists.
+          {t('movies.detail.notFound')}
         </Text>
       ) : (
         <SectionError
-          message="Couldn't load this movie."
+          message={t('movies.detail.loadFailed')}
           onRetry={() => void movie.refetch()}
         />
       );
@@ -58,9 +62,11 @@ export function MovieDetailScreen() {
           <MovieRatingCard rating={data.rating} />
           <Text className="font-sans text-[13px] text-tertiary-text-color">
             <Text className="font-semibold text-primary-text-color">
-              {formatWatchCount(data.watchCount)}
+              {formatWatchCount(data.watchCount, language)}
             </Text>
-            {` · last on ${formatWatchedDate(data.watchedAt)}`}
+            {t('movies.detail.lastOn', {
+              date: formatWatchedDate(data.watchedAt, language),
+            })}
           </Text>
         </View>
 
@@ -73,14 +79,14 @@ export function MovieDetailScreen() {
         />
 
         {data.review && (
-          <MovieInfoSection title="My review" card>
+          <MovieInfoSection title={t('movies.detail.myReview')} card>
             <Text className="font-sans text-[15px] leading-6 text-primary-text-color">
               {data.review}
             </Text>
           </MovieInfoSection>
         )}
 
-        <MovieInfoSection title="Synopsis">
+        <MovieInfoSection title={t('movies.detail.synopsis')}>
           <Text className="font-sans text-sm leading-[22px] text-secondary-text-color">
             {data.synopsis}
           </Text>
@@ -111,12 +117,12 @@ export function MovieDetailScreen() {
         onClose={closeSheet}
         actions={[
           {
-            label: 'Edit movie',
+            label: t('movies.detail.edit'),
             icon: Pencil,
             onPress: actions.edit,
           },
           {
-            label: 'Delete movie',
+            label: t('movies.detail.delete'),
             icon: Trash2,
             destructive: true,
             onPress: () => {
@@ -126,13 +132,13 @@ export function MovieDetailScreen() {
         ]}
       />
       <ActionSheet
-        title="Delete movie?"
-        message={`"${title}" will be removed from your movies.`}
+        title={t('movies.detail.deleteTitle')}
+        message={t('movies.detail.deleteMessage', { title })}
         visible={sheet === 'confirmDelete'}
         onClose={closeSheet}
         actions={[
           {
-            label: 'Delete',
+            label: t('movies.detail.deleteConfirm'),
             icon: Trash2,
             destructive: true,
             onPress: actions.remove,

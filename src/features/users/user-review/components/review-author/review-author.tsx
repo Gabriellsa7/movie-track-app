@@ -3,6 +3,8 @@ import { Pressable, Text, View } from 'react-native';
 import type { IUserProfile } from '@/api/types';
 import { UserAvatar } from '@/components/user-avatar';
 import { formatWatchedDate } from '@/lib/movie-format';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 interface IReviewAuthorProps {
   author: IUserProfile;
@@ -10,6 +12,8 @@ interface IReviewAuthorProps {
 }
 
 export function ReviewAuthor({ author, watchedAt }: IReviewAuthorProps) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   return (
     <Link
       href={{ pathname: '/users/[userId]', params: { userId: author.id } }}
@@ -17,7 +21,10 @@ export function ReviewAuthor({ author, watchedAt }: IReviewAuthorProps) {
     >
       <Pressable
         accessibilityRole="link"
-        accessibilityLabel={`${author.name}, watched on ${formatWatchedDate(watchedAt)}`}
+        accessibilityLabel={t('users.review.authorLabel', {
+          name: author.name,
+          date: formatWatchedDate(watchedAt, language),
+        })}
         className="flex-row items-center gap-3 self-start active:opacity-80"
       >
         <UserAvatar
@@ -31,7 +38,9 @@ export function ReviewAuthor({ author, watchedAt }: IReviewAuthorProps) {
             {author.name}
           </Text>
           <Text className="font-sans text-xs text-tertiary-text-color">
-            watched on {formatWatchedDate(watchedAt)}
+            {t('users.review.watchedOn', {
+              date: formatWatchedDate(watchedAt, language),
+            })}
           </Text>
         </View>
       </Pressable>

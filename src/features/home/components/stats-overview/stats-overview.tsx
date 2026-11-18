@@ -8,6 +8,7 @@ import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
 import { SectionHeader } from '../section-header/section-header';
 import { StatsGrid } from '../stats-grid/stats-grid';
+import { useTranslation } from 'react-i18next';
 
 interface IStatsOverviewProps {
   stats: IUserStats | undefined;
@@ -20,23 +21,24 @@ export function StatsOverview({
   isError,
   onRetry,
 }: IStatsOverviewProps) {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
 
   return (
     <View className="gap-2.5">
       <SectionHeader
-        title="Your stats"
-        linkLabel="See dashboard"
+        title={t('home.stats.title')}
+        linkLabel={t('home.stats.seeDashboard')}
         href={ROUTES.stats}
       />
       {isError ? (
-        <SectionError message="Couldn't load your stats." onRetry={onRetry} />
+        <SectionError message={t('home.stats.loadFailed')} onRetry={onRetry} />
       ) : (
         <Link href={ROUTES.stats} asChild>
           <Pressable
             accessibilityRole="link"
-            accessibilityLabel="Open your dashboard"
-            accessibilityHint="Shows your trends, ratings and top genres"
+            accessibilityLabel={t('home.stats.openDashboard')}
+            accessibilityHint={t('home.stats.openDashboardHint')}
             className="gap-2.5 active:opacity-80"
           >
             <StatsGrid stats={stats} />
@@ -46,8 +48,7 @@ export function StatsOverview({
                 color={color(scheme, 'accent-text-color')}
               />
               <Text className="flex-1 font-sans text-caption text-secondary-text-color">
-                Tap to open your dashboard: movies per month, ratings and top
-                genres.
+                {t('home.stats.dashboardTip')}
               </Text>
               <ChevronRight
                 size={18}

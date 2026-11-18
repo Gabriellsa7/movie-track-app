@@ -1,19 +1,5 @@
-import { SHORT_MONTHS } from '@/lib/stats';
-
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-] as const;
+import { tFor, type TLanguage } from '@/i18n';
+import { formatDate, formatShortMonth } from '@/i18n/format';
 
 export const AVATAR_TONES = [
   { bg: 'bg-accent-soft-bg-color', text: 'text-accent-text-color' },
@@ -40,16 +26,24 @@ export function avatarToneOf(id: string): (typeof AVATAR_TONES)[number] {
   return AVATAR_TONES[hash % AVATAR_TONES.length] ?? AVATAR_TONES[0];
 }
 
-export function formatSince(isoDate: string): string {
+export function formatSince(isoDate: string, language: TLanguage): string {
   const date = new Date(isoDate);
-  return `${SHORT_MONTHS[date.getUTCMonth()] ?? ''} ${String(date.getUTCFullYear())}`;
+  return `${formatShortMonth(date, language)} ${String(date.getUTCFullYear())}`;
 }
 
-export function formatMemberSince(isoDate: string): string {
-  const date = new Date(isoDate);
-  return `Member since ${MONTHS[date.getUTCMonth()] ?? ''} ${String(date.getUTCFullYear())}`;
+export function formatMemberSince(
+  isoDate: string,
+  language: TLanguage,
+): string {
+  return tFor(language)('users.memberSince', {
+    date: formatDate(
+      new Date(isoDate),
+      { month: 'long', year: 'numeric' },
+      language,
+    ),
+  });
 }
 
-export function formatMoviesCount(count: number): string {
-  return count === 1 ? '1 movie' : `${String(count)} movies`;
+export function formatMoviesCount(count: number, language: TLanguage): string {
+  return tFor(language)('users.moviesCount', { count });
 }

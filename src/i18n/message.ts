@@ -1,4 +1,4 @@
-import { i18n } from './index';
+import { i18n, tFor, type TLanguage } from './index';
 
 const SEPARATOR = '|';
 
@@ -8,7 +8,10 @@ export function messageKey(key: string, values?: TValues): string {
   return values ? `${key}${SEPARATOR}${JSON.stringify(values)}` : key;
 }
 
-export function translateMessage(message: string): string {
+export function translateMessage(
+  message: string,
+  language?: TLanguage,
+): string {
   const separatorIndex = message.indexOf(SEPARATOR);
   const key =
     separatorIndex === -1 ? message : message.slice(0, separatorIndex);
@@ -19,5 +22,6 @@ export function translateMessage(message: string): string {
     separatorIndex === -1
       ? undefined
       : (JSON.parse(message.slice(separatorIndex + 1)) as TValues);
-  return i18n.t(key, values as never) as unknown as string;
+  const t = language ? tFor(language) : i18n.t.bind(i18n);
+  return t(key as never, values as never) as unknown as string;
 }

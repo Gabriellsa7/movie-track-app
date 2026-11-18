@@ -3,8 +3,10 @@ import { SectionError } from '@/components/section-error';
 import { Skeleton } from '@/components/skeleton';
 import { useWatchlistItemQuery } from '../../../api/get-watchlist-item';
 import { ItemForm } from '../item-form/item-form';
+import { useTranslation } from 'react-i18next';
 
 export function EditItem({ itemId }: { itemId: string }) {
+  const { t } = useTranslation();
   const item = useWatchlistItemQuery(itemId);
 
   if (item.data) {
@@ -16,12 +18,12 @@ export function EditItem({ itemId }: { itemId: string }) {
         <Skeleton className="h-40 rounded-xl" />
       ) : item.isError ? (
         <SectionError
-          message="Couldn't load this movie."
+          message={t('watchlist.form.loadFailed')}
           onRetry={() => void item.refetch()}
         />
       ) : (
         <Text className="font-sans text-base text-secondary-text-color">
-          This movie is no longer on your watchlist.
+          {t('watchlist.form.notFound')}
         </Text>
       )}
     </View>

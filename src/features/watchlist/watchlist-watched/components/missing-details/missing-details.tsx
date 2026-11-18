@@ -8,6 +8,7 @@ import type {
   IWatchedOutput,
   TMissingField,
 } from '../../constants/constants';
+import { useTranslation } from 'react-i18next';
 
 interface IMissingDetailsProps {
   control: Control<IWatchedInput, unknown, IWatchedOutput>;
@@ -15,6 +16,7 @@ interface IMissingDetailsProps {
 }
 
 export function MissingDetails({ control, missing }: IMissingDetailsProps) {
+  const { t } = useTranslation();
   return (
     <View
       accessibilityRole="alert"
@@ -22,29 +24,33 @@ export function MissingDetails({ control, missing }: IMissingDetailsProps) {
     >
       <Text className="font-sans text-[13px] leading-5 text-primary-text-color">
         <Text className="font-semibold text-accent-text-color">
-          This movie is missing some details.
+          {t('watchlist.watched.missingTitle')}
         </Text>{' '}
-        Fill them in to log it.
+        {t('watchlist.watched.missingHint')}
       </Text>
       {missing.includes('releaseYear') && (
         <TextField
           control={control}
           name="releaseYear"
-          label="Year *"
+          label={t('watchlist.watched.year')}
           placeholder="2023"
           keyboardType="number-pad"
           maxLength={4}
         />
       )}
       {missing.includes('genreIds') && (
-        <GenrePicker control={control} name="genreIds" label="Genres *" />
+        <GenrePicker
+          control={control}
+          name="genreIds"
+          label={t('watchlist.watched.genres')}
+        />
       )}
       {missing.includes('synopsis') && (
         <TextAreaField
           control={control}
           name="synopsis"
-          label="Synopsis *"
-          placeholder="What is the movie about?"
+          label={t('watchlist.watched.synopsis')}
+          placeholder={t('watchlist.watched.synopsisPlaceholder')}
         />
       )}
     </View>

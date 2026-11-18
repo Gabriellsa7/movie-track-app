@@ -3,6 +3,7 @@ import { Pressable, Text, View } from 'react-native';
 import { Poster } from '@/components/poster';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 interface IWatchedHeaderProps {
   title: string;
@@ -15,6 +16,7 @@ export function WatchedHeader({
   posterUrl,
   onClose,
 }: IWatchedHeaderProps) {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
 
   return (
@@ -27,7 +29,7 @@ export function WatchedHeader({
       />
       <View className="min-w-0 flex-1">
         <Text className="font-sans text-xs text-tertiary-text-color">
-          Watched it
+          {t('watchlist.watched.title')}
         </Text>
         <Text
           accessibilityRole="header"
@@ -39,7 +41,7 @@ export function WatchedHeader({
       </View>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Close"
+        accessibilityLabel={t('common.close')}
         onPress={onClose}
         className="h-11 w-11 items-center justify-center rounded-xl"
       >

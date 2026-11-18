@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Text, View } from 'react-native';
+import { useLanguage } from '@/i18n';
 import { translateMessage } from '@/i18n/message';
-import { useTranslation } from 'react-i18next';
 
 interface IFieldFrameProps {
   label: string;
@@ -11,7 +11,7 @@ interface IFieldFrameProps {
 }
 
 export function FieldFrame({ label, error, hint, children }: IFieldFrameProps) {
-  useTranslation();
+  const language = useLanguage();
   return (
     <View className="gap-1.5">
       <Text className="font-semibold text-sm text-primary-text-color">
@@ -28,7 +28,7 @@ export function FieldFrame({ label, error, hint, children }: IFieldFrameProps) {
           accessibilityRole="alert"
           className="font-medium text-xs text-danger-text-color"
         >
-          {translateMessage(error)}
+          {translateMessage(error, language)}
         </Text>
       )}
     </View>

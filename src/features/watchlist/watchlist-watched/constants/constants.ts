@@ -1,3 +1,4 @@
+import { messageKey } from '@/i18n/message';
 import { z, type input as TInput, type output as TOutput } from 'zod';
 import type { IWatchlistItem } from '@/api/types';
 import {
@@ -22,7 +23,7 @@ export const WATCHED_SCHEMA = z.object({
     .trim()
     .max(
       REVIEW_MAX_LENGTH,
-      `Use at most ${String(REVIEW_MAX_LENGTH)} characters`,
+      messageKey('validation.maxLength', { count: REVIEW_MAX_LENGTH }),
     )
     .transform((value) => value || undefined),
   releaseYear: z
@@ -36,7 +37,7 @@ export const WATCHED_SCHEMA = z.object({
     .trim()
     .max(
       SYNOPSIS_MAX_LENGTH,
-      `Use at most ${String(SYNOPSIS_MAX_LENGTH)} characters`,
+      messageKey('validation.maxLength', { count: SYNOPSIS_MAX_LENGTH }),
     )
     .transform((value) => value || undefined),
 });
@@ -58,14 +59,14 @@ export function watchedSchemaFor(missing: TMissingField[]) {
       context.addIssue({
         code: 'custom',
         path: ['releaseYear'],
-        message: 'Enter the year',
+        message: 'validation.yearRequired',
       });
     }
     if (missing.includes('synopsis') && !values.synopsis) {
       context.addIssue({
         code: 'custom',
         path: ['synopsis'],
-        message: 'Write a synopsis',
+        message: 'validation.synopsisRequired',
       });
     }
     if (missing.includes('genreIds')) {
@@ -74,7 +75,7 @@ export function watchedSchemaFor(missing: TMissingField[]) {
         context.addIssue({
           code: 'custom',
           path: ['genreIds'],
-          message: checked.error.issues[0]?.message ?? 'Pick a genre',
+          message: checked.error.issues[0]?.message ?? 'validation.genreMin',
         });
       }
     }

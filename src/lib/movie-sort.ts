@@ -1,16 +1,26 @@
 import type { IListMoviesQuery } from '@/api/types';
 import type { IOption } from '@/components/option-sheet';
+import { tFor, type TLanguage } from '@/i18n';
 
 export type TMovieSortKey =
   'latest' | 'rating' | 'title' | 'releaseYear' | 'watchCount';
 
-export const MOVIE_SORT_OPTIONS: IOption<TMovieSortKey>[] = [
-  { label: 'Latest watched', value: 'latest' },
-  { label: 'Highest rating', value: 'rating' },
-  { label: 'Title A–Z', value: 'title' },
-  { label: 'Release year', value: 'releaseYear' },
-  { label: 'Most rewatched', value: 'watchCount' },
+const SORT_KEYS: TMovieSortKey[] = [
+  'latest',
+  'rating',
+  'title',
+  'releaseYear',
+  'watchCount',
 ];
+
+export function movieSortOptions(
+  language: TLanguage,
+): IOption<TMovieSortKey>[] {
+  return SORT_KEYS.map((value) => ({
+    value,
+    label: movieSortLabel(value, language),
+  }));
+}
 
 const SORT_QUERIES: Record<
   TMovieSortKey,
@@ -29,8 +39,9 @@ export function movieSortQuery(
   return SORT_QUERIES[sort];
 }
 
-export function movieSortLabel(sort: TMovieSortKey): string {
-  return (
-    MOVIE_SORT_OPTIONS.find((option) => option.value === sort)?.label ?? ''
-  );
+export function movieSortLabel(
+  sort: TMovieSortKey,
+  language: TLanguage,
+): string {
+  return tFor(language)(`movies.sort.${sort === 'title' ? 'titleAz' : sort}`);
 }

@@ -8,10 +8,12 @@ import { useAddWatchlistItemMutation } from '@/features/watchlist/api/post-watch
 import { notifySaveError } from '@/lib/forms/notify-save-error';
 import { shareLink } from '@/lib/share';
 import { toWatchlistItemBody } from '../../utils/users.utils';
+import { i18n } from '@/i18n';
+import { translateMessage } from '@/i18n/message';
 
 const ADD_ERRORS: Partial<Record<string, string>> = {
-  [EApiErrorCode.ALREADY_IN_WATCHLIST]: 'It is already on your watchlist.',
-  [EApiErrorCode.MOVIE_ALREADY_LOGGED]: "You've already logged this movie.",
+  [EApiErrorCode.ALREADY_IN_WATCHLIST]: 'users.review.alreadyInWatchlist',
+  [EApiErrorCode.MOVIE_ALREADY_LOGGED]: 'users.review.alreadyLogged',
 };
 
 export function useReviewActions(movie: IMovie | undefined, authorName = '') {
@@ -23,15 +25,15 @@ export function useReviewActions(movie: IMovie | undefined, authorName = '') {
     }
     addItem.mutate(toWatchlistItemBody(movie), {
       onSuccess: () => {
-        toast.success('Added to your watchlist');
+        toast.success(i18n.t('users.review.added'));
       },
       onError: (error) => {
         const message = ADD_ERRORS[ApiError.from(error).code];
         if (message) {
-          toast.error(message);
+          toast.error(translateMessage(message));
           return;
         }
-        notifySaveError(error, "Couldn't add it to your watchlist. Try again.");
+        notifySaveError(error, 'users.review.addFailed');
       },
     });
   }
@@ -48,7 +50,10 @@ export function useReviewActions(movie: IMovie | undefined, authorName = '') {
   function share() {
     if (movie) {
       void shareLink(
-        `${authorName}'s review of ${movie.title} on Movie Track:`,
+        i18n.t('users.review.shareMessage', {
+          name: authorName,
+          title: movie.title,
+        }),
         Linking.createURL(`/users/${movie.userId}/movies/${movie.id}`),
       );
     }

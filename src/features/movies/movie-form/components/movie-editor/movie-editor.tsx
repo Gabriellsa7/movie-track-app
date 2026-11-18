@@ -36,6 +36,7 @@ import {
 } from '../movie-form-header/movie-form-header';
 import { MovieSummaryCard } from '@/components/movie-summary-card';
 import { PosterPicker } from '@/components/poster-picker';
+import { useTranslation } from 'react-i18next';
 
 interface IMovieEditorProps {
   movie?: IMovie;
@@ -43,6 +44,7 @@ interface IMovieEditorProps {
 }
 
 export function MovieEditor({ movie, template }: IMovieEditorProps) {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
   const isEditing = movie !== undefined;
   const createMovie = useCreateMovieMutation();
@@ -134,9 +136,11 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
       return true;
     } catch {
       toast.error(
-        isEditing
-          ? MOVIE_FORM_MESSAGES.posterNotSaved
-          : MOVIE_FORM_MESSAGES.posterNotSent,
+        t(
+          isEditing
+            ? MOVIE_FORM_MESSAGES.posterNotSaved
+            : MOVIE_FORM_MESSAGES.posterNotSent,
+        ),
       );
       return false;
     }
@@ -152,7 +156,11 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
           );
       if (await sendPoster(saved.id, photo)) {
         toast.success(
-          isEditing ? MOVIE_FORM_MESSAGES.updated : MOVIE_FORM_MESSAGES.created,
+          t(
+            isEditing
+              ? MOVIE_FORM_MESSAGES.updated
+              : MOVIE_FORM_MESSAGES.created,
+          ),
         );
       }
       closeMovieForm();
@@ -179,7 +187,9 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
   return (
     <View className="flex-1">
       <MovieFormHeader
-        title={isEditing ? 'Edit movie' : 'Log a movie'}
+        title={
+          isEditing ? t('movies.form.editTitle') : t('movies.form.logTitle')
+        }
         isSaving={isSubmitting}
         onSave={() => void save()}
       />
@@ -189,7 +199,9 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
       >
         <TmdbSearch
           placeholder={
-            tmdbId === undefined ? 'Search TMDB' : 'Search another movie'
+            tmdbId === undefined
+              ? t('movies.form.searchTmdb')
+              : t('movies.form.searchAnother')
           }
           onSelect={fillFromTmdb}
         />
@@ -214,7 +226,7 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
               posterUrl={posterUrl}
               posterUrlLabel={
                 isEditing && posterUrl === movie.posterUrl
-                  ? 'Current poster'
+                  ? t('movies.form.currentPoster')
                   : undefined
               }
               onPick={(photo) => {
@@ -222,27 +234,39 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
               }}
               onRemove={removePoster}
             />
-            <TextField control={control} name="title" label="Title" />
+            <TextField
+              control={control}
+              name="title"
+              label={t('movies.form.title')}
+            />
             <TextField
               control={control}
               name="releaseYear"
-              label="Release year"
+              label={t('movies.form.releaseYear')}
               keyboardType="number-pad"
               maxLength={4}
             />
-            <GenrePicker control={control} name="genreIds" label="Genres" />
-            <TextAreaField control={control} name="synopsis" label="Synopsis" />
+            <GenrePicker
+              control={control}
+              name="genreIds"
+              label={t('movies.form.genres')}
+            />
+            <TextAreaField
+              control={control}
+              name="synopsis"
+              label={t('movies.form.synopsis')}
+            />
             <TextField
               control={control}
               name="director"
-              label="Director"
-              hint="Optional"
+              label={t('movies.form.director')}
+              hint={t('movies.form.optional')}
             />
             <TextField
               control={control}
               name="durationMinutes"
-              label="Runtime (minutes)"
-              hint="Optional"
+              label={t('movies.form.runtime')}
+              hint={t('movies.form.optional')}
               keyboardType="number-pad"
               maxLength={4}
             />
@@ -256,7 +280,7 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
             <DateField
               control={control}
               name="watchedAt"
-              label="Watched on"
+              label={t('movies.form.watchedOn')}
               maximumDate={new Date()}
             />
           </View>
@@ -264,7 +288,7 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
             <TextField
               control={control}
               name="watchCount"
-              label="Times"
+              label={t('movies.form.times')}
               keyboardType="number-pad"
               maxLength={4}
             />
@@ -277,10 +301,10 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
           render={({ field: { value, onChange } }) => (
             <View className="h-[52px] flex-row items-center justify-between rounded-xl border border-primary-border-color bg-secondary-bg-color px-3.5">
               <Text className="font-medium text-[15px] text-primary-text-color">
-                Favorite
+                {t('movies.form.favorite')}
               </Text>
               <Switch
-                accessibilityLabel="Favorite"
+                accessibilityLabel={t('movies.form.favorite')}
                 value={value}
                 onValueChange={onChange}
                 trackColor={{ true: color(scheme, 'accent-bg-color') }}
@@ -292,8 +316,8 @@ export function MovieEditor({ movie, template }: IMovieEditorProps) {
         <TextAreaField
           control={control}
           name="review"
-          label="Your review"
-          placeholder="What did you think?"
+          label={t('movies.form.review')}
+          placeholder={t('movies.form.reviewPlaceholder')}
         />
       </ScrollView>
     </View>

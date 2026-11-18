@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { toast } from 'sonner-native';
 import type { IWatchlistItem } from '@/api/types';
 import { useRemoveWatchlistItemMutation } from '../api/delete-watchlist-item';
+import { i18n } from '@/i18n';
 
 export function useWatchlistItemActions() {
   const removeItem = useRemoveWatchlistItemMutation();
@@ -16,10 +17,10 @@ export function useWatchlistItemActions() {
   function remove(item: IWatchlistItem) {
     removeItem.mutate(item.id, {
       onSuccess: () => {
-        toast.success('Removed from your watchlist');
+        toast.success(i18n.t('watchlist.removed'));
       },
       onError: () => {
-        toast.error("Couldn't remove it. Try again.");
+        toast.error(i18n.t('watchlist.removeFailed'));
       },
     });
   }

@@ -2,6 +2,7 @@ import { Heart, Repeat, Share2 } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 interface IMovieActionsProps {
   isFavorite: boolean;
@@ -21,6 +22,7 @@ export function MovieActions({
   onRewatch,
   onShare,
 }: IMovieActionsProps) {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
   const accent = color(scheme, 'accent-text-color');
   const text = color(scheme, 'primary-text-color');
@@ -29,7 +31,7 @@ export function MovieActions({
     <View className="flex-row gap-2">
       <Pressable
         accessibilityRole="switch"
-        accessibilityLabel="Favorite"
+        accessibilityLabel={t('movies.detail.favorite')}
         accessibilityState={{ checked: isFavorite }}
         onPress={onToggleFavorite}
         className={`${BUTTON} ${
@@ -48,7 +50,7 @@ export function MovieActions({
             isFavorite ? 'text-accent-text-color' : 'text-primary-text-color'
           }`}
         >
-          Favorite
+          {t('movies.detail.favorite')}
         </Text>
       </Pressable>
       <Pressable
@@ -60,7 +62,7 @@ export function MovieActions({
       >
         <Repeat size={18} color={text} />
         <Text className="font-semibold text-xs text-primary-text-color">
-          Watched again
+          {t('movies.detail.watchedAgain')}
         </Text>
       </Pressable>
       <Pressable
@@ -70,7 +72,7 @@ export function MovieActions({
       >
         <Share2 size={18} color={text} />
         <Text className="font-semibold text-xs text-primary-text-color">
-          Share
+          {t('movies.detail.share')}
         </Text>
       </Pressable>
     </View>

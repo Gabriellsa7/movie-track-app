@@ -2,8 +2,8 @@ import { formatAverage, formatHours, lastTwelveMonths } from './stats';
 
 describe('When we format the stats', () => {
   it('should show a dash without an average', () => {
-    expect(formatAverage(null)).toBe('–');
-    expect(formatAverage(7)).toBe('7.0');
+    expect(formatAverage(null, 'en')).toBe('–');
+    expect(formatAverage(7, 'en')).toBe('7.0');
   });
 
   it('should round the minutes to hours', () => {
@@ -21,6 +21,7 @@ describe('When we build the months chart', () => {
         { month: '2024-01', count: 9 },
       ],
       new Date(2026, 10, 16),
+      'en',
     );
 
     expect(months).toHaveLength(12);

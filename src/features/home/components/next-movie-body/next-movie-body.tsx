@@ -8,6 +8,8 @@ import { Skeleton } from '@/components/skeleton';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { plannedLabel, priorityLabel } from '@/lib/watchlist';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 export const NEXT_MOVIE_QUERY = {
   planned: true,
@@ -16,6 +18,8 @@ export const NEXT_MOVIE_QUERY = {
 } as const;
 
 export function NextMovieBody() {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const scheme = useAppTheme();
   const { data, isPending, isError, refetch } =
     useWatchlistQuery(NEXT_MOVIE_QUERY);
@@ -26,7 +30,7 @@ export function NextMovieBody() {
   if (isError) {
     return (
       <SectionError
-        message="Couldn't load the next movie."
+        message={t('home.next.loadFailed')}
         onRetry={() => void refetch()}
       />
     );
@@ -37,10 +41,10 @@ export function NextMovieBody() {
     return (
       <View className="gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-4">
         <Text className="font-semibold text-sm text-primary-text-color">
-          No movie scheduled
+          {t('home.next.emptyTitle')}
         </Text>
         <Text className="font-sans text-caption text-tertiary-text-color">
-          Pick a day for a movie on your watchlist.
+          {t('home.next.emptyBody')}
         </Text>
       </View>
     );
@@ -62,8 +66,8 @@ export function NextMovieBody() {
           {item.title}
         </Text>
         <Text className="font-sans text-caption text-secondary-text-color">
-          {plannedLabel(item.plannedFor, new Date())} ·{' '}
-          {priorityLabel(item.priority)}
+          {plannedLabel(item.plannedFor, new Date(), language)} ·{' '}
+          {priorityLabel(item.priority, language)}
         </Text>
         <Link
           href={{
@@ -74,7 +78,9 @@ export function NextMovieBody() {
         >
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`Mark ${item.title} as watched`}
+            accessibilityLabel={t('home.next.markWatched', {
+              title: item.title,
+            })}
             className="mt-auto h-9 flex-row items-center gap-1.5 self-start rounded-lg bg-accent-bg-color px-3.5"
           >
             <Check
@@ -83,7 +89,7 @@ export function NextMovieBody() {
               color={color(scheme, 'on-accent-text-color')}
             />
             <Text className="font-semibold text-label text-on-accent-text-color">
-              Watched it
+              {t('home.next.watchedIt')}
             </Text>
           </Pressable>
         </Link>

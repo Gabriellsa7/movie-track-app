@@ -7,18 +7,22 @@ import { lastTwelveMonths } from '@/lib/stats';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 const CHART_HEIGHT = 70;
 const EMPTY_BAR_HEIGHT = 3;
 
 export function MoviesPerMonth({ stats }: { stats: IUserStats | undefined }) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const scheme = useAppTheme();
 
   if (!stats) {
     return <Skeleton className="h-[122px] rounded-[14px]" />;
   }
 
-  const months = lastTwelveMonths(stats.moviesPerMonth, new Date());
+  const months = lastTwelveMonths(stats.moviesPerMonth, new Date(), language);
   const max = Math.max(...months.map((month) => month.count), 1);
   const summary = months
     .map((month) => `${month.label}: ${month.count}`)
@@ -28,17 +32,17 @@ export function MoviesPerMonth({ stats }: { stats: IUserStats | undefined }) {
     <Link href={ROUTES.stats} asChild>
       <Pressable
         accessibilityRole="link"
-        accessibilityLabel={`Movies per month. ${summary}`}
-        accessibilityHint="Opens your dashboard"
+        accessibilityLabel={t('home.perMonth.label', { summary })}
+        accessibilityHint={t('home.perMonth.hint')}
         className="rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-4 active:opacity-80"
       >
         <View className="mb-3.5 flex-row items-center justify-between">
           <Text className="font-semibold text-sm text-primary-text-color">
-            Movies per month
+            {t('home.perMonth.title')}
           </Text>
           <View className="flex-row items-center gap-0.5">
             <Text className="font-semibold text-label text-accent-text-color">
-              See dashboard
+              {t('home.stats.seeDashboard')}
             </Text>
             <ChevronRight
               size={16}

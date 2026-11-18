@@ -2,8 +2,10 @@ import { Text, View } from 'react-native';
 import type { IUserProfile } from '@/api/types';
 import { UserAvatar } from '@/components/user-avatar';
 import { formatMemberSince } from '@/lib/users';
+import { useLanguage } from '@/i18n';
 
 export function ProfileHeader({ user }: { user: IUserProfile }) {
+  const language = useLanguage();
   return (
     <View className="items-center gap-2">
       <UserAvatar
@@ -19,7 +21,7 @@ export function ProfileHeader({ user }: { user: IUserProfile }) {
         {user.name}
       </Text>
       <Text className="font-sans text-[13px] text-tertiary-text-color">
-        {formatMemberSince(user.memberSince)}
+        {formatMemberSince(user.memberSince, language)}
       </Text>
     </View>
   );

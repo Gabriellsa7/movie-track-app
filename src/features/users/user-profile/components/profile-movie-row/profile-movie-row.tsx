@@ -6,8 +6,12 @@ import { Poster } from '@/components/poster';
 import { formatRating } from '@/lib/rating';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 export function ProfileMovieRow({ movie }: { movie: IMovie }) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const scheme = useAppTheme();
 
   return (
@@ -20,7 +24,10 @@ export function ProfileMovieRow({ movie }: { movie: IMovie }) {
     >
       <Pressable
         accessibilityRole="link"
-        accessibilityLabel={`${movie.title}, rating ${formatRating(movie.rating)}`}
+        accessibilityLabel={t('users.profile.movieLabel', {
+          title: movie.title,
+          rating: formatRating(movie.rating, language),
+        })}
         className="flex-row gap-3 rounded-xl border border-primary-border-color bg-secondary-bg-color p-2.5 active:opacity-80"
       >
         <Poster
@@ -44,7 +51,7 @@ export function ProfileMovieRow({ movie }: { movie: IMovie }) {
                 color={color(scheme, 'star-filled-color')}
               />
               <Text className="font-semibold text-[13px] text-primary-text-color">
-                {formatRating(movie.rating)}
+                {formatRating(movie.rating, language)}
               </Text>
             </View>
           </View>
@@ -57,7 +64,7 @@ export function ProfileMovieRow({ movie }: { movie: IMovie }) {
             </Text>
           ) : (
             <Text className="font-sans text-[13px] text-tertiary-text-color">
-              No review
+              {t('users.profile.noReview')}
             </Text>
           )}
         </View>

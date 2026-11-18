@@ -9,11 +9,13 @@ import { useDeleteMovieMutation } from '../../api/delete-movie';
 import { useSetFavoriteMutation } from '../../api/patch-movie-favorite';
 import { useRewatchMovieMutation } from '../../api/post-movie-rewatch';
 import { reviewShare } from '../utils/movie-detail.utils';
+import { i18n, useLanguage } from '@/i18n';
 
 export function useMovieDetailActions(
   movieId: string,
   movie: IMovie | undefined,
 ) {
+  const language = useLanguage();
   const setFavorite = useSetFavoriteMutation(movieId);
   const rewatch = useRewatchMovieMutation(movieId);
   const deleteMovie = useDeleteMovieMutation();
@@ -27,17 +29,17 @@ export function useMovieDetailActions(
   function watchedAgain() {
     rewatch.mutate(undefined, {
       onSuccess: () => {
-        toast.success('Added one more watch');
+        toast.success(i18n.t('movies.detail.rewatched'));
       },
       onError: () => {
-        toast.error("Couldn't save the new watch. Try again.");
+        toast.error(i18n.t('movies.detail.rewatchFailed'));
       },
     });
   }
 
   function share() {
     if (movie) {
-      const { message, path } = reviewShare(movie);
+      const { message, path } = reviewShare(movie, language);
       void shareLink(message, Linking.createURL(path));
     }
   }
@@ -49,11 +51,11 @@ export function useMovieDetailActions(
   function remove() {
     deleteMovie.mutate(movieId, {
       onSuccess: () => {
-        toast.success('Movie deleted');
+        toast.success(i18n.t('movies.detail.deleted'));
         goBackOr(ROUTES.movies);
       },
       onError: () => {
-        toast.error("Couldn't delete the movie. Try again.");
+        toast.error(i18n.t('movies.detail.deleteFailed'));
       },
     });
   }

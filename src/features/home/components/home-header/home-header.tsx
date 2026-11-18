@@ -4,8 +4,12 @@ import { Pressable, Text, View } from 'react-native';
 import { ROUTES } from '@/routes/routes.constants';
 import { useSessionStore } from '@/stores/session.store';
 import { greetingFor } from '../../utils/home.utils';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 export function HomeHeader() {
+  const { t } = useTranslation();
+  const language = useLanguage();
   const user = useSessionStore((state) => state.user);
   const initial = user?.name.trim().charAt(0).toUpperCase() ?? '';
 
@@ -13,19 +17,19 @@ export function HomeHeader() {
     <View className="flex-row items-center justify-between">
       <View>
         <Text className="font-sans text-caption text-tertiary-text-color">
-          {greetingFor(new Date(), user?.name)}
+          {greetingFor(new Date(), user?.name, language)}
         </Text>
         <Text
           accessibilityRole="header"
           className="mt-0.5 font-display text-title-sm text-primary-text-color"
         >
-          Home
+          {t('home.title')}
         </Text>
       </View>
       <Link href={ROUTES.account} asChild>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Open account"
+          accessibilityLabel={t('home.openAccount')}
           className="h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-secondary-border-color"
         >
           {user?.avatarUrl ? (

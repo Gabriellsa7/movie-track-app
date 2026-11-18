@@ -1,4 +1,6 @@
 import { Pressable, Text, View } from 'react-native';
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export type TWatchlistTab = 'upcoming' | 'someday';
 
@@ -9,8 +11,10 @@ interface IWatchlistTabsProps {
   onChange: (tab: TWatchlistTab) => void;
 }
 
-function label(name: string, count: number | undefined): string {
-  return count === undefined ? name : `${name} · ${String(count)}`;
+function label(t: TFunction, name: string, count: number | undefined): string {
+  return count === undefined
+    ? name
+    : t('watchlist.tabs.withCount', { name, count });
 }
 
 export function WatchlistTabs({
@@ -19,9 +23,16 @@ export function WatchlistTabs({
   somedayCount,
   onChange,
 }: IWatchlistTabsProps) {
+  const { t } = useTranslation();
   const tabs: { id: TWatchlistTab; text: string }[] = [
-    { id: 'upcoming', text: label('Upcoming', upcomingCount) },
-    { id: 'someday', text: label('Someday', somedayCount) },
+    {
+      id: 'upcoming',
+      text: label(t, t('watchlist.tabs.upcoming'), upcomingCount),
+    },
+    {
+      id: 'someday',
+      text: label(t, t('watchlist.tabs.someday'), somedayCount),
+    },
   ];
 
   return (

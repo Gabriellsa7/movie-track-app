@@ -4,15 +4,17 @@ import { goBackOr } from '@/lib/navigation';
 import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
+import { useTranslation } from 'react-i18next';
 
 export function StatsHeader() {
+  const { t } = useTranslation();
   const scheme = useAppTheme();
 
   return (
     <View className="gap-3">
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Back"
+        accessibilityLabel={t('stats.back')}
         onPress={() => {
           goBackOr(ROUTES.home);
         }}
@@ -29,10 +31,10 @@ export function StatsHeader() {
           accessibilityRole="header"
           className="font-display text-4xl text-primary-text-color"
         >
-          Your dashboard
+          {t('stats.title')}
         </Text>
         <Text className="font-sans text-sm text-tertiary-text-color">
-          Everything you watched, in numbers. Pull down to refresh.
+          {t('stats.subtitle')}
         </Text>
       </View>
     </View>

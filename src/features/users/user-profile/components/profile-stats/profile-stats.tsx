@@ -1,6 +1,8 @@
 import { Text, View } from 'react-native';
 import type { IUserProfile } from '@/api/types';
 import { formatAverage } from '@/lib/stats';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/i18n';
 
 interface IStatProps {
   value: string;
@@ -34,21 +36,25 @@ function Stat({ value, label, accent = false, divided = false }: IStatProps) {
 }
 
 export function ProfileStats({ user }: { user: IUserProfile }) {
+  const { t } = useTranslation();
+  const language = useLanguage();
   return (
     <View className="flex-row rounded-[14px] border border-primary-border-color bg-secondary-bg-color py-3.5">
       <Stat
         value={String(user.moviesCount)}
-        label={user.moviesCount === 1 ? 'movie' : 'movies'}
+        label={t('users.profile.statMovies', { count: user.moviesCount })}
       />
       <Stat
-        value={formatAverage(user.averageRating)}
-        label="average rating"
+        value={formatAverage(user.averageRating, language)}
+        label={t('users.profile.statAverage')}
         accent
         divided
       />
       <Stat
         value={String(user.favoritesCount)}
-        label={user.favoritesCount === 1 ? 'favorite' : 'favorites'}
+        label={t('users.profile.statFavorites', {
+          count: user.favoritesCount,
+        })}
       />
     </View>
   );

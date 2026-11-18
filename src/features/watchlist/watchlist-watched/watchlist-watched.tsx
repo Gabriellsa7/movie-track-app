@@ -9,8 +9,10 @@ import {
   WatchedForm,
 } from './components/watched-form/watched-form';
 import { WatchedHeader } from './components/watched-header/watched-header';
+import { useTranslation } from 'react-i18next';
 
 export function WatchlistWatchedScreen() {
+  const { t } = useTranslation();
   const { itemId } = useLocalSearchParams<{ itemId: string }>();
   const item = useWatchlistItemQuery(itemId);
 
@@ -24,18 +26,18 @@ export function WatchlistWatchedScreen() {
           <Skeleton className="h-[66px] rounded-xl" />
         ) : item.isError ? (
           <SectionError
-            message="Couldn't load this movie."
+            message={t('watchlist.form.loadFailed')}
             onRetry={() => void item.refetch()}
           />
         ) : (
           <>
             <WatchedHeader
-              title="Movie not found"
+              title={t('watchlist.watched.notFound')}
               posterUrl={undefined}
               onClose={closeWatched}
             />
             <Text className="font-sans text-base text-secondary-text-color">
-              This movie is no longer on your watchlist.
+              {t('watchlist.form.notFound')}
             </Text>
           </>
         )}

@@ -1,19 +1,17 @@
 import { Text, View } from 'react-native';
 import type { TWatchlistTab } from '../watchlist-tabs/watchlist-tabs';
+import { useTranslation } from 'react-i18next';
 
-const MESSAGES: Record<TWatchlistTab, [string, string]> = {
-  upcoming: [
-    'Nothing scheduled',
-    'Give a movie a date and it shows up here, soonest first.',
-  ],
-  someday: [
-    'No movies for someday',
-    'Tap + to save a movie you want to watch.',
-  ],
-};
+const MESSAGES = {
+  upcoming: ['watchlist.empty.upcomingTitle', 'watchlist.empty.upcomingHint'],
+  someday: ['watchlist.empty.somedayTitle', 'watchlist.empty.somedayHint'],
+} as const satisfies Record<TWatchlistTab, readonly [string, string]>;
 
 export function WatchlistEmpty({ tab }: { tab: TWatchlistTab }) {
-  const [title, hint] = MESSAGES[tab];
+  const { t } = useTranslation();
+  const [titleKey, hintKey] = MESSAGES[tab];
+  const title = t(titleKey);
+  const hint = t(hintKey);
 
   return (
     <View className="gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-4">
