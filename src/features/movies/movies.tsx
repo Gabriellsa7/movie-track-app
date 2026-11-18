@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { FlatList, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMoviesQuery } from '@/api/get-movies';
+import { useMoviePagesQuery } from '@/api/get-movies';
+import { pagesItems } from '@/api/pagination';
 import { NewMovieButton } from '@/components/new-movie-button';
 import { SearchField } from '@/components/search-field';
 import { SectionError } from '@/components/section-error';
 import { useDebouncedValue } from '@/lib/use-debounced-value';
+import { useLoadMore } from '@/lib/use-load-more';
 import { useRefreshControl } from '@/lib/use-refresh-control';
 import { MovieCard } from './components/movie-card/movie-card';
 import { MovieCardSkeleton } from './components/movie-card-skeleton/movie-card-skeleton';
@@ -35,13 +37,10 @@ export function MoviesScreen() {
     searchText.trim(),
     SEARCH_DEBOUNCE_MILLISECONDS,
   );
-  const {
-    data: page,
-    isPending,
-    isError,
-    refetch,
-  } = useMoviesQuery(toMoviesQuery(filters, search));
+  const movies = useMoviePagesQuery(toMoviesQuery(filters, search));
+  const { isPending, isError, refetch } = movies;
   const refreshControl = useRefreshControl(() => refetch());
+  const loadMore = useLoadMore(movies);
 
   function renderEmpty() {
     if (isPending) {
@@ -67,14 +66,14 @@ export function MoviesScreen() {
   return (
     <SafeAreaView className="flex-1 bg-primary-bg-color" edges={['top']}>
       <FlatList
-        data={page?.items}
+        data={pagesItems(movies.data)}
         keyExtractor={(movie) => movie.id}
         numColumns={COLUMNS}
         renderItem={({ item }) => <MovieCard movie={item} width={tileWidth} />}
         columnWrapperStyle={{ gap: COLUMN_GAP }}
         ListHeaderComponent={
           <View className="gap-4 pb-4">
-            <MoviesHeader total={page?.total} />
+            <MoviesHeader total={movies.data?.pages[0]?.total} />
             <SearchField
               label="Search movies"
               value={searchText}
@@ -90,6 +89,7 @@ export function MoviesScreen() {
         contentContainerClassName="pb-28 pt-4"
         contentContainerStyle={{ paddingHorizontal: SCREEN_PADDING }}
         refreshControl={refreshControl}
+        {...loadMore}
       />
       <NewMovieButton />
     </SafeAreaView>

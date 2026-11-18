@@ -27,7 +27,7 @@ const NEWCOMER = {
 };
 
 function page(items: object[]) {
-  return { items, total: items.length, page: 1, limit: 50 };
+  return { items, total: items.length, page: 1, limit: 20 };
 }
 
 async function renderUsers() {
@@ -69,8 +69,9 @@ describe('When we open the users', () => {
 
     await waitFor(() => {
       expect(mockApi.history.get.at(-1)?.params).toEqual({
-        limit: 50,
         search: 'mar',
+        page: 1,
+        limit: 20,
       });
     });
   });

@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { pagesItems } from '@/api/pagination';
 import { SearchField } from '@/components/search-field';
 import { SectionError } from '@/components/section-error';
 import { useDebouncedValue } from '@/lib/use-debounced-value';
+import { useLoadMore } from '@/lib/use-load-more';
 import { useRefreshControl } from '@/lib/use-refresh-control';
 import { useSessionStore } from '@/stores/session.store';
-import { useUsersQuery } from '../api/get-users';
+import { useUserPagesQuery } from '../api/get-users';
 import { UserRow } from './components/user-row/user-row';
 import { UserRowSkeleton } from './components/user-row-skeleton/user-row-skeleton';
 import { UsersEmpty } from './components/users-empty/users-empty';
 
 const SEARCH_DEBOUNCE_MILLISECONDS = 300;
-const USERS_PER_PAGE = 50;
 const SKELETON_ROWS = [0, 1, 2, 3, 4];
 
 export function UsersScreen() {
@@ -22,12 +23,13 @@ export function UsersScreen() {
     searchText.trim(),
     SEARCH_DEBOUNCE_MILLISECONDS,
   );
-  const { data, isPending, isError, refetch } = useUsersQuery({
-    limit: USERS_PER_PAGE,
-    ...(search && { search }),
-  });
+  const userPages = useUserPagesQuery(search ? { search } : {});
+  const { isPending, isError, refetch } = userPages;
   const refreshControl = useRefreshControl(() => refetch());
-  const users = data?.items.filter((user) => user.id !== myUserId);
+  const loadMore = useLoadMore(userPages);
+  const users = pagesItems(userPages.data)?.filter(
+    (user) => user.id !== myUserId,
+  );
 
   function renderEmpty() {
     if (isPending) {
@@ -93,6 +95,7 @@ export function UsersScreen() {
         keyboardDismissMode="on-drag"
         contentContainerClassName="px-5 pb-10 pt-4"
         refreshControl={refreshControl}
+        {...loadMore}
       />
     </SafeAreaView>
   );

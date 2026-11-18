@@ -1,9 +1,11 @@
 import {
   keepPreviousData,
+  useInfiniteQuery,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import { apiClient } from './client';
+import { FIRST_PAGE, nextPageParam, PAGE_SIZE } from './pagination';
 import { queryKeys } from './query-keys';
 import type { IListMoviesQuery, IMoviePage } from './types';
 
@@ -20,6 +22,17 @@ export function useMoviesQuery(query: IListMoviesQuery) {
   return useQuery({
     queryKey: queryKeys.movies.list(query),
     queryFn: () => listMovies(query),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useMoviePagesQuery(query: IListMoviesQuery) {
+  return useInfiniteQuery({
+    queryKey: queryKeys.movies.pages(query),
+    queryFn: ({ pageParam }) =>
+      listMovies({ ...query, page: pageParam, limit: PAGE_SIZE }),
+    initialPageParam: FIRST_PAGE,
+    getNextPageParam: nextPageParam,
     placeholderData: keepPreviousData,
   });
 }
