@@ -4,6 +4,7 @@ import type { IMonthsInsights } from '../../utils/stats.utils';
 
 const CHART_HEIGHT = 120;
 const EMPTY_BAR_HEIGHT = 3;
+const LABEL_SPACE = 18;
 
 interface IMonthlyChartProps {
   months: IMonthCount[];
@@ -37,27 +38,34 @@ export function MonthlyChart({ months, insights }: IMonthlyChartProps) {
         accessibilityLabel={`Movies watched per month. ${summary}`}
         className="gap-1.5"
       >
-        <View
-          className="flex-row items-end gap-1.5"
-          style={{ height: CHART_HEIGHT }}
-        >
+        <View className="flex-row items-end gap-1.5">
           {months.map((month) => (
-            <View key={month.month} className="flex-1 items-center gap-1">
+            <View
+              key={month.month}
+              style={{
+                flex: 1,
+                height: CHART_HEIGHT,
+                justifyContent: 'flex-end',
+              }}
+            >
               {month.count > 0 && (
-                <Text className="font-semibold text-[10px] text-secondary-text-color">
+                <Text className="mb-1 text-center font-semibold text-[10px] text-secondary-text-color">
                   {month.count}
                 </Text>
               )}
               <View
-                className={`w-full rounded-b-[1px] rounded-t-[4px] ${
+                className={`rounded-b-[1px] rounded-t-[4px] ${
                   month.count === 0
                     ? 'bg-primary-border-color'
                     : 'bg-accent-bg-color'
                 }`}
                 style={{
+                  alignSelf: 'stretch',
                   height: Math.max(
                     EMPTY_BAR_HEIGHT,
-                    Math.round((month.count / max) * (CHART_HEIGHT - 16)),
+                    Math.round(
+                      (month.count / max) * (CHART_HEIGHT - LABEL_SPACE),
+                    ),
                   ),
                 }}
               />

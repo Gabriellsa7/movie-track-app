@@ -35,41 +35,47 @@ function Dashboard({ stats }: { stats: IUserStats }) {
 
   return (
     <View className="gap-4">
-      <View className="flex-row flex-wrap gap-2.5">
-        <MetricCard
-          label="Movies logged"
-          value={String(stats.totalMovies)}
-          description="Different movies in your log."
-        />
-        <MetricCard
-          label="Times watched"
-          value={String(stats.totalWatches)}
-          description={`Counting ${plural(rewatchCount(stats), 'rewatch', 'rewatches')}.`}
-        />
-        <MetricCard
-          label="Hours watched"
-          value={formatHours(stats.totalMinutes)}
-          description="Runtime times watches. Movies without a runtime count as 0."
-        />
-        <MetricCard
-          label="Average rating"
-          value={formatAverage(stats.averageRating)}
-          description="The mean of your ratings, from 1 to 10."
-        />
-        <MetricCard
-          label="Favorites"
-          value={String(stats.favoritesCount)}
-          description={`${String(favoriteShare)}% of your movies.`}
-        />
-        <MetricCard
-          label="Most given rating"
-          value={topRating ? String(topRating.rating) : '–'}
-          description={
-            topRating
-              ? `Given to ${plural(topRating.count, 'movie', 'movies')}.`
-              : 'Rate movies to see it.'
-          }
-        />
+      <View className="gap-2.5">
+        <View className="flex-row gap-2.5">
+          <MetricCard
+            label="Movies logged"
+            value={String(stats.totalMovies)}
+            description="Different movies in your log."
+          />
+          <MetricCard
+            label="Times watched"
+            value={String(stats.totalWatches)}
+            description={`Counting ${plural(rewatchCount(stats), 'rewatch', 'rewatches')}.`}
+          />
+        </View>
+        <View className="flex-row gap-2.5">
+          <MetricCard
+            label="Hours watched"
+            value={formatHours(stats.totalMinutes)}
+            description="Runtime times watches. Movies without a runtime count as 0."
+          />
+          <MetricCard
+            label="Average rating"
+            value={formatAverage(stats.averageRating)}
+            description="The mean of your ratings, from 1 to 10."
+          />
+        </View>
+        <View className="flex-row gap-2.5">
+          <MetricCard
+            label="Favorites"
+            value={String(stats.favoritesCount)}
+            description={`${String(favoriteShare)}% of your movies.`}
+          />
+          <MetricCard
+            label="Most given rating"
+            value={topRating ? String(topRating.rating) : '–'}
+            description={
+              topRating
+                ? `Given to ${plural(topRating.count, 'movie', 'movies')}.`
+                : 'Rate movies to see it.'
+            }
+          />
+        </View>
       </View>
 
       <StatsSection

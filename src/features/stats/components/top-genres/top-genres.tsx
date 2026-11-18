@@ -31,8 +31,8 @@ export function TopGenres({ genres, totalMovies }: ITopGenresProps) {
             </View>
             <View className="h-2 overflow-hidden rounded-full bg-tertiary-bg-color">
               <View
-                className="h-full rounded-full bg-accent-bg-color"
-                style={{ width: `${String(share)}%` }}
+                className="rounded-full bg-accent-bg-color"
+                style={{ height: '100%', width: `${String(share)}%` }}
               />
             </View>
           </View>
