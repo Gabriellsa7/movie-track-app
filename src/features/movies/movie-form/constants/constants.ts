@@ -1,4 +1,5 @@
 import { z, type input as TInput, type output as TOutput } from 'zod';
+import type { IUploadFile } from '@/api/upload-file';
 import {
   genreIdsSchema,
   ratingSchema,
@@ -67,6 +68,11 @@ export const MOVIE_FORM_SCHEMA = z.object({
     ),
   review: optionalText(REVIEW_MAX_LENGTH),
   isFavorite: z.boolean(),
+  // Filled by the TMDB search; posterUrl is TMDB's own image, sent as a link.
+  tmdbId: z.number().optional(),
+  posterUrl: z.string().optional(),
+  // A photo from the phone, uploaded after the movie exists. Not part of the request body.
+  poster: z.custom<IUploadFile>().optional(),
 });
 
 export interface IMovieFormInput extends TInput<typeof MOVIE_FORM_SCHEMA> {}
@@ -83,6 +89,7 @@ export const MOVIE_FORM_FIELDS = [
   'durationMinutes',
   'review',
   'isFavorite',
+  'posterUrl',
 ] as const;
 
 // A function, so "today" is the day the form opens and not the day the app started.
@@ -105,4 +112,5 @@ export const MOVIE_FORM_MESSAGES = {
   noConnection:
     'Sem conexão com o servidor. Verifique sua internet e tente de novo.',
   unexpected: 'Não foi possível registrar o filme. Tente de novo.',
+  posterNotSent: 'Filme registrado, mas a capa não foi enviada.',
 } as const;
