@@ -15,6 +15,7 @@ import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { setUpLanguageSync } from '@/lib/react-query/language-sync';
 import { setUpReactQueryManagers } from '@/lib/react-query/react-native-managers';
 import { bootstrapSession, setUpSession } from '@/lib/session/session';
 import {
@@ -32,6 +33,7 @@ import { THEME_VARS } from '@/theme/theme-vars';
 void SplashScreen.preventAutoHideAsync();
 setUpSession();
 setUpReactQueryManagers();
+setUpLanguageSync();
 void bootstrapSession();
 
 function navigationTheme(scheme: TColorScheme) {

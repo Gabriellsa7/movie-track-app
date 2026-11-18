@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { useLanguage } from '@/i18n';
 import { apiClient } from './client';
 import { queryKeys } from './query-keys';
 import type { ITmdbMovieDetails } from './types';
@@ -19,10 +20,11 @@ export async function getTmdbMovieDetails(
 
 export function useFetchTmdbDetailsValues() {
   const client = useQueryClient();
+  const language = useLanguage();
   return async (tmdbId: number): Promise<ITmdbDetailsValues | undefined> => {
     try {
       const details = await client.query({
-        queryKey: queryKeys.tmdb.details(tmdbId),
+        queryKey: queryKeys.tmdb.details(tmdbId, language),
         queryFn: () => getTmdbMovieDetails(tmdbId),
         staleTime: Infinity,
       });

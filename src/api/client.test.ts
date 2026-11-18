@@ -1,3 +1,5 @@
+import { act } from '@testing-library/react-native';
+import { useLanguageStore } from '@/stores/language.store';
 import { apiErrorReply, authorizationOf, mockApi } from '@/test/mock-api';
 import {
   apiClient,
@@ -50,6 +52,25 @@ describe('When the client calls the API', () => {
     await apiClient.get('/genres');
 
     expect(authorization).toBeUndefined();
+  });
+
+  it('should tell the API which language to answer in', async () => {
+    const languages: unknown[] = [];
+    mockApi.onGet('/genres').reply((config) => {
+      languages.push(config.headers?.['Accept-Language']);
+      return [200, []];
+    });
+
+    await apiClient.get('/genres');
+    await act(() => {
+      useLanguageStore.setState({ preference: 'pt-BR' });
+    });
+    await apiClient.get('/genres');
+    await act(() => {
+      useLanguageStore.setState({ preference: 'en' });
+    });
+
+    expect(languages).toEqual(['en', 'pt-BR']);
   });
 });
 

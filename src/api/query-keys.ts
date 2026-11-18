@@ -1,3 +1,4 @@
+import type { TLanguage } from '@/i18n';
 import type {
   IListMoviesQuery,
   IListUsersQuery,
@@ -6,7 +7,7 @@ import type {
 } from '@/api/types';
 
 export const queryKeys = {
-  genres: ['genres'] as const,
+  genres: (language: TLanguage) => ['genres', language] as const,
   account: (userId: string) => ['account', userId] as const,
   movies: {
     all: ['movies'] as const,
@@ -33,7 +34,9 @@ export const queryKeys = {
       ['users', userId, 'movies', 'detail', movieId] as const,
   },
   tmdb: {
-    search: (query: ITmdbSearchQuery) => ['tmdb', 'search', query] as const,
-    details: (tmdbId: number) => ['tmdb', 'details', tmdbId] as const,
+    search: (query: ITmdbSearchQuery, language: TLanguage) =>
+      ['tmdb', 'search', language, query] as const,
+    details: (tmdbId: number, language: TLanguage) =>
+      ['tmdb', 'details', language, tmdbId] as const,
   },
 };
