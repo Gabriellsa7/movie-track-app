@@ -26,9 +26,9 @@ describe('When we open my movies', () => {
       .reply(200, { ...PAGE, total: 1, items: [A_MOVIE] });
     await renderMovies();
 
-    expect(await screen.findByText('1 filme')).toBeOnTheScreen();
+    expect(await screen.findByText('1 movie')).toBeOnTheScreen();
     expect(
-      screen.getByLabelText('Duna: Parte 2, 2024, nota 9'),
+      screen.getByLabelText('Duna: Parte 2, 2024, rating 9'),
     ).toBeOnTheScreen();
     expect(mockApi.history.get[0]?.params).toEqual({
       sort: 'watchedAt',
@@ -40,8 +40,8 @@ describe('When we open my movies', () => {
     mockApi.onGet('/movies').reply(200, { ...PAGE, total: 0, items: [] });
     await renderMovies();
 
-    expect(await screen.findByText('0 filmes')).toBeOnTheScreen();
-    expect(screen.getByText('Nenhum filme registrado ainda')).toBeOnTheScreen();
+    expect(await screen.findByText('0 movies')).toBeOnTheScreen();
+    expect(screen.getByText('No movies logged yet')).toBeOnTheScreen();
   });
 
   it('should offer a retry when the list fails', async () => {
@@ -49,7 +49,7 @@ describe('When we open my movies', () => {
     await renderMovies();
 
     expect(
-      await screen.findByText('Não foi possível carregar seus filmes.'),
+      await screen.findByText("Couldn't load your movies."),
     ).toBeOnTheScreen();
   });
 });
@@ -74,15 +74,15 @@ describe('When we search my movies', () => {
       ];
     });
     await renderMovies();
-    expect(await screen.findByText('1 filme')).toBeOnTheScreen();
+    expect(await screen.findByText('1 movie')).toBeOnTheScreen();
 
-    await fireEvent.changeText(screen.getByLabelText('Buscar filme'), ' xyz ');
+    await fireEvent.changeText(screen.getByLabelText('Search movies'), ' xyz ');
     await act(() => {
       jest.advanceTimersByTime(300);
     });
 
     expect(
-      await screen.findByText('Nenhum filme encontrado para “xyz”'),
+      await screen.findByText('No movies found for “xyz”'),
     ).toBeOnTheScreen();
     await waitFor(() => {
       expect(mockApi.history.get.at(-1)?.params).toEqual({

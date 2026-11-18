@@ -24,7 +24,6 @@ export function RootStack() {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="explore" />
       </Stack.Protected>
-      {/* Public: opened from e-mail links and shared profile and review links. */}
       <Stack.Screen name="reset-password" />
       <Stack.Screen name="verify-email" />
       <Stack.Screen name="users/[userId]/index" />

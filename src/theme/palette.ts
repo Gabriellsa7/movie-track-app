@@ -1,4 +1,3 @@
-// Colors from the approved mockups (FQ-25).
 export const PALETTE = {
   dark: {
     'primary-bg-color': '#0F1115',
@@ -10,7 +9,6 @@ export const PALETTE = {
     'accent-soft-bg-color': '#2A2418',
     'danger-soft-bg-color': '#2E1C1C',
     'success-soft-bg-color': '#16261E',
-    // Use with opacity: bg-overlay-bg-color/80
     'overlay-bg-color': '#07080A',
 
     'primary-text-color': '#E8E6E3',
@@ -40,7 +38,6 @@ export const PALETTE = {
     'accent-soft-bg-color': '#FBEFD3',
     'danger-soft-bg-color': '#FBE9E7',
     'success-soft-bg-color': '#E3F3EA',
-    // Use with opacity: bg-overlay-bg-color/45
     'overlay-bg-color': '#17191E',
 
     'primary-text-color': '#17191E',

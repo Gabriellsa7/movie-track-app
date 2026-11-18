@@ -18,7 +18,6 @@ interface IDateFieldProps<TFields extends FieldValues, TTransformed = TFields> {
   maximumDate?: Date;
 }
 
-// The form value is YYYY-MM-DD, what the API expects; parsed in local time.
 function fromIsoDate(value: unknown): Date {
   if (typeof value !== 'string' || !value) {
     return new Date();
@@ -29,8 +28,8 @@ function fromIsoDate(value: unknown): Date {
 
 function formatDate(value: unknown): string {
   return typeof value === 'string' && value
-    ? fromIsoDate(value).toLocaleDateString('pt-BR')
-    : 'Escolher data';
+    ? fromIsoDate(value).toLocaleDateString('en-US')
+    : 'Pick a date';
 }
 
 export function DateField<TFields extends FieldValues, TTransformed = TFields>({
@@ -48,7 +47,6 @@ export function DateField<TFields extends FieldValues, TTransformed = TFields>({
   const error = fieldState.error?.message;
 
   const onValueChange = (_event: unknown, date: Date) => {
-    // Android closes its dialog after a choice; iOS keeps the inline picker open.
     setOpen(Platform.OS === 'ios');
     onChange(toIsoDate(date));
   };

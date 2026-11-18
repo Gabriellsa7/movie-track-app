@@ -14,10 +14,10 @@ async function renderForm() {
 }
 
 async function fillAndSubmit(name: string, email: string, password: string) {
-  await fireEvent.changeText(screen.getByLabelText('Nome ou apelido'), name);
+  await fireEvent.changeText(screen.getByLabelText('Name or nickname'), name);
   await fireEvent.changeText(screen.getByLabelText('E-mail'), email);
-  await fireEvent.changeText(screen.getByLabelText('Senha'), password);
-  await fireEvent.press(screen.getByRole('button', { name: 'Criar conta' }));
+  await fireEvent.changeText(screen.getByLabelText('Password'), password);
+  await fireEvent.press(screen.getByRole('button', { name: 'Sign up' }));
 }
 
 describe('When we submit the sign-up form', () => {
@@ -27,10 +27,10 @@ describe('When we submit the sign-up form', () => {
     await fillAndSubmit(' ', 'not-an-email', 'filmes');
 
     expect(
-      await screen.findByText('Use pelo menos 2 caracteres'),
+      await screen.findByText('Use at least 2 characters'),
     ).toBeOnTheScreen();
-    expect(screen.getByText('Informe um e-mail válido')).toBeOnTheScreen();
-    expect(screen.getByText('Use pelo menos 8 caracteres')).toBeOnTheScreen();
+    expect(screen.getByText('Enter a valid e-mail')).toBeOnTheScreen();
+    expect(screen.getByText('Use at least 8 characters')).toBeOnTheScreen();
     expect(mockApi.history.post).toHaveLength(0);
   });
 
@@ -62,9 +62,11 @@ describe('When we submit the sign-up form', () => {
     await fillAndSubmit('Gabriel', 'gabriel@email.com', 'filmes123');
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'Este e-mail já tem uma conta',
+      'This e-mail already has an account',
     );
-    expect(toast.error).toHaveBeenCalledWith('Este e-mail já tem uma conta');
+    expect(toast.error).toHaveBeenCalledWith(
+      'This e-mail already has an account',
+    );
   });
 
   it('should warn in a toast when the API rejects the name', async () => {
@@ -81,7 +83,7 @@ describe('When we submit the sign-up form', () => {
     await fillAndSubmit('Gabriel', 'gabriel@email.com', 'filmes123');
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Nome inválido');
+      expect(toast.error).toHaveBeenCalledWith('Invalid name');
     });
   });
 
@@ -92,21 +94,21 @@ describe('When we submit the sign-up form', () => {
     await fillAndSubmit('Gabriel', 'gabriel@email.com', 'filmes123');
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'Não foi possível criar a conta. Tente de novo.',
+      "Couldn't create the account. Try again.",
     );
   });
 
   it('should check the password rules while typing', async () => {
     await renderForm();
 
-    await fireEvent.changeText(screen.getByLabelText('Senha'), 'filmes');
+    await fireEvent.changeText(screen.getByLabelText('Password'), 'filmes');
 
     const checked = (label: string) =>
       screen.getByLabelText(label).props.accessibilityState as {
         checked: boolean;
       };
-    expect(checked('Entre 8 e 72 caracteres')).toEqual({ checked: false });
-    expect(checked('Pelo menos uma letra')).toEqual({ checked: true });
-    expect(checked('Pelo menos um número')).toEqual({ checked: false });
+    expect(checked('Between 8 and 72 characters')).toEqual({ checked: false });
+    expect(checked('At least one letter')).toEqual({ checked: true });
+    expect(checked('At least one number')).toEqual({ checked: false });
   });
 });

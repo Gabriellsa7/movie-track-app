@@ -525,7 +525,7 @@ export interface paths {
         };
         /**
          * Search movies in TMDB
-         * @description Searches TMDB by title (pt-BR). Each result has what POST /movies and POST /watchlist need: tmdbId, title, releaseYear, synopsis, posterUrl and genreIds (already translated to the ids of GET /genres). TMDB pages always hold up to 20 results.
+         * @description Searches TMDB by title (in English). Each result has what POST /movies and POST /watchlist need: tmdbId, title, releaseYear, synopsis, posterUrl and genreIds (already translated to the ids of GET /genres). TMDB pages always hold up to 20 results.
          */
         get: operations["searchTmdbMovies"];
         put?: never;
@@ -568,7 +568,7 @@ export interface paths {
         };
         /**
          * List the genres
-         * @description Public. The fixed pt-BR list seeded from TMDB, sorted by name. Movies reference these ids in genreIds.
+         * @description Public. The fixed English list seeded from TMDB, sorted by name. Movies reference these ids in genreIds.
          */
         get: operations["listGenres"];
         put?: never;

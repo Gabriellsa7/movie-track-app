@@ -1,4 +1,3 @@
-// Every `code` the API can answer; the UI branches on these, never on the message.
 export const EApiErrorCode = {
   VALIDATION_ERROR: 'VALIDATION_ERROR',
   INVALID_JSON: 'INVALID_JSON',
@@ -49,7 +48,6 @@ export const EApiErrorCode = {
   INCOMPLETE_MOVIE: 'INCOMPLETE_MOVIE',
   MOVIE_CATALOG_UNAVAILABLE: 'MOVIE_CATALOG_UNAVAILABLE',
 
-  // Client-side only: the request never got an answer.
   NETWORK_ERROR: 'NETWORK_ERROR',
 } as const;
 

@@ -7,7 +7,6 @@ const REQUEST_TIMEOUT_MILLISECONDS = 15_000;
 
 declare module 'axios' {
   interface AxiosRequestConfig {
-    // Set on the refresh call itself, so a failed refresh doesn't trigger another one.
     skipAuthRefresh?: boolean;
   }
   interface InternalAxiosRequestConfig {
@@ -17,7 +16,6 @@ declare module 'axios' {
 
 export interface ISessionHandlers {
   getAccessToken: () => string | null;
-  // Exchanges the stored refresh token and resolves with the new access token.
   refreshAccessToken: () => Promise<string>;
   onSessionExpired: () => void;
 }
@@ -60,7 +58,6 @@ apiClient.interceptors.response.use(undefined, async (error: unknown) => {
 
   let accessToken: string;
   try {
-    // Concurrent 401s share one refresh: the refresh token rotates, so a second call would fail.
     refreshInFlight ??= handlers.refreshAccessToken().finally(() => {
       refreshInFlight = null;
     });

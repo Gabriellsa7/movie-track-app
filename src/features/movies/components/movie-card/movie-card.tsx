@@ -20,7 +20,7 @@ export function MovieCard({ movie }: IMovieCardProps) {
     >
       <Pressable
         accessibilityRole="link"
-        accessibilityLabel={`${movie.title}, ${String(movie.releaseYear)}, nota ${String(movie.rating)}`}
+        accessibilityLabel={`${movie.title}, ${String(movie.releaseYear)}, rating ${String(movie.rating)}`}
         className="flex-row gap-3 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-2.5 active:opacity-80"
       >
         <Poster
@@ -51,7 +51,7 @@ export function MovieCard({ movie }: IMovieCardProps) {
           </View>
         </View>
         {movie.isFavorite && (
-          <View accessibilityLabel="Favorito" className="pt-1">
+          <View accessibilityLabel="Favorite" className="pt-1">
             <Heart
               size={16}
               color={color(scheme, 'accent-text-color')}

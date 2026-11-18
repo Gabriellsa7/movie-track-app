@@ -4,8 +4,6 @@ const envSchema = z.object({
   EXPO_PUBLIC_API_URL: z.url(),
 });
 
-// Expo only inlines process.env.EXPO_PUBLIC_* when it is read literally like this.
-// Typed as unknown: process.env is any in CI and string | undefined once Expo generates expo-env.d.ts.
 const rawEnv: Record<string, unknown> = {
   EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL,
 };

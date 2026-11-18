@@ -12,13 +12,13 @@ export function MoviesHeader({ total }: IMoviesHeaderProps) {
         accessibilityRole="header"
         className="font-display text-4xl text-primary-text-color"
       >
-        Meus filmes
+        My movies
       </Text>
       {total === undefined ? (
         <Skeleton className="h-4 w-24 rounded" />
       ) : (
         <Text className="font-sans text-sm text-tertiary-text-color">
-          {total === 1 ? '1 filme' : `${String(total)} filmes`}
+          {total === 1 ? '1 movie' : `${String(total)} movies`}
         </Text>
       )}
     </View>

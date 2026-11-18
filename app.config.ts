@@ -9,7 +9,6 @@ const config: ExpoConfig = {
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
-  // Deep links: movietrack://reset-password?token=… and movietrack://verify-email?token=…
   scheme: 'movietrack',
   userInterfaceStyle: 'automatic',
   backgroundColor: APP_BACKGROUND,

@@ -14,7 +14,7 @@ export function MovieFormScreen() {
           contentContainerClassName="gap-6 px-5 pb-10 pt-4"
           keyboardShouldPersistTaps="handled"
         >
-          <MovieFormHeader title="Registrar filme" />
+          <MovieFormHeader title="Log a movie" />
           <NewMovieForm />
         </ScrollView>
       </KeyboardAvoidingView>

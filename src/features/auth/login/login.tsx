@@ -27,16 +27,16 @@ export function LoginScreen() {
 
           <View className="mt-auto items-center gap-4">
             <Text className="font-sans text-sm text-tertiary-text-color">
-              Ainda não tem conta?{' '}
+              Don&apos;t have an account?{' '}
               <Link href={ROUTES.signUp} asChild>
                 <Text className="font-semibold text-accent-text-color">
-                  Criar conta
+                  Sign up
                 </Text>
               </Link>
             </Text>
             <Link href={ROUTES.explore} asChild>
               <Text className="font-semibold text-sm text-secondary-text-color">
-                Explorar perfis sem entrar
+                Explore profiles without logging in
               </Text>
             </Link>
           </View>

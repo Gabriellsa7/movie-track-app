@@ -19,13 +19,13 @@ export function HomeHeader() {
           accessibilityRole="header"
           className="mt-0.5 font-display text-title-sm text-primary-text-color"
         >
-          Início
+          Home
         </Text>
       </View>
       <Link href={ROUTES.account} asChild>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Abrir conta"
+          accessibilityLabel="Open account"
           className="h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-secondary-border-color"
         >
           {user?.avatarUrl ? (

@@ -2,45 +2,43 @@ import type { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 import { ApiError } from '@/api/api-error';
 import { EApiErrorCode } from '@/api/error-codes';
 
-// Domain errors that belong to one field, with the message shown under it.
 const FIELD_ERRORS: Partial<
   Record<EApiErrorCode, { field: string; message: string }>
 > = {
   [EApiErrorCode.EMAIL_TAKEN]: {
     field: 'email',
-    message: 'Este e-mail já tem uma conta',
+    message: 'This e-mail already has an account',
   },
   [EApiErrorCode.INVALID_CREDENTIALS]: {
     field: 'currentPassword',
-    message: 'Senha incorreta',
+    message: 'Wrong password',
   },
   [EApiErrorCode.CURRENT_PASSWORD_REQUIRED]: {
     field: 'currentPassword',
-    message: 'Confirme sua senha para trocar o e-mail',
+    message: 'Confirm your password to change the e-mail',
   },
   [EApiErrorCode.MOVIE_ALREADY_LOGGED]: {
     field: 'title',
-    message: 'Você já registrou esse filme',
+    message: "You've already logged this movie",
   },
-  [EApiErrorCode.INVALID_RATING]: { field: 'rating', message: 'Nota inválida' },
+  [EApiErrorCode.INVALID_RATING]: {
+    field: 'rating',
+    message: 'Invalid rating',
+  },
   [EApiErrorCode.INVALID_RELEASE_YEAR]: {
     field: 'releaseYear',
-    message: 'Ano inválido',
+    message: 'Invalid year',
   },
   [EApiErrorCode.INVALID_WATCHED_AT]: {
     field: 'watchedAt',
-    message: 'A data não pode estar no futuro',
+    message: "The date can't be in the future",
   },
   [EApiErrorCode.INVALID_GENRE]: {
     field: 'genreIds',
-    message: 'Gênero inválido',
+    message: 'Invalid genre',
   },
 };
 
-/**
- * Puts the API's errors on the form fields. Returns false when the error has no
- * field to show on, so the caller falls back to a toast.
- */
 export function applyApiErrors<TFields extends FieldValues>(
   error: unknown,
   setError: UseFormSetError<TFields>,

@@ -10,7 +10,6 @@ import {
 const persistOptions = {
   persister: queryPersister,
   maxAge: CACHE_MAX_AGE_MILLISECONDS,
-  // A new app version drops the old cache, whose shape may have changed.
   buster: Constants.expoConfig?.version ?? 'dev',
 };
 

@@ -36,7 +36,7 @@ describe('When a query fails', () => {
 
     expect(toast.error).toHaveBeenCalledTimes(1);
     expect(toast.error).toHaveBeenCalledWith(
-      'Serviço indisponível no momento. Tente de novo em instantes.',
+      'Service unavailable right now. Try again in a moment.',
       { id: 'temporary-failure' },
     );
   });

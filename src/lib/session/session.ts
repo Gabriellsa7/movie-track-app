@@ -27,7 +27,6 @@ export function setUpSession() {
   });
 }
 
-// On app start: the stored refresh token brings the session back.
 export async function bootstrapSession() {
   if (!(await readRefreshToken())) {
     useSessionStore.getState().clear();
@@ -53,7 +52,6 @@ export async function startSession(tokens: IAuthTokens) {
 export async function logout() {
   const refreshToken = await readRefreshToken();
   if (refreshToken) {
-    // The device forgets the session even if the API can't revoke the token now.
     await postLogout(refreshToken).catch(() => undefined);
   }
   await endSession();
@@ -69,8 +67,6 @@ async function endSession() {
   ]);
 }
 
-// Without a connection, the cached account and queries keep the app usable (read only);
-// the session is refreshed as soon as the device is back online.
 async function resumeOffline() {
   const user = await readStoredUser();
   if (!user) {

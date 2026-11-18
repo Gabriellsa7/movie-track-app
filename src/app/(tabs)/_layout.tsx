@@ -19,7 +19,6 @@ function tabIcon(Icon: LucideIcon) {
     color: ColorValue;
     size: number;
   }) {
-    // The tint colors set below are plain strings.
     return (
       <Icon
         color={typeof color === 'string' ? color : undefined}
@@ -48,23 +47,23 @@ export default function TabsLayout() {
     >
       <Tabs.Screen
         name="index"
-        options={{ title: 'Início', tabBarIcon: tabIcon(House) }}
+        options={{ title: 'Home', tabBarIcon: tabIcon(House) }}
       />
       <Tabs.Screen
         name="movies"
-        options={{ title: 'Meus filmes', tabBarIcon: tabIcon(Film) }}
+        options={{ title: 'My movies', tabBarIcon: tabIcon(Film) }}
       />
       <Tabs.Screen
         name="watchlist"
-        options={{ title: 'Quero ver', tabBarIcon: tabIcon(Bookmark) }}
+        options={{ title: 'Watchlist', tabBarIcon: tabIcon(Bookmark) }}
       />
       <Tabs.Screen
         name="users"
-        options={{ title: 'Usuários', tabBarIcon: tabIcon(Users) }}
+        options={{ title: 'Users', tabBarIcon: tabIcon(Users) }}
       />
       <Tabs.Screen
         name="account"
-        options={{ title: 'Conta', tabBarIcon: tabIcon(CircleUser) }}
+        options={{ title: 'Account', tabBarIcon: tabIcon(CircleUser) }}
       />
     </Tabs>
   );

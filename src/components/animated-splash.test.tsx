@@ -18,7 +18,7 @@ describe('When the app is starting', () => {
   it('should swap the native splash for the animated logo', async () => {
     await render(<AnimatedSplash ready={false} onFinish={jest.fn()} />);
 
-    const splash = screen.getByLabelText('Carregando o Movie Track');
+    const splash = screen.getByLabelText('Loading Movie Track');
     await fireEvent(splash, 'layout', {
       nativeEvent: { layout: { x: 0, y: 0, width: 390, height: 844 } },
     });
@@ -41,7 +41,6 @@ describe('When the app is starting', () => {
     const onFinish = jest.fn();
     await render(<AnimatedSplash ready onFinish={onFinish} />);
 
-    // First past the minimum time on screen, then through the fade.
     await act(async () => {
       await jest.advanceTimersByTimeAsync(600);
     });

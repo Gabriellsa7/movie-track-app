@@ -40,9 +40,9 @@ function Harness({ error }: { error?: string }) {
         label="E-mail"
         hint="Usado no login"
       />
-      <PasswordField control={control} name="password" label="Senha" />
-      <TextAreaField control={control} name="review" label="Opinião" />
-      <DateField control={control} name="watchedAt" label="Assisti em" />
+      <PasswordField control={control} name="password" label="Password" />
+      <TextAreaField control={control} name="review" label="Review" />
+      <DateField control={control} name="watchedAt" label="Watched on" />
       <Text>{`email=${email}`}</Text>
     </>
   );
@@ -62,29 +62,33 @@ describe('When we fill the form fields', () => {
   });
 
   it('should show the error in place of the hint', async () => {
-    await render(<Harness error="Informe um e-mail válido" />);
+    await render(<Harness error="Enter a valid e-mail" />);
 
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'Informe um e-mail válido',
-    );
+    expect(screen.getByRole('alert')).toHaveTextContent('Enter a valid e-mail');
     expect(screen.queryByText('Usado no login')).toBeNull();
   });
 
   it('should toggle the password visibility', async () => {
     await render(<Harness />);
 
-    expect(screen.getByLabelText('Senha')).toHaveProp('secureTextEntry', true);
-    await fireEvent.press(
-      screen.getByRole('button', { name: 'Mostrar senha' }),
+    expect(screen.getByLabelText('Password')).toHaveProp(
+      'secureTextEntry',
+      true,
     );
-    expect(screen.getByLabelText('Senha')).toHaveProp('secureTextEntry', false);
+    await fireEvent.press(
+      screen.getByRole('button', { name: 'Show password' }),
+    );
+    expect(screen.getByLabelText('Password')).toHaveProp(
+      'secureTextEntry',
+      false,
+    );
   });
 
-  it('should show the date in pt-BR and open the picker', async () => {
+  it('should show the date in English and open the picker', async () => {
     await render(<Harness />);
 
     const dateButton = screen.getByRole('button', {
-      name: 'Assisti em: 12/10/2026',
+      name: 'Watched on: 10/12/2026',
     });
     await fireEvent.press(dateButton);
 

@@ -4,7 +4,6 @@ import type { IUser } from '@/api/types';
 import { writeStoredUser } from '@/lib/session/session.storage';
 import { requireUserId, useSessionStore } from '@/stores/session.store';
 
-// Account changes return the private user: keep the session copy in sync.
 export function useAccountMutation<TVariables>(
   mutationFn: (userId: string, variables: TVariables) => Promise<IUser>,
 ) {

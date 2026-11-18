@@ -11,7 +11,6 @@ const POSTER_ASPECT: [number, number] = [2, 3];
 
 interface IPosterPickerProps {
   title: string;
-  // The photo wins over the TMDB poster: it was an explicit choice.
   photo: IUploadFile | undefined;
   posterUrl: string | undefined;
   onPick: (photo: IUploadFile) => void;
@@ -40,11 +39,11 @@ export function PosterPicker({
   return (
     <View className="gap-1.5">
       <Text className="font-semibold text-sm text-primary-text-color">
-        Capa
+        Poster
       </Text>
       <View className="flex-row items-end gap-4">
         <Poster
-          title={title || 'Sem capa'}
+          title={title || 'No poster'}
           posterUrl={previewUrl}
           className="h-[150px] w-[100px] rounded-[10px]"
         />
@@ -56,7 +55,7 @@ export function PosterPicker({
           >
             <ImagePlus size={18} color={color(scheme, 'primary-text-color')} />
             <Text className="font-semibold text-sm text-primary-text-color">
-              {photo ? 'Trocar foto' : 'Escolher foto'}
+              {photo ? 'Change photo' : 'Choose photo'}
             </Text>
           </Pressable>
           {previewUrl && (
@@ -67,16 +66,16 @@ export function PosterPicker({
             >
               <Trash2 size={18} color={color(scheme, 'danger-text-color')} />
               <Text className="font-semibold text-sm text-danger-text-color">
-                Remover capa
+                Remove poster
               </Text>
             </Pressable>
           )}
           <Text className="font-sans text-xs text-tertiary-text-color">
             {photo
-              ? 'Foto do celular'
+              ? 'Photo from your phone'
               : posterUrl
-                ? 'Capa do TMDB'
-                : 'Opcional · JPEG, PNG ou WebP até 5 MB'}
+                ? 'Poster from TMDB'
+                : 'Optional · JPEG, PNG or WebP up to 5 MB'}
           </Text>
         </View>
       </View>

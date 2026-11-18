@@ -19,14 +19,13 @@ interface IRatingPickerProps<
 
 const MIN_RATING = 1;
 const MAX_RATING = 10;
-// 1, 1.5, 2 … 10: the only values the API accepts.
 const RATINGS = Array.from(
   { length: (MAX_RATING - MIN_RATING) / RATING_STEP + 1 },
   (_, index) => MIN_RATING + index * RATING_STEP,
 );
 
 function formatRating(rating: number): string {
-  return rating.toLocaleString('pt-BR');
+  return rating.toLocaleString('en-US');
 }
 
 export function RatingPicker<
@@ -52,7 +51,7 @@ export function RatingPicker<
             <Pressable
               key={rating}
               accessibilityRole="radio"
-              accessibilityLabel={`Nota ${formatRating(rating)}`}
+              accessibilityLabel={`Rating ${formatRating(rating)}`}
               accessibilityState={{ selected: isSelected }}
               onPress={() => {
                 onChange(rating);

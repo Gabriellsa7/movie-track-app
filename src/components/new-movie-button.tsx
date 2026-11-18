@@ -5,7 +5,6 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
 
-// The floating "+" of the mockups; place it as the last child of the screen's root view.
 export function NewMovieButton() {
   const scheme = useAppTheme();
 
@@ -14,7 +13,7 @@ export function NewMovieButton() {
       <Link href={ROUTES.newMovie} asChild>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Registrar filme"
+          accessibilityLabel="Log a movie"
           className="h-14 w-14 items-center justify-center rounded-2xl bg-accent-bg-color shadow-lg shadow-black/45"
         >
           <Plus

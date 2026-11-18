@@ -4,10 +4,8 @@ import { AccessibilityInfo, Animated, Easing, StyleSheet } from 'react-native';
 import { color } from '@/theme/palette';
 import { LogoMark } from './logo';
 
-// Same background and logo width as the native splash in app.config.ts, so the hand-off is invisible.
 export const SPLASH_BACKGROUND = color('dark', 'primary-bg-color');
 const LOGO_SIZE = 120;
-// Keeps the brand moment readable when the session is restored instantly.
 const MIN_VISIBLE_MS = 600;
 const EASE_IN_OUT = Easing.bezier(0.42, 0, 0.58, 1);
 const EASE_OUT_CUBIC = Easing.bezier(0.33, 1, 0.68, 1);
@@ -77,8 +75,7 @@ export function AnimatedSplash({
   return (
     <Animated.View
       accessible
-      accessibilityLabel="Carregando o Movie Track"
-      // The native splash goes away only once this identical screen is drawn.
+      accessibilityLabel="Loading Movie Track"
       onLayout={() => void SplashScreen.hideAsync()}
       style={[
         StyleSheet.absoluteFill,

@@ -51,13 +51,13 @@ export function LoginForm() {
       <PasswordField
         control={control}
         name="password"
-        label="Senha"
+        label="Password"
         autoComplete="current-password"
       />
 
       <Link href={ROUTES.forgotPassword} asChild>
         <Text className="self-end font-semibold text-sm text-accent-text-color">
-          Esqueci a senha
+          Forgot password
         </Text>
       </Link>
 
@@ -78,7 +78,7 @@ export function LoginForm() {
         className="h-[52px] items-center justify-center rounded-xl bg-accent-bg-color active:bg-accent-hover-bg-color disabled:opacity-60"
       >
         <Text className="font-semibold text-base text-on-accent-text-color">
-          {isSubmitting ? 'Entrando…' : 'Entrar'}
+          {isSubmitting ? 'Logging in…' : 'Log in'}
         </Text>
       </Pressable>
     </View>

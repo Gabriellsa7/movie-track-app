@@ -1,4 +1,3 @@
-// Same names as src/theme/palette.ts and the web app's CSS variables.
 const COLOR_TOKENS = [
   'primary-bg-color',
   'secondary-bg-color',
@@ -26,34 +25,31 @@ const COLOR_TOKENS = [
   'star-empty-color',
 ];
 
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{ts,tsx}'],
   presets: [require('nativewind/preset')],
   darkMode: 'class',
   theme: {
     extend: {
-      // bg-primary-bg-color, text-primary-text-color, border-primary-border-color…
       colors: Object.fromEntries(
         COLOR_TOKENS.map((token) => [
           token,
           `rgb(var(--${token}) / <alpha-value>)`,
         ]),
       ),
-      // size: text-title, text-body… Pair with the font in the comment (font-display, font-semibold…).
       fontSize: {
-        display: ['72px', { lineHeight: '68px', letterSpacing: '1px' }], // font-display
-        title: ['56px', { lineHeight: '56px', letterSpacing: '1px' }], // font-display
-        'title-sm': ['40px', { lineHeight: '40px', letterSpacing: '1px' }], // font-display
-        stat: ['28px', { lineHeight: '28px', letterSpacing: '1px' }], // font-display
-        subtitle: ['20px', { lineHeight: '26px' }], // font-semibold
-        heading: ['16px', { lineHeight: '22px' }], // font-semibold
-        body: ['15px', { lineHeight: '24px' }], // font-sans
-        button: ['14px', { lineHeight: '20px' }], // font-semibold
-        label: ['13px', { lineHeight: '18px' }], // font-semibold
-        caption: ['13px', { lineHeight: '18px' }], // font-sans
-        overline: ['13px', { lineHeight: '18px', letterSpacing: '1px' }], // font-semibold uppercase
-        small: ['12px', { lineHeight: '17px' }], // font-semibold
+        display: ['72px', { lineHeight: '68px', letterSpacing: '1px' }],
+        title: ['56px', { lineHeight: '56px', letterSpacing: '1px' }],
+        'title-sm': ['40px', { lineHeight: '40px', letterSpacing: '1px' }],
+        stat: ['28px', { lineHeight: '28px', letterSpacing: '1px' }],
+        subtitle: ['20px', { lineHeight: '26px' }],
+        heading: ['16px', { lineHeight: '22px' }],
+        body: ['15px', { lineHeight: '24px' }],
+        button: ['14px', { lineHeight: '20px' }],
+        label: ['13px', { lineHeight: '18px' }],
+        caption: ['13px', { lineHeight: '18px' }],
+        overline: ['13px', { lineHeight: '18px', letterSpacing: '1px' }],
+        small: ['12px', { lineHeight: '17px' }],
       },
       fontFamily: {
         sans: ['Inter_400Regular'],

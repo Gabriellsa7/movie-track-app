@@ -5,7 +5,6 @@ interface IPosterProps {
   title: string;
   posterUrl?: string;
   className?: string;
-  // Shown over the fallback tile when there is no poster; small posters leave it out.
   showTitle?: boolean;
 }
 
@@ -22,7 +21,7 @@ export function Poster({
       {posterUrl ? (
         <Image
           source={{ uri: posterUrl }}
-          accessibilityLabel={`Pôster de ${title}`}
+          accessibilityLabel={`Poster of ${title}`}
           contentFit="cover"
           transition={150}
           style={{ flex: 1 }}

@@ -58,7 +58,6 @@ export default function RootLayout() {
     BebasNeue_400Regular,
   });
   const sessionLoading = useSessionStore((state) => state.status === 'loading');
-  // The logo stays on screen until the fonts and the session are ready, so no screen flashes.
   const ready = (fontsLoaded || fontError !== null) && !sessionLoading;
   const [splashVisible, setSplashVisible] = useState(true);
   const hideSplash = useCallback(() => {

@@ -119,7 +119,8 @@ sit next to the code, named `describe('When we …')` / `it('should …')`.
   (`IMovie extends TSchema<'Movie'>`). Type aliases `T*` only for what an
   interface cannot express (unions, `keyof`). Enums `E*`, constants
   `UPPER_SNAKE_CASE`.
-- Code, comments and commits in English; UI texts in pt-BR.
+- Everything in English: code, comments, commits and UI texts (localization comes
+  later).
 - Conventional Commits, checked by commitlint on every commit.
 - Imports from `src` use the `@/` alias.
 - ESLint stays on v9: `eslint-plugin-react` (inside `eslint-config-expo`) does

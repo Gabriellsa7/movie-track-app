@@ -14,7 +14,6 @@ export async function searchTmdbMovies(
   return data;
 }
 
-// Pass an already debounced query; short queries don't hit TMDB.
 export function useTmdbSearchQuery(query: ITmdbSearchQuery) {
   return useQuery({
     queryKey: queryKeys.tmdb.search(query),

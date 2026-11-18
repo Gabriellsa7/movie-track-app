@@ -8,7 +8,6 @@ interface IMovieSearchProps {
   onChangeText: (value: string) => void;
 }
 
-// Controlled: the screen owns the text and decides when it becomes a query.
 export function MovieSearch({ value, onChangeText }: IMovieSearchProps) {
   const scheme = useAppTheme();
 
@@ -20,8 +19,8 @@ export function MovieSearch({ value, onChangeText }: IMovieSearchProps) {
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        accessibilityLabel="Buscar filme"
-        placeholder="Buscar pelo título"
+        accessibilityLabel="Search movies"
+        placeholder="Search by title"
         placeholderTextColor={color(scheme, 'tertiary-text-color')}
         autoCapitalize="none"
         autoCorrect={false}

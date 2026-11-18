@@ -18,7 +18,7 @@ export function MovieFormHeader({ title }: { title: string }) {
       </Text>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Fechar"
+        accessibilityLabel="Close"
         onPress={() => {
           if (router.canGoBack()) {
             router.back();

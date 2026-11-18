@@ -8,7 +8,6 @@ interface IFieldFrameProps {
   children: ReactNode;
 }
 
-// Label, hint and error shared by every input.
 export function FieldFrame({ label, error, hint, children }: IFieldFrameProps) {
   return (
     <View className="gap-1.5">

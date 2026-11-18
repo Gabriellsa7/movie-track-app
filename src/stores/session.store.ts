@@ -6,7 +6,6 @@ export type TSessionStatus = 'loading' | 'authenticated' | 'anonymous';
 
 interface ISessionState {
   status: TSessionStatus;
-  // Memory only; SecureStore keeps the refresh token (see session.storage.ts).
   accessToken: string | null;
   userId: string | null;
   user: IUser | null;
@@ -31,7 +30,6 @@ export const useSessionStore = create<ISessionState>()((set) => ({
   },
 }));
 
-// For account calls: they need the logged-in user's id.
 export function requireUserId(): string {
   const { userId } = useSessionStore.getState();
   if (!userId) {

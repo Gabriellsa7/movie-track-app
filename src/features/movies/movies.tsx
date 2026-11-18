@@ -33,7 +33,6 @@ export function MoviesScreen() {
     ...(search && { search }),
   };
   const { data: page, isPending, isError, refetch } = useMoviesQuery(query);
-  // Local, so only the pull gesture shows the spinner (not a new search keeping the old page).
   const [refreshing, setRefreshing] = useState(false);
 
   async function refresh() {
@@ -55,7 +54,7 @@ export function MoviesScreen() {
     if (isError) {
       return (
         <SectionError
-          message="Não foi possível carregar seus filmes."
+          message="Couldn't load your movies."
           onRetry={() => void refetch()}
         />
       );

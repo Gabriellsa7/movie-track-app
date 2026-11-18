@@ -3,7 +3,6 @@ import { apiClient } from '@/api/client';
 import { queryKeys } from '@/api/query-keys';
 import type { IMovie, IWatchlistItemWatchedBody } from '@/api/types';
 
-// "I watched it": creates the movie from the item and removes the item.
 export async function markWatchlistItemWatched(
   itemId: string,
   body: IWatchlistItemWatchedBody,
