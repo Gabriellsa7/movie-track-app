@@ -11,7 +11,7 @@ export function MetricCard({ label, value, description }: IMetricCardProps) {
     <View
       accessible
       accessibilityLabel={`${label}: ${value}. ${description}`}
-      className="min-w-[45%] flex-1 gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-3.5"
+      className="flex-1 gap-1 rounded-[14px] border border-primary-border-color bg-secondary-bg-color p-3.5"
     >
       <Text className="font-sans text-xs text-tertiary-text-color">
         {label}

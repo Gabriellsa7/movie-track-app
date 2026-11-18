@@ -1,17 +1,21 @@
 import { View } from 'react-native';
 import { Skeleton } from '@/components/skeleton';
 
-const CARDS = [0, 1, 2, 3, 4, 5];
+const ROWS = [0, 1, 2];
 
 export function StatsSkeleton() {
   return (
     <View className="gap-4">
-      <View className="flex-row flex-wrap gap-2.5">
-        {CARDS.map((card) => (
-          <Skeleton
-            key={card}
-            className="h-[112px] min-w-[45%] flex-1 rounded-[14px]"
-          />
+      <View className="gap-2.5">
+        {ROWS.map((row) => (
+          <View key={row} className="flex-row gap-2.5">
+            <View className="flex-1">
+              <Skeleton className="h-[112px] rounded-[14px]" />
+            </View>
+            <View className="flex-1">
+              <Skeleton className="h-[112px] rounded-[14px]" />
+            </View>
+          </View>
         ))}
       </View>
       <Skeleton className="h-[220px] rounded-[14px]" />

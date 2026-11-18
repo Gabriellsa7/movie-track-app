@@ -38,8 +38,11 @@ export function RatingDistribution({ distribution }: IRatingDistributionProps) {
           </View>
           <View className="h-2.5 flex-1 overflow-hidden rounded-full bg-tertiary-bg-color">
             <View
-              className="h-full rounded-full bg-accent-bg-color"
-              style={{ width: `${String((entry.count / max) * 100)}%` }}
+              className="rounded-full bg-accent-bg-color"
+              style={{
+                height: '100%',
+                width: `${String((entry.count / max) * 100)}%`,
+              }}
             />
           </View>
           <Text className="w-7 text-right font-sans text-xs text-secondary-text-color">
