@@ -8,7 +8,7 @@ import { useAppTheme } from '@/lib/theme/use-app-theme';
 import { ROUTES } from '@/routes/routes.constants';
 import { color } from '@/theme/palette';
 import { plannedLabel, priorityLabel } from '../../utils/home.utils';
-import { SectionError } from '../section-error/section-error';
+import { SectionError } from '@/components/section-error';
 import { SectionHeader } from '../section-header/section-header';
 
 export const NEXT_MOVIE_QUERY = {
